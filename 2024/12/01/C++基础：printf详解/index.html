@@ -1,0 +1,275 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>C++基础：printf详解 | AillianYue's Blog</title><meta name="author" content="AillianYue"><meta name="copyright" content="AillianYue"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="printf 是 C 语言标准库中的一个函数，来自于 &lt;stdio.h&gt; 头文件，虽然 C++ 更倾向于使用 cout，但 printf 在某些情况下仍然非常有用。 printf格式指定符   类型 printf 格式指定符    short %hd   unsigned short %hu   int %d   unsigned int %u   long %ld   unsigne">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++基础：printf详解">
+<meta property="og:url" content="http://example.com/2024/12/01/C++%E5%9F%BA%E7%A1%80%EF%BC%9Aprintf%E8%AF%A6%E8%A7%A3/index.html">
+<meta property="og:site_name" content="AillianYue&#39;s Blog">
+<meta property="og:description" content="printf 是 C 语言标准库中的一个函数，来自于 &lt;stdio.h&gt; 头文件，虽然 C++ 更倾向于使用 cout，但 printf 在某些情况下仍然非常有用。 printf格式指定符   类型 printf 格式指定符    short %hd   unsigned short %hu   int %d   unsigned int %u   long %ld   unsigne">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/tree.png">
+<meta property="article:published_time" content="2024-12-01T13:48:00.000Z">
+<meta property="article:modified_time" content="2024-12-01T13:48:00.000Z">
+<meta property="article:author" content="AillianYue">
+<meta property="article:tag" content="C++">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/tree.png"><link rel="shortcut icon" href="/img/avatar.png"><link rel="canonical" href="http://example.com/2024/12/01/C++%E5%9F%BA%E7%A1%80%EF%BC%9Aprintf%E8%AF%A6%E8%A7%A3/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        if (name && globalFn[key][name]) return
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'C++基础：printf详解',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-12-01 21:48:00'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">3</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">2</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">AillianYue's Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">C++基础：printf详解</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">C++基础：printf详解</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-12-01T13:48:00.000Z" title="发表于 2024-12-01 21:48:00">2024-12-01</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-12-01T13:48:00.000Z" title="更新于 2024-12-01 21:48:00">2024-12-01</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/C/">C++</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/C/C-%E5%9F%BA%E7%A1%80/">C++基础</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">289</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>1分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="post-content" id="article-container"><p>printf 是 C 语言标准库中的一个函数，来自于 &lt;stdio.h&gt; 头文件，虽然 C++ 更倾向于使用 cout，但 printf 在某些情况下仍然非常有用。</p>
+<h1 id="printf格式指定符"><a href="#printf格式指定符" class="headerlink" title="printf格式指定符"></a>printf格式指定符</h1><table>
+<thead>
+<tr>
+<th>类型</th>
+<th align="center">printf 格式指定符</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>short</td>
+<td align="center">%hd</td>
+</tr>
+<tr>
+<td>unsigned short</td>
+<td align="center">%hu</td>
+</tr>
+<tr>
+<td>int</td>
+<td align="center">%d</td>
+</tr>
+<tr>
+<td>unsigned int</td>
+<td align="center">%u</td>
+</tr>
+<tr>
+<td>long</td>
+<td align="center">%ld</td>
+</tr>
+<tr>
+<td>unsigned long</td>
+<td align="center">%lu</td>
+</tr>
+<tr>
+<td>long long</td>
+<td align="center">%lld</td>
+</tr>
+<tr>
+<td>unsigned long long</td>
+<td align="center">%llu</td>
+</tr>
+<tr>
+<td>无符号整数（16进制）</td>
+<td align="center">%x</td>
+</tr>
+<tr>
+<td>无符号整数（8进制）</td>
+<td align="center">%o</td>
+</tr>
+<tr>
+<td>float</td>
+<td align="center">%f</td>
+</tr>
+<tr>
+<td>float（科学计数法）</td>
+<td align="center">%e</td>
+</tr>
+<tr>
+<td>float（自动选择%f或%e）</td>
+<td align="center">%g</td>
+</tr>
+<tr>
+<td>double</td>
+<td align="center">%lf</td>
+</tr>
+<tr>
+<td>double（科学计数法）</td>
+<td align="center">%le</td>
+</tr>
+<tr>
+<td>double（自动选择%f或%e）</td>
+<td align="center">%lg</td>
+</tr>
+<tr>
+<td>long double</td>
+<td align="center">%Lf</td>
+</tr>
+<tr>
+<td>long double（科学计数法）</td>
+<td align="center">%Le</td>
+</tr>
+<tr>
+<td>long double（自动选择%f或%e）</td>
+<td align="center">%Lg</td>
+</tr>
+<tr>
+<td>char（窄字符）</td>
+<td align="center">%c</td>
+</tr>
+<tr>
+<td>wchar_t（宽字符）</td>
+<td align="center">%lc</td>
+</tr>
+<tr>
+<td>bool</td>
+<td align="center">%d</td>
+</tr>
+<tr>
+<td>size_t</td>
+<td align="center">%zd</td>
+</tr>
+<tr>
+<td>size_t（十六进制）</td>
+<td align="center">%zx</td>
+</tr>
+<tr>
+<td>char*</td>
+<td align="center">%s</td>
+</tr>
+<tr>
+<td>指针</td>
+<td align="center">%p</td>
+</tr>
+<tr>
+<td>百分号</td>
+<td align="center">%%</td>
+</tr>
+</tbody></table>
+<h1 id="printf格式修饰符"><a href="#printf格式修饰符" class="headerlink" title="printf格式修饰符"></a><font style="color:rgb(51, 51, 51);">printf格式修饰符</font></h1><p><font style="color:rgb(51, 51, 51);">格式说明符可以包含额外的</font><strong><font style="color:rgb(51, 51, 51);">标志+宽度+精度</font></strong><font style="color:rgb(51, 51, 51);">来控制输出格式：</font></p>
+<ul>
+<li><strong><font style="color:rgb(51, 51, 51);">标志</font></strong><font style="color:rgb(51, 51, 51);">：- 表示左对齐，+ 在正数前加加号。</font></li>
+<li><strong><font style="color:rgb(51, 51, 51);">宽度</font></strong><font style="color:rgb(51, 51, 51);">：指定输出字段的最小宽度。</font></li>
+<li><strong><font style="color:rgb(51, 51, 51);">精度</font></strong><font style="color:rgb(51, 51, 51);">：用于浮点数和字符串的显示精度。</font></li>
+</ul>
+<p>举例：<code>%-8.3e</code>表示打印一个浮点数，左对齐，占位宽度为8，有效数字为3</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a target="_blank" rel="noopener" href="https://github.com/AillianYue">Yilin.Yue</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a target="_blank" rel="noopener" href="https://www.yuque.com/aillian-yue/blog">https://www.yuque.com/aillian-yue/blog</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">此文章版归岳一霖所有，如需转载，请注明来自原作者</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/C/">C++</a></div><div class="post-share"><div class="social-share" data-image="/img/tree.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="prev-post pull-left" href="/2024/12/03/C++%E5%9F%BA%E7%A1%80%EF%BC%9AGDB%E8%B0%83%E8%AF%95/" title="C++基础：GDB调试"><img class="cover" src="/img/tree.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">C++基础：GDB调试</div></div></a><a class="next-post pull-right" href="/2023/12/13/%E7%BA%B9%E7%90%86%E5%8E%8B%E7%BC%A9%E5%AD%A6%E4%B9%A0%E4%B8%8EASTC%E5%8A%A0%E8%BD%BD/" title="纹理压缩学习与ASTC加载"><img class="cover" src="/img/tree.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">纹理压缩学习与ASTC加载</div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a href="/2024/12/03/C++%E5%9F%BA%E7%A1%80%EF%BC%9AGDB%E8%B0%83%E8%AF%95/" title="C++基础：GDB调试"><img class="cover" src="/img/tree.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-03</div><div class="title">C++基础：GDB调试</div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info is-center"><div class="avatar-img"><img src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">AillianYue</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">3</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">2</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><a id="card-info-btn" href="/about/"><i class="fas fa-user-graduate"></i><span>关于我</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/AillianYue" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="https://gitee.com/aillianyue" target="_blank" title="Gitee"><i class="fab fa-github-alt"></i></a><a class="social-icon" href="mailto:634558578@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="tencent://AddContact/?fromId=45&amp;fromSubId=1&amp;subcmd=all&amp;uin=634558578&amp;website=www.oicqzone.com" target="_blank" title="QQ"><i class="fab fa-qq"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站不定期更新，欢迎！</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#printf%E6%A0%BC%E5%BC%8F%E6%8C%87%E5%AE%9A%E7%AC%A6"><span class="toc-number">1.</span> <span class="toc-text">printf格式指定符</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#printf%E6%A0%BC%E5%BC%8F%E4%BF%AE%E9%A5%B0%E7%AC%A6"><span class="toc-number">2.</span> <span class="toc-text">printf格式修饰符</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/12/03/C++%E5%9F%BA%E7%A1%80%EF%BC%9AGDB%E8%B0%83%E8%AF%95/" title="C++基础：GDB调试"><img src="/img/tree.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="C++基础：GDB调试"/></a><div class="content"><a class="title" href="/2024/12/03/C++%E5%9F%BA%E7%A1%80%EF%BC%9AGDB%E8%B0%83%E8%AF%95/" title="C++基础：GDB调试">C++基础：GDB调试</a><time datetime="2024-12-02T16:48:00.000Z" title="发表于 2024-12-03 00:48:00">2024-12-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/01/C++%E5%9F%BA%E7%A1%80%EF%BC%9Aprintf%E8%AF%A6%E8%A7%A3/" title="C++基础：printf详解"><img src="/img/tree.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="C++基础：printf详解"/></a><div class="content"><a class="title" href="/2024/12/01/C++%E5%9F%BA%E7%A1%80%EF%BC%9Aprintf%E8%AF%A6%E8%A7%A3/" title="C++基础：printf详解">C++基础：printf详解</a><time datetime="2024-12-01T13:48:00.000Z" title="发表于 2024-12-01 21:48:00">2024-12-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/12/13/%E7%BA%B9%E7%90%86%E5%8E%8B%E7%BC%A9%E5%AD%A6%E4%B9%A0%E4%B8%8EASTC%E5%8A%A0%E8%BD%BD/" title="纹理压缩学习与ASTC加载"><img src="/img/tree.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="纹理压缩学习与ASTC加载"/></a><div class="content"><a class="title" href="/2023/12/13/%E7%BA%B9%E7%90%86%E5%8E%8B%E7%BC%A9%E5%AD%A6%E4%B9%A0%E4%B8%8EASTC%E5%8A%A0%E8%BD%BD/" title="纹理压缩学习与ASTC加载">纹理压缩学习与ASTC加载</a><time datetime="2023-12-13T02:14:00.000Z" title="发表于 2023-12-13 10:14:00">2023-12-13</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2024 By AillianYue</div><div class="footer_custom_text">Hi, welcome to <a target="_blank" rel="noopener" href="https://github.com/AillianYue">my blog</a>!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
