@@ -1,0 +1,292 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Android基础：Android Studio | AillianYue's Blog</title><meta name="author" content="AillianYue"><meta name="copyright" content="AillianYue"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Android 系统架构 Android 四大组件 活动（Activity） 服务（Service） 广播接收器（Broadcast Receiver） 内容提供器（Content Provider）  Project 目录结构123456789101112Projecct├── .gradle├── .idea├── .gitignore├── app├── gradle├── build.gr">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android基础：Android Studio">
+<meta property="og:url" content="http://example.com/2025/01/02/Android%E5%9F%BA%E7%A1%80%EF%BC%9AAndroid%20Studio/index.html">
+<meta property="og:site_name" content="AillianYue&#39;s Blog">
+<meta property="og:description" content="Android 系统架构 Android 四大组件 活动（Activity） 服务（Service） 广播接收器（Broadcast Receiver） 内容提供器（Content Provider）  Project 目录结构123456789101112Projecct├── .gradle├── .idea├── .gitignore├── app├── gradle├── build.gr">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/AndroidStudio.webp">
+<meta property="article:published_time" content="2025-01-01T16:14:00.000Z">
+<meta property="article:modified_time" content="2025-01-01T16:14:00.000Z">
+<meta property="article:author" content="AillianYue">
+<meta property="article:tag" content="Android">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/AndroidStudio.webp"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Android基础：Android Studio",
+  "url": "http://example.com/2025/01/02/Android%E5%9F%BA%E7%A1%80%EF%BC%9AAndroid%20Studio/",
+  "image": "http://example.com/img/AndroidStudio.webp",
+  "datePublished": "2025-01-01T16:14:00.000Z",
+  "dateModified": "2025-01-01T16:14:00.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Yilin.Yue",
+      "url": "https://github.com/AillianYue"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/avatar.png"><link rel="canonical" href="http://example.com/2025/01/02/Android%E5%9F%BA%E7%A1%80%EF%BC%9AAndroid%20Studio/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Android基础：Android Studio',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">12</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">10</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">AillianYue's Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">Android基础：Android Studio</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">Android基础：Android Studio</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-01-01T16:14:00.000Z" title="发表于 2025-01-02 00:14:00">2025-01-02</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-01-01T16:14:00.000Z" title="更新于 2025-01-02 00:14:00">2025-01-02</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Android/">Android</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Android/Android%E5%9F%BA%E7%A1%80/">Android基础</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">2.9k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>10分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><h4 id="Android-系统架构"><a href="#Android-系统架构" class="headerlink" title="Android 系统架构"></a>Android 系统架构</h4><p><img src="https://developer.android.google.cn/static/guide/platform/images/android-stack_2x.png?hl=zh-cn"></p>
+<h4 id="Android-四大组件"><a href="#Android-四大组件" class="headerlink" title="Android 四大组件"></a>Android 四大组件</h4><ol>
+<li>活动（Activity）</li>
+<li>服务（Service）</li>
+<li>广播接收器（Broadcast Receiver）</li>
+<li>内容提供器（Content Provider）</li>
+</ol>
+<h4 id="Project-目录结构"><a href="#Project-目录结构" class="headerlink" title="Project 目录结构"></a>Project 目录结构</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Projecct</span><br><span class="line">├── .gradle</span><br><span class="line">├── .idea</span><br><span class="line">├── .gitignore</span><br><span class="line">├── app</span><br><span class="line">├── gradle</span><br><span class="line">├── build.gradle</span><br><span class="line">├── gradle.properties</span><br><span class="line">├── gradlew</span><br><span class="line">├── gradlew.bat</span><br><span class="line">├── local.properties</span><br><span class="line">└── settings.gradle</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><font style="color:#D8DAD9;">.gradle：Android Studio自动生成的一些文件，无须关心，无须手动编辑</font></li>
+<li><font style="color:#D8DAD9;">.idea：Android Studio自动生成的一些文件，无须关心，无须手动编辑</font></li>
+<li><font style="color:#D8DAD9;">.gitignore：Git 版本控制系统中使用的配置文件，暂无须关心，无须手动编辑</font></li>
+<li><strong>app</strong>：项目中的代码、资源等内容几乎都是放置在这个目录下的，开发工作也基本都是在这个目录下进行</li>
+<li><strong>gradle</strong>：这个目录下包含了gradle wrapper的配置文件，使用gradle wrapper的方式不需要提前将gradle下载好，而是会自动根据本地的缓存情况决定是否需要联网下载gradle。<ul>
+<li>Android Studio默认没有启用gradle wrapper的方式，如果需要打开，可以点击Android Studio导航栏→File→Settings→Build,Execution, Deployment→Gradle，进行配置更改</li>
+</ul>
+</li>
+<li><font style="color:#D8DAD9;">build.gradle：这是项目全局的gradle构建脚本，通常这个文件中的内容是不需要修改的</font></li>
+<li><strong>gradle.properties</strong>：这个文件<strong>是全局的gradle配置文件</strong>，在这里配置的属性将会影响到项目中所有的gradle编译脚本</li>
+<li><font style="color:#D8DAD9;">gradlew：用来在Linux或Mac系统命令行界面中执行gradle命令的</font></li>
+<li><font style="color:#D8DAD9;">gradlew.bat：用来在Window系统命令行界面中执行gradle命令的</font></li>
+<li><strong>local.properties</strong>：这个文件<strong>用于指定本机中的Android SDK路径</strong>，通常内容都是自动生成的，并不需要修改。如果本机中的Android SDK位置发生了变化，那么将这个文件中的路径改成新的位置。</li>
+<li><strong>settings.gradle</strong>：这个文件<strong>用于指定项目中所有引入的模块</strong>。由于HelloWorld项目中就只有一个app模块，因此该文件中也就只引入了app这一个模块。通常情况下模块的引入都是自动完成的，需要我们手动去修改这个文件的场景可能比较少。</li>
+</ul>
+<h4 id="App-目录结构"><a href="#App-目录结构" class="headerlink" title="App 目录结构"></a>App 目录结构</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">app</span><br><span class="line">├── .gitignore</span><br><span class="line">├── libs</span><br><span class="line">├── build</span><br><span class="line">├── build.gradle</span><br><span class="line">├── proguard-rules.pro</span><br><span class="line">└── src</span><br><span class="line">    ├── androidTest</span><br><span class="line">    ├── main</span><br><span class="line">    │   ├── AndroidManifest.xml</span><br><span class="line">    │   ├── java</span><br><span class="line">    │   └── res</span><br><span class="line">    └── test</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><font style="color:#D8DAD9;">.gitignore：Git 版本控制系统中使用的配置文件，暂无须关心</font></li>
+<li><font style="color:#D8DAD9;">build：无需过多关心</font></li>
+<li><strong>libs</strong>：如果你的项目中使用到了第三方jar包，就需要把这些jar包都放在libs目录下，放在这个目录下的jar包都会被自动添加到构建路径里去。</li>
+<li><strong>androidTest</strong>：此处是用来编写Android Test测试用例的，可以对项目进行一些自动化测试</li>
+<li><strong>java</strong>：放置我们所有Java代码的地方</li>
+<li><strong>res</strong>：项目中使用到的所有图片、布局、字符串等资源都要存放在这个目录下。这个目录下还有很多子目录，图片放在drawable目录下，布局放在layout目录下，字符串放在values目录下</li>
+<li><strong>AndroidManifest.xml</strong>：这是你整个Android项目的配置文件，你在程序中定义的所有<strong>四大组件都需要在这个文件里注册</strong>，另外还可以在这个文件中<strong>给应用程序添加权限声明</strong>。由于这个文件以后会经常用到，我们用到的时候再做详细说明</li>
+<li><strong>test</strong>：用来编写Unit Test测试用例的，是对项目进行自动化测试的另一种方式</li>
+<li><strong>build.gradle</strong>：这是<strong>app模块的gradle构建脚本</strong>，这个文件中会指定很多项目构建相关的配置，我们稍后将会详细分析gradle构建脚本中的具体内容</li>
+<li><strong>proguard-rules.pro</strong>：这个文件用于指定项目代码的混淆规则，当代码开发完成后打成安装包文件，如果不希望代码被别人破解，通常会将代码进行混淆，从而让破解者难以阅读</li>
+</ul>
+<h4 id="Androi-Manifest-xml"><a href="#Androi-Manifest-xml" class="headerlink" title="Androi-Manifest.xml"></a>Androi-Manifest.xml</h4><p>从AndroidManifest.xml文件中可以找到如下代码段：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">activity</span> <span class="attr">android:name</span>=<span class="string">&quot;.MainActivity&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">intent-filter</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">action</span> <span class="attr">android:name</span>=<span class="string">&quot;android.intent.action.MAIN&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">category</span> <span class="attr">android:name</span>=<span class="string">&quot;android.intent.category.LAUNCHER&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">intent-filter</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">activity</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>这段代码表示对MainActivity这个活动进行注册，没有在AndroidManifest.xml里注册的活动是不能使用的。其中<code>intent-filter</code>里的两行代码非常重要，表示MainActivity是这个项目的主活动，在手机上点击应用图标，首先启动的就是这个活动</p>
+<h4 id="res-目录结构"><a href="#res-目录结构" class="headerlink" title="res 目录结构"></a>res 目录结构</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">res</span><br><span class="line">├── drawable</span><br><span class="line">├── layout</span><br><span class="line">├── mipmap-anydpi</span><br><span class="line">├── mipmap-hdpi</span><br><span class="line">├── mipmap-mdpi</span><br><span class="line">├── mipmap-xhdpi</span><br><span class="line">├── mipmap-xxhdpi</span><br><span class="line">├── mipmap-xxxhdpi</span><br><span class="line">├── values</span><br><span class="line">├── values-night</span><br><span class="line">└── xml</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>drawable</strong>：图片</li>
+<li><strong>mipmap</strong>：应用图标</li>
+<li><strong>values</strong>：字符串、样式、颜色等配置</li>
+<li><strong>layout</strong>：布局文件</li>
+</ul>
+<p>如何去使用这些资源</p>
+<p>打开res&#x2F;values&#x2F;strings.xml文件，部分内容如下所示：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;resources&gt;</span><br><span class="line">    &lt;string name=&quot;app_name&quot;&gt;LearnApp01&lt;/string&gt;</span><br><span class="line">    &lt;string name=&quot;click_me&quot;&gt;click me&lt;/string&gt;</span><br><span class="line">    &lt;string name=&quot;hello_android&quot;&gt;Hello Android&lt;/string&gt;</span><br><span class="line">&lt;/resources&gt;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到，这里定义了一个应用程序名的字符串，我们有以下两种方式来引用它</p>
+<ol>
+<li>在代码中通过<code>R.string.app_name</code>可以获得该字符串的引用</li>
+<li>在XML中通过<code>@string/app_name</code>可以获得该字符串的引用</li>
+</ol>
+<p>比如从AndroidManifest.xml文件中可以找到如下代码段：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">application</span></span></span><br><span class="line"><span class="tag">  <span class="attr">android:allowBackup</span>=<span class="string">&quot;true&quot;</span></span></span><br><span class="line"><span class="tag">  <span class="attr">android:icon</span>=<span class="string">&quot;@mipmap/ic_launcher&quot;</span></span></span><br><span class="line"><span class="tag">  <span class="attr">android:label</span>=<span class="string">&quot;@string/app_name&quot;</span></span></span><br><span class="line"><span class="tag">  <span class="attr">android:roundIcon</span>=<span class="string">&quot;@mipmap/ic_launcher_round&quot;</span></span></span><br><span class="line"><span class="tag">  <span class="attr">android:supportsRtl</span>=<span class="string">&quot;true&quot;</span></span></span><br><span class="line"><span class="tag">  <span class="attr">android:theme</span>=<span class="string">&quot;@style/Theme.LearnApp01&quot;</span></span></span><br><span class="line"><span class="tag">  <span class="attr">...</span></span></span><br><span class="line"><span class="tag">&lt;/<span class="attr">application</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="build-gradle文件"><a href="#build-gradle文件" class="headerlink" title="build.gradle文件"></a>build.gradle文件</h4><p>Gradle是一个非常先进的项目构建工具，它使用了一种基于Groovy的领域特定语言（DSL）来声明项目设置，摒弃了传统基于XML（如Ant和Maven）的各种烦琐配置。</p>
+<p>项目中有两个build.gradle文件，一个是在最外层目录下的，一个是在app目录下的。这两个文件对构建Android Studio项目都起到了至关重要的作用。</p>
+<h5 id="最外层目录下的build-gradle"><a href="#最外层目录下的build-gradle" class="headerlink" title="最外层目录下的build.gradle"></a>最外层目录下的build.gradle</h5><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">buildscript &#123;</span><br><span class="line">    repositories &#123;</span><br><span class="line">        google()</span><br><span class="line">        jcenter()</span><br><span class="line">    &#125;</span><br><span class="line">    dependencies &#123;</span><br><span class="line">        classpath <span class="string">&#x27;com.android.tools.build:gradle:2.2.0&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">allprojects &#123;</span><br><span class="line">    repositories &#123;</span><br><span class="line">        google()</span><br><span class="line">        jcenter()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>buildscript&#123;&#125;</code>闭包里是gradle脚本执行所需依赖，分别是对应的maven库和插件。<ul>
+<li><code>repositories&#123;&#125;</code>闭包：配置远程仓库，该闭包中声明了jcenter()和google()的配置，其中jcenter是一个代码托管仓库，上面托管了很多Android开源项目，在这里配置了jcenter后我们可以在项目中方便引用jcenter上的开源项目，从Android Studio3.0后新增了google()配置，可以引用google上的开源项目。</li>
+<li><code>dependencies&#123;&#125;</code>闭包：配置构建工具，该闭包使用classpath声明了一个Gradle插件，由于Gradle并不只是用来构建Android项目，因此此处引入相关插件来构建Android项目，其中’3.0.0’为该插件的版本号，可以根据最新的版本号来调整。</li>
+</ul>
+</li>
+<li><code>allprojects&#123;&#125;</code>闭包里是项目本身需要的依赖，比如项目所需的maven库。</li>
+</ul>
+<h5 id="app目录下的build-gradle"><a href="#app目录下的build-gradle" class="headerlink" title="app目录下的build.gradle"></a>app目录下的build.gradle</h5><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">apply <span class="attr">plugin:</span> <span class="string">&#x27;com.android.application&#x27;</span></span><br><span class="line">android &#123;</span><br><span class="line">    compileSdkVersion <span class="number">24</span></span><br><span class="line">    buildToolsVersion <span class="string">&quot;24.0.2&quot;</span></span><br><span class="line">    defaultConfig &#123;</span><br><span class="line">        applicationId <span class="string">&quot;com.example.helloworld&quot;</span></span><br><span class="line">        minSdkVersion <span class="number">15</span></span><br><span class="line">        targetSdkVersion <span class="number">24</span></span><br><span class="line">        versionCode <span class="number">1</span></span><br><span class="line">        versionName <span class="string">&quot;1.0&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">    buildTypes &#123;</span><br><span class="line">        release &#123;</span><br><span class="line">            minifyEnabled <span class="literal">false</span></span><br><span class="line">            proguardFiles getDefaultProguardFile(<span class="string">&#x27;proguard-android.txt&#x27;</span>),</span><br><span class="line">                <span class="string">&#x27;proguard-rules.pro&#x27;</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">dependencies &#123;</span><br><span class="line">    compile fileTree(<span class="attr">dir:</span> <span class="string">&#x27;libs&#x27;</span>, <span class="attr">include:</span> [<span class="string">&#x27;*.jar&#x27;</span>])</span><br><span class="line">    compile <span class="string">&#x27;com.android.support:appcompat-v7:24.2.1&#x27;</span></span><br><span class="line">    testCompile <span class="string">&#x27;junit:junit:4.12&#x27;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>com.android.application：表示这是一个应用程序模块</li>
+<li>com.android.library：表示这是一个库模块</li>
+</ul>
+<p>应用程序模块和库模块的最大区别在于，一个是可以直接运行的，一个只能作为代码库依附于别的应用程序模块来运行。</p>
+<ul>
+<li><code>android&#123;&#125;</code>闭包：在这个闭包中我们可以配置项目构建的各种属性。<ul>
+<li><code>compileSdkVersion</code>：用于指定项目的编译版本，这里指定成24表示使用Android 7.0系统的SDK编译</li>
+<li><code>buildToolsVersion</code>：用于指定项目构建工具的版本</li>
+<li><code>defaultConfig&#123;&#125;</code>闭包：可以对项目的更多细节进行配置<ul>
+<li><code>applicationId</code>：用于指定项目的包名</li>
+<li><code>minSdkVersion</code>：用于指定项目最低兼容的Android系统版本</li>
+<li><code>targetSdkVersion</code>：指定的值表示你在该目标版本上已经做过了充分的测试，系统将会为你的应用程序启用一些最新的功能和特性。比如说Android 6.0系统中引入了运行时权限这个功能，如果你将targetSdkVersion指定成23或者更高，那么系统就会为你的程序启用运行时权限功能，而如果你将targetSdkVersion指定成22，那么就说明你的程序最高只在Android 5.1系统上做过充分的测试，Android 6.0系统中引入的新功能自然就不会启用了</li>
+<li><code>versionCode</code>：用于指定项目的版本号</li>
+<li><code>versionName</code>：用于指定项目的版本名，这两个属性在生成安装文件的时候非常重要，我们在后面都会</li>
+</ul>
+</li>
+<li><code>buildTypes&#123;&#125;</code>闭包：用于指定生成安装文件的相关配置，通常只会有debug、release两个子闭包<ul>
+<li><code>debug&#123;&#125;</code>闭包：用于指定生成测试版安装文件的配置，debug闭包可以忽略不写</li>
+<li><code>release&#123;&#125;</code>闭包：用于指定生成正式版安装文件的配置。<ul>
+<li><code>minifyEnabled</code>：用于指定是否对项目的代码进行混淆，true表示混淆，false表示不混淆</li>
+<li><code>proguardFiles</code>：用于指定混淆时使用的规则文件，这里指定了两个文件：第一个proguard-android.txt是在Android SDK目录下的，里面是所有项目通用的混淆规则；第二个proguard-rules.pro是在当前项目的根目录下的，里面可以编写当前项目特有的混淆规则</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>dependencies&#123;&#125;</code>闭包：指定当前项目所有的依赖关系。通常Android Studio项目一共有3种依赖方式：本地依赖、库依赖和远程依赖。<ul>
+<li>本地依赖可以对本地的Jar包或目录添加依赖关系</li>
+<li>库依赖可以对项目中的库模块添加依赖关系</li>
+<li>远程依赖则可以对jcenter库上的开源项目添加依赖关系。<br>观察一下dependencies闭包中的配置：<ul>
+<li><code>compile fileTree</code>：本地依赖声明，它表示将libs目录下所有.jar后缀的文件都添加到项目的构建路径当中。</li>
+<li><code>compile</code>：远程依赖声明，com.android.support:appcompat-v7:24.2.1就是一个标准的远程依赖库格式，其中com.android.support是域名部分，用于和其他公司的库做区分；appcompat-v7是组名称，用于和同一个公司中不同的库做区分；24.2.1是版本号，用于和同一个库不同的版本做区分。加上这句声明后，Gradle在构建项目时会首先检查一下本地是否已经有这个库的缓存，如果没有的话则会去自动联网下载，然后再添加到项目的构建路径当中。</li>
+<li><code>testCompile</code>：用于声明测试用例库的，暂时先忽略</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="日志工具"><a href="#日志工具" class="headerlink" title="日志工具"></a>日志工具</h4><p>Android中的日志工具类是Log（android.util.Log），这个类中提供了如下5个方法来供我们打印日志。</p>
+<ul>
+<li><code>Log.v()</code></li>
+<li><code>Log.d()</code></li>
+<li><code>Log.i()</code></li>
+<li><code>Log.w()</code></li>
+<li><code>Log.e()</code></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">onCreate</span><span class="params">(Bundle savedInstanceState)</span> &#123;</span><br><span class="line">    <span class="built_in">super</span>.onCreate(savedInstanceState);</span><br><span class="line">    setContentView(R.layout.hello_world_layout);</span><br><span class="line">    Log.d(<span class="string">&quot;HelloWorldActivity&quot;</span>, <span class="string">&quot;onCreate execute&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Log.d()方法中传入了两个参数：第一个参数是tag，一般传入当前的类名就好，主要用于对打印信息进行过滤；第二个参数是msg，即想要打印的具体的内容。</p>
+<h4 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h4><p><a target="_blank" rel="noopener" href="https://developer.android.google.cn/studio/intro?hl=zh-cn">探索 Android Studio  | Android Developers</a></p>
+<p><a target="_blank" rel="noopener" href="https://developer.android.google.cn/build/gradle-build-overview?hl=zh-cn">Gradle 构建概览  | Android Studio  | Android Developers</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a target="_blank" rel="noopener" href="https://github.com/AillianYue">Yilin.Yue</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a target="_blank" rel="noopener" href="https://www.yuque.com/aillian-yue/blog">https://www.yuque.com/aillian-yue/blog</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">此文章版归岳一霖所有，如需转载，请注明来自原作者</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Android/">Android</a></div><div class="post-share"><div class="social-share" data-image="/img/AndroidStudio.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/05/05/%E6%94%BB%E7%95%A5%EF%BC%9A%E8%89%BE%E5%B0%94%E7%99%BB%E6%B3%95%E7%8E%AF/" title="攻略：艾尔登法环"><img class="cover" src="/img/ELDENRING.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">攻略：艾尔登法环</div></div><div class="info-2"><div class="info-item-1">线性剧情完整攻略本体线性剧情攻略   序号 区域 类型 涉及人物 大概地点 大概内容    1 宁姆格福 支线任务 白面具-梵雷 引导之始 让你跟着赐福指引去史东薇尔城   2 宁姆格福 推荐任务 狼人布莱泽 艾雷教堂 和流浪商人咖列把能聊的都聊聊，买个工具皮带呗   3 宁姆格福 支线任务 梅琳娜 关卡前方 和梅琳娜聊聊，前有马（获得灵马哨笛）   4 宁姆格福 支线任务 菈妮 艾雷教堂 获得召魂铃，聊到她消失   5 宁姆格福 支线任务 罗德莉卡 风暴山丘的破屋 罗德莉卡裆下掏出一只库菈菈水母送给你   6 宁姆格福 支线任务 贝纳尔 习战者的破屋 聊聊天，买点东西   7 宁姆格福 支线任务 战士壶 圣人桥附近 冷兵器重击屁屁，然后送你一块屁头肉   8 宁姆格福 支线任务 狩猎死亡D 圣人桥过桥附近 聊聊天，让你小心死诞者   9 湖之利耶尼亚 支线任务 魔法师托普斯 伊利斯教堂 他说想要一把魔法钥匙   10 湖之利耶尼亚 主线任务 梅琳娜 利耶尼亚湖湖边 和梅琳娜聊聊，前往圆桌厅堂   11 大赐福 支线任务 柯林 大赐福 聊聊天   12 大赐福 推荐任务 柯林 大...</div></div></div></a><a class="pagination-related" href="/2024/12/16/WSL%E5%9F%BA%E7%A1%80%EF%BC%9A%E5%BC%80%E5%A7%8B/" title="WSL基础：开始"><img class="cover" src="/img/Linux.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">WSL基础：开始</div></div><div class="info-2"><div class="info-item-1">安装1 开启相关Window服务 【设置】-【系统】-【关于】，确保操作系统内部版本大于19041，本文使用的版本为19045.5247 【控制面板】-【程序和功能】-【启用或关闭WIndow功能】 勾选【Hyper-V】 勾选【适用于Linux的Window子系统】 勾选【虚拟机平台】    2 安装WSL以及Ubuntu 打开微软商店，搜索并安装【Windows Subsystem for Linux】 打开微软商店，搜索并安装【Ubuntu 22.04.5 LTS】，你也可以选一个其他版本 上一步安装完成后，打开安装好的【Ubuntu 22.04.5 LTS】，将显示Installing, this may take a few minutes...自动安装，随后输入账户名，输入密码，确认密码  3 确认安装版本 【Ubuntu 22.04.5 LTS】安装完成后，打开任意终端，执行wsl -l -v，会显示 NAME                STATE      VERSION *Ubuntu 22.04   Running   2  4 切换默认环境 默认是安装在...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">AillianYue</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">12</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">10</div></a></div><a id="card-info-btn" href="/about/"><i class="fas fa-user-graduate"></i><span>关于我</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/AillianYue" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="https://gitee.com/aillianyue" target="_blank" title="Gitee"><i class="fab fa-github-alt"></i></a><a class="social-icon" href="mailto:634558578@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="tencent://AddContact/?fromId=45&amp;fromSubId=1&amp;subcmd=all&amp;uin=634558578&amp;website=www.oicqzone.com" target="_blank" title="QQ"><i class="fab fa-qq"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站不定期更新，欢迎！</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#Android-%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84"><span class="toc-number">1.</span> <span class="toc-text">Android 系统架构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Android-%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6"><span class="toc-number">2.</span> <span class="toc-text">Android 四大组件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Project-%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84"><span class="toc-number">3.</span> <span class="toc-text">Project 目录结构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#App-%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84"><span class="toc-number">4.</span> <span class="toc-text">App 目录结构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Androi-Manifest-xml"><span class="toc-number">5.</span> <span class="toc-text">Androi-Manifest.xml</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#res-%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84"><span class="toc-number">6.</span> <span class="toc-text">res 目录结构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#build-gradle%E6%96%87%E4%BB%B6"><span class="toc-number">7.</span> <span class="toc-text">build.gradle文件</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%9C%80%E5%A4%96%E5%B1%82%E7%9B%AE%E5%BD%95%E4%B8%8B%E7%9A%84build-gradle"><span class="toc-number">7.1.</span> <span class="toc-text">最外层目录下的build.gradle</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#app%E7%9B%AE%E5%BD%95%E4%B8%8B%E7%9A%84build-gradle"><span class="toc-number">7.2.</span> <span class="toc-text">app目录下的build.gradle</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%97%A5%E5%BF%97%E5%B7%A5%E5%85%B7"><span class="toc-number">8.</span> <span class="toc-text">日志工具</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5"><span class="toc-number">9.</span> <span class="toc-text">参考链接</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/07/06/%E6%94%BB%E7%95%A5%EF%BC%9A%E9%BB%91%E7%A5%9E%E8%AF%9D%E6%82%9F%E7%A9%BA/" title="攻略：黑神话悟空"><img src="/img/WUKONG.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="攻略：黑神话悟空"/></a><div class="content"><a class="title" href="/2025/07/06/%E6%94%BB%E7%95%A5%EF%BC%9A%E9%BB%91%E7%A5%9E%E8%AF%9D%E6%82%9F%E7%A9%BA/" title="攻略：黑神话悟空">攻略：黑神话悟空</a><time datetime="2025-07-05T16:00:01.000Z" title="发表于 2025-07-06 00:00:01">2025-07-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/05/05/%E6%94%BB%E7%95%A5%EF%BC%9A%E8%89%BE%E5%B0%94%E7%99%BB%E6%B3%95%E7%8E%AF/" title="攻略：艾尔登法环"><img src="/img/ELDENRING.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="攻略：艾尔登法环"/></a><div class="content"><a class="title" href="/2025/05/05/%E6%94%BB%E7%95%A5%EF%BC%9A%E8%89%BE%E5%B0%94%E7%99%BB%E6%B3%95%E7%8E%AF/" title="攻略：艾尔登法环">攻略：艾尔登法环</a><time datetime="2025-05-04T16:00:01.000Z" title="发表于 2025-05-05 00:00:01">2025-05-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/01/02/Android%E5%9F%BA%E7%A1%80%EF%BC%9AAndroid%20Studio/" title="Android基础：Android Studio"><img src="/img/AndroidStudio.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Android基础：Android Studio"/></a><div class="content"><a class="title" href="/2025/01/02/Android%E5%9F%BA%E7%A1%80%EF%BC%9AAndroid%20Studio/" title="Android基础：Android Studio">Android基础：Android Studio</a><time datetime="2025-01-01T16:14:00.000Z" title="发表于 2025-01-02 00:14:00">2025-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/16/WSL%E5%9F%BA%E7%A1%80%EF%BC%9A%E5%BC%80%E5%A7%8B/" title="WSL基础：开始"><img src="/img/Linux.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="WSL基础：开始"/></a><div class="content"><a class="title" href="/2024/12/16/WSL%E5%9F%BA%E7%A1%80%EF%BC%9A%E5%BC%80%E5%A7%8B/" title="WSL基础：开始">WSL基础：开始</a><time datetime="2024-12-15T16:50:00.000Z" title="发表于 2024-12-16 00:50:00">2024-12-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/03/C++%E5%9F%BA%E7%A1%80%EF%BC%9AGDB%E8%B0%83%E8%AF%95/" title="C++基础：GDB调试"><img src="/img/CPlusPlus.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="C++基础：GDB调试"/></a><div class="content"><a class="title" href="/2024/12/03/C++%E5%9F%BA%E7%A1%80%EF%BC%9AGDB%E8%B0%83%E8%AF%95/" title="C++基础：GDB调试">C++基础：GDB调试</a><time datetime="2024-12-02T16:48:00.000Z" title="发表于 2024-12-03 00:48:00">2024-12-03</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2019 - 2025 By AillianYue</span></div><div class="footer_custom_text">Hi, welcome to <a target="_blank" rel="noopener" href="https://github.com/AillianYue">my blog</a>!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

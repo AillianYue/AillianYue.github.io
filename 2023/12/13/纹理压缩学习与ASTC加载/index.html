@@ -1,0 +1,526 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>纹理压缩学习与ASTC加载 | AillianYue's Blog</title><meta name="author" content="AillianYue"><meta name="copyright" content="AillianYue"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="加载ASTC_4x4文件以供OpenGL渲染使用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="纹理压缩学习与ASTC加载">
+<meta property="og:url" content="http://example.com/2023/12/13/%E7%BA%B9%E7%90%86%E5%8E%8B%E7%BC%A9%E5%AD%A6%E4%B9%A0%E4%B8%8EASTC%E5%8A%A0%E8%BD%BD/index.html">
+<meta property="og:site_name" content="AillianYue&#39;s Blog">
+<meta property="og:description" content="加载ASTC_4x4文件以供OpenGL渲染使用">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/OpenGL.webp">
+<meta property="article:published_time" content="2023-12-13T02:14:00.000Z">
+<meta property="article:modified_time" content="2023-12-13T02:14:00.000Z">
+<meta property="article:author" content="AillianYue">
+<meta property="article:tag" content="OpenGL">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/OpenGL.webp"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "纹理压缩学习与ASTC加载",
+  "url": "http://example.com/2023/12/13/%E7%BA%B9%E7%90%86%E5%8E%8B%E7%BC%A9%E5%AD%A6%E4%B9%A0%E4%B8%8EASTC%E5%8A%A0%E8%BD%BD/",
+  "image": "http://example.com/img/OpenGL.webp",
+  "datePublished": "2023-12-13T02:14:00.000Z",
+  "dateModified": "2023-12-13T02:14:00.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Yilin.Yue",
+      "url": "https://github.com/AillianYue"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/avatar.png"><link rel="canonical" href="http://example.com/2023/12/13/%E7%BA%B9%E7%90%86%E5%8E%8B%E7%BC%A9%E5%AD%A6%E4%B9%A0%E4%B8%8EASTC%E5%8A%A0%E8%BD%BD/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '纹理压缩学习与ASTC加载',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">12</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">10</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">AillianYue's Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">纹理压缩学习与ASTC加载</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">纹理压缩学习与ASTC加载</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-12-13T02:14:00.000Z" title="发表于 2023-12-13 10:14:00">2023-12-13</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-12-13T02:14:00.000Z" title="更新于 2023-12-13 10:14:00">2023-12-13</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B8%B2%E6%9F%93/">渲染</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B8%B2%E6%9F%93/OpenGL/">OpenGL</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">4.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>18分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><h1 id="了解平台信息"><a href="#了解平台信息" class="headerlink" title="了解平台信息"></a>了解平台信息</h1><h2 id="移动GPU"><a href="#移动GPU" class="headerlink" title="移动GPU"></a>移动GPU</h2><ol>
+<li>Imagination Technologies：PowerVR SGX系列</li>
+<li>Qualcomm(高通)：Adreno系列</li>
+<li>ARM：Mali系列</li>
+<li>NVIDIA(英伟达)：Tegra、GTX、RTX系列</li>
+</ol>
+<h2 id="查看硬件GPU、支持的OpenGL版本、GLSL版本"><a href="#查看硬件GPU、支持的OpenGL版本、GLSL版本" class="headerlink" title="查看硬件GPU、支持的OpenGL版本、GLSL版本"></a>查看硬件GPU、支持的OpenGL版本、GLSL版本</h2><p>如果支持的话，使用<code>glxinfo</code>即可，某些域控是没有<code>glxinfo</code>命令的，需要自己使用OpenGL接口打印到终端了，如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> GLubyte* renderer = <span class="built_in">glGetString</span>(GL_RENDERER);</span><br><span class="line"><span class="type">const</span> GLubyte* vendor = <span class="built_in">glGetString</span>(GL_VENDOR);</span><br><span class="line"><span class="type">const</span> GLubyte* version = <span class="built_in">glGetString</span>(GL_VERSION);</span><br><span class="line"><span class="type">const</span> GLubyte* glslVersion = <span class="built_in">glGetString</span>(GL_SHADING_LANGUAGE_VERSION);</span><br><span class="line"></span><br><span class="line">GLint major, minor;</span><br><span class="line"><span class="built_in">glGetIntegerv</span>(GL_MAJOR_VERSION, &amp;major);</span><br><span class="line"><span class="built_in">glGetIntegerv</span>(GL_MINOR_VERSION, &amp;minor);</span><br><span class="line"></span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;GL Vendor : %s\n&quot;</span>, vendor);</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;GL Renderer : %s\n&quot;</span>, renderer);</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;GL Version(string) : %s\n&quot;</span>, version);</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;GL Version(integer) : %d.%d\n&quot;</span>, major, minor);</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;GLSL Version : %s\n&quot;</span>, glslVersion);</span><br></pre></td></tr></table></figure>
+
+<h2 id="OpenGL中查询扩展相关的接口"><a href="#OpenGL中查询扩展相关的接口" class="headerlink" title="OpenGL中查询扩展相关的接口"></a>OpenGL中查询扩展相关的接口</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 获得GPU的型号</span></span><br><span class="line"><span class="built_in">glGetString</span>(GL_RENDERER);</span><br><span class="line"><span class="comment">// 获得GPU的生产厂商</span></span><br><span class="line"><span class="built_in">glGetString</span>(GL_VENDOR);</span><br><span class="line"><span class="comment">// 获取GPU支持哪些压缩纹理</span></span><br><span class="line">string extensions = (<span class="type">const</span> <span class="type">char</span>*)<span class="built_in">glGetString</span>(GL_EXTENSIONS)</span><br><span class="line"><span class="comment">// 判断是否支持ETC1格式的压缩纹理</span></span><br><span class="line"><span class="built_in">return</span> (extensions.<span class="built_in">find</span>(<span class="string">&quot;GL_OES_compressed_ETC1_RGB8_texture&quot;</span>)!= string::npos)</span><br><span class="line"><span class="comment">// 判断是否支持DXT格式的压缩纹理</span></span><br><span class="line"><span class="built_in">return</span> (extensions.<span class="built_in">find</span>(<span class="string">&quot;GL_EXT_texture_compression_dxt1&quot;</span>)!= string::npos || extensions.<span class="built_in">find</span>(<span class="string">&quot;GL_EXT_texture_compression_s3tc&quot;</span>)!= string::npos);</span><br><span class="line"><span class="comment">// 判断是否支持PVRTC格式的压缩纹理</span></span><br><span class="line"><span class="keyword">return</span> (extensions.<span class="built_in">find</span>(<span class="string">&quot;GL_IMG_texture_compression_pvrtc&quot;</span>)!= string::npos);</span><br><span class="line"><span class="comment">// 判断是否支持ATITC格式的压缩纹理</span></span><br><span class="line"><span class="keyword">return</span> (extensions.<span class="built_in">find</span>(<span class="string">&quot;GL_AMD_compressed_ATC_texture&quot;</span>)!= string::npos || extensions.<span class="built_in">find</span>(<span class="string">&quot;GL_ATI_texture_compression_atitc&quot;</span>)!= string::npos);</span><br></pre></td></tr></table></figure>
+
+<h2 id="OpenGL查询所有支持的扩展"><a href="#OpenGL查询所有支持的扩展" class="headerlink" title="OpenGL查询所有支持的扩展"></a>OpenGL查询所有支持的扩展</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">std::string extensions = (<span class="type">const</span> <span class="type">char</span>*)<span class="built_in">glGetString</span>(GL_EXTENSIONS);</span><br><span class="line">std::<span class="built_in">replace</span>(extensions.<span class="built_in">begin</span>(), extensions.<span class="built_in">end</span>(), <span class="string">&#x27; &#x27;</span>, <span class="string">&#x27;\n&#x27;</span>);</span><br><span class="line">std::cout &lt;&lt; <span class="string">&quot;OpenGL Extensions: \n&quot;</span> + entensions &lt;&lt; std::endl;</span><br></pre></td></tr></table></figure>
+
+<p>比如orin平台支持的扩展如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br></pre></td><td class="code"><pre><span class="line">OpenGL扩展: </span><br><span class="line">GL_EXT_base_instance</span><br><span class="line">GL_EXT_blend_func_extended</span><br><span class="line">GL_EXT_blend_minmax</span><br><span class="line">GL_EXT_buffer_storage</span><br><span class="line">GL_EXT_clear_texture</span><br><span class="line">GL_EXT_clip_control</span><br><span class="line">GL_EXT_clip_cull_distance</span><br><span class="line">GL_EXT_color_buffer_float</span><br><span class="line">GL_EXT_color_buffer_half_float</span><br><span class="line">GL_EXT_conservative_depth</span><br><span class="line">GL_EXT_copy_image</span><br><span class="line">GL_EXT_depth_clamp</span><br><span class="line">GL_EXT_debug_label</span><br><span class="line">GL_EXT_discard_framebuffer</span><br><span class="line">GL_EXT_disjoint_timer_query</span><br><span class="line">GL_EXT_draw_buffers_indexed</span><br><span class="line">GL_EXT_draw_elements_base_vertex</span><br><span class="line">GL_EXT_EGL_image_array</span><br><span class="line">GL_EXT_EGL_image_storage</span><br><span class="line">GL_EXT_EGL_image_external_wrap_modes</span><br><span class="line">GL_EXT_float_blend</span><br><span class="line">GL_EXT_frag_depth</span><br><span class="line">GL_EXT_geometry_point_size</span><br><span class="line">GL_EXT_geometry_shader</span><br><span class="line">GL_EXT_gpu_shader5</span><br><span class="line">GL_EXT_map_buffer_range</span><br><span class="line">GL_EXT_multi_draw_indirect</span><br><span class="line">GL_EXT_multisample_compatibility</span><br><span class="line">GL_EXT_multisampled_render_to_texture</span><br><span class="line">GL_EXT_multisampled_render_to_texture2</span><br><span class="line">GL_EXT_multiview_texture_multisample</span><br><span class="line">GL_EXT_multiview_timer_query</span><br><span class="line">GL_EXT_occlusion_query_boolean</span><br><span class="line">GL_EXT_polygon_offset_clamp</span><br><span class="line">GL_EXT_post_depth_coverage</span><br><span class="line">GL_EXT_primitive_bounding_box</span><br><span class="line">GL_EXT_raster_multisample</span><br><span class="line">GL_EXT_render_snorm</span><br><span class="line">GL_EXT_robustness</span><br><span class="line">GL_EXT_separate_shader_objects</span><br><span class="line">GL_EXT_shader_group_vote</span><br><span class="line">GL_EXT_shader_implicit_conversions</span><br><span class="line">GL_EXT_shader_integer_mix</span><br><span class="line">GL_EXT_shader_io_blocks</span><br><span class="line">GL_EXT_shader_non_constant_global_initializers</span><br><span class="line">GL_EXT_shader_texture_lod</span><br><span class="line">GL_EXT_shadow_samplers</span><br><span class="line">GL_EXT_sparse_texture</span><br><span class="line">GL_EXT_sparse_texture2</span><br><span class="line">GL_EXT_sRGB</span><br><span class="line">GL_EXT_sRGB_write_control</span><br><span class="line">GL_EXT_tessellation_point_size</span><br><span class="line">GL_EXT_tessellation_shader</span><br><span class="line">GL_EXT_texture_border_clamp</span><br><span class="line">GL_EXT_texture_buffer</span><br><span class="line">GL_EXT_texture_compression_bptc</span><br><span class="line">GL_EXT_texture_compression_dxt1</span><br><span class="line">GL_EXT_texture_compression_rgtc</span><br><span class="line">GL_EXT_texture_compression_s3tc</span><br><span class="line">GL_EXT_texture_cube_map_array</span><br><span class="line">GL_EXT_texture_filter_anisotropic</span><br><span class="line">GL_EXT_texture_filter_minmax</span><br><span class="line">GL_EXT_texture_format_BGRA8888</span><br><span class="line">GL_EXT_texture_mirror_clamp_to_edge</span><br><span class="line">GL_EXT_texture_norm16</span><br><span class="line">GL_EXT_texture_query_lod</span><br><span class="line">GL_EXT_texture_rg</span><br><span class="line">GL_EXT_texture_shadow_lod</span><br><span class="line">GL_EXT_texture_sRGB_R8</span><br><span class="line">GL_EXT_texture_sRGB_decode</span><br><span class="line">GL_EXT_texture_storage</span><br><span class="line">GL_EXT_texture_view</span><br><span class="line">GL_EXT_draw_transform_feedback</span><br><span class="line">GL_EXT_unpack_subimage</span><br><span class="line">GL_EXT_window_rectangles</span><br><span class="line">GL_KHR_context_flush_control</span><br><span class="line">GL_KHR_debug</span><br><span class="line">GL_EXT_memory_object</span><br><span class="line">GL_EXT_memory_object_fd</span><br><span class="line">GL_NV_memory_object_sparse</span><br><span class="line">GL_KHR_parallel_shader_compile</span><br><span class="line">GL_KHR_no_error</span><br><span class="line">GL_KHR_robust_buffer_access_behavior</span><br><span class="line">GL_KHR_robustness</span><br><span class="line">GL_EXT_semaphore</span><br><span class="line">GL_EXT_semaphore_fd</span><br><span class="line">GL_KHR_shader_subgroup</span><br><span class="line">GL_KHR_texture_compression_astc_ldr</span><br><span class="line">GL_KHR_texture_compression_astc_sliced_3d</span><br><span class="line">GL_NV_bgr</span><br><span class="line">GL_NV_bindless_texture</span><br><span class="line">GL_NV_blend_equation_advanced</span><br><span class="line">GL_NV_blend_equation_advanced_coherent</span><br><span class="line">GL_NVX_blend_equation_advanced_multi_draw_buffers</span><br><span class="line">GL_NV_blend_minmax_factor</span><br><span class="line">GL_NV_clip_space_w_scaling</span><br><span class="line">GL_NV_compute_shader_derivatives</span><br><span class="line">GL_NV_conditional_render</span><br><span class="line">GL_NV_conservative_raster</span><br><span class="line">GL_NV_conservative_raster_pre_snap_triangles</span><br><span class="line">GL_NV_copy_buffer</span><br><span class="line">GL_NV_copy_image</span><br><span class="line">GL_NV_draw_buffers</span><br><span class="line">GL_NV_draw_instanced</span><br><span class="line">GL_NV_draw_texture</span><br><span class="line">GL_NV_draw_vulkan_image</span><br><span class="line">GL_NV_EGL_stream_consumer_external</span><br><span class="line">GL_NV_explicit_attrib_location</span><br><span class="line">GL_NV_fbo_color_attachments</span><br><span class="line">GL_NV_fill_rectangle</span><br><span class="line">GL_NV_fragment_coverage_to_color</span><br><span class="line">GL_NV_fragment_shader_barycentric</span><br><span class="line">GL_NV_fragment_shader_interlock</span><br><span class="line">GL_NV_framebuffer_blit</span><br><span class="line">GL_NV_framebuffer_mixed_samples</span><br><span class="line">GL_NV_framebuffer_multisample</span><br><span class="line">GL_NV_generate_mipmap_sRGB</span><br><span class="line">GL_NV_geometry_shader_passthrough</span><br><span class="line">GL_NV_instanced_arrays</span><br><span class="line">GL_NV_internalformat_sample_query</span><br><span class="line">GL_NV_gpu_shader5</span><br><span class="line">GL_NV_image_formats</span><br><span class="line">GL_NV_memory_attachment</span><br><span class="line">GL_NV_mesh_shader</span><br><span class="line">GL_NV_occlusion_query_samples</span><br><span class="line">GL_NV_non_square_matrices</span><br><span class="line">GL_NV_pack_subimage</span><br><span class="line">GL_NV_packed_float</span><br><span class="line">GL_NV_packed_float_linear</span><br><span class="line">GL_NV_path_rendering</span><br><span class="line">GL_NV_path_rendering_shared_edge</span><br><span class="line">GL_NV_pixel_buffer_object</span><br><span class="line">GL_NV_polygon_mode</span><br><span class="line">GL_NV_primitive_shading_rate</span><br><span class="line">GL_NV_read_buffer</span><br><span class="line">GL_NV_read_depth</span><br><span class="line">GL_NV_read_depth_stencil</span><br><span class="line">GL_NV_read_stencil</span><br><span class="line">GL_NV_representative_fragment_test</span><br><span class="line">GL_NV_sample_locations</span><br><span class="line">GL_NV_sample_mask_override_coverage</span><br><span class="line">GL_NV_scissor_exclusive</span><br><span class="line">GL_NV_shader_atomic_fp16_vector</span><br><span class="line">GL_NV_shader_noperspective_interpolation</span><br><span class="line">GL_NV_shader_subgroup_partitioned</span><br><span class="line">GL_NV_shader_texture_footprint</span><br><span class="line">GL_NV_shading_rate_image</span><br><span class="line">GL_NV_shadow_samplers_array</span><br><span class="line">GL_NV_shadow_samplers_cube</span><br><span class="line">GL_NV_sRGB_formats</span><br><span class="line">GL_NV_stereo_view_rendering</span><br><span class="line">GL_NV_texture_array</span><br><span class="line">GL_NV_texture_barrier</span><br><span class="line">GL_NV_texture_border_clamp</span><br><span class="line">GL_NV_texture_compression_latc</span><br><span class="line">GL_NV_texture_compression_s3tc</span><br><span class="line">GL_NV_texture_compression_s3tc_update</span><br><span class="line">GL_NV_texture_dirty_tile_map</span><br><span class="line">GL_NV_timer_query</span><br><span class="line">GL_NV_viewport_array</span><br><span class="line">GL_NV_viewport_array2</span><br><span class="line">GL_NV_viewport_swizzle</span><br><span class="line">GL_KHR_blend_equation_advanced</span><br><span class="line">GL_KHR_blend_equation_advanced_coherent</span><br><span class="line">GL_OES_compressed_ETC1_RGB8_texture</span><br><span class="line">GL_EXT_compressed_ETC1_RGB8_sub_texture</span><br><span class="line">GL_OES_depth24</span><br><span class="line">GL_OES_depth32</span><br><span class="line">GL_OES_depth_texture</span><br><span class="line">GL_OES_depth_texture_cube_map</span><br><span class="line">GL_OES_copy_image</span><br><span class="line">GL_OES_draw_buffers_indexed</span><br><span class="line">GL_OES_draw_elements_base_vertex</span><br><span class="line">GL_OES_texture_border_clamp</span><br><span class="line">GL_OES_tessellation_point_size</span><br><span class="line">GL_OES_tessellation_shader</span><br><span class="line">GL_OES_texture_buffer</span><br><span class="line">GL_OES_geometry_point_size</span><br><span class="line">GL_OES_geometry_shader</span><br><span class="line">GL_OES_gpu_shader5</span><br><span class="line">GL_OES_shader_io_blocks</span><br><span class="line">GL_OES_texture_view</span><br><span class="line">GL_OES_primitive_bounding_box</span><br><span class="line">GL_OES_EGL_image</span><br><span class="line">GL_OES_EGL_image_external</span><br><span class="line">GL_OES_EGL_image_external_essl3</span><br><span class="line">GL_OES_EGL_sync</span><br><span class="line">GL_OES_element_index_uint</span><br><span class="line">GL_OES_fbo_render_mipmap</span><br><span class="line">GL_OES_get_program_binary</span><br><span class="line">GL_OES_mapbuffer</span><br><span class="line">GL_OES_packed_depth_stencil</span><br><span class="line">GL_OES_rgb8_rgba8</span><br><span class="line">GL_EXT_read_format_bgra</span><br><span class="line">GL_OES_sample_shading</span><br><span class="line">GL_OES_sample_variables</span><br><span class="line">GL_OES_shader_image_atomic</span><br><span class="line">GL_OES_shader_multisample_interpolation</span><br><span class="line">GL_OES_standard_derivatives</span><br><span class="line">GL_OES_surfaceless_context</span><br><span class="line">GL_OES_texture_cube_map_array</span><br><span class="line">GL_OES_texture_npot</span><br><span class="line">GL_OES_texture_float</span><br><span class="line">GL_OES_texture_float_linear</span><br><span class="line">GL_OES_texture_half_float</span><br><span class="line">GL_OES_texture_half_float_linear</span><br><span class="line">GL_OES_texture_stencil8</span><br><span class="line">GL_OES_texture_storage_multisample_2d_array</span><br><span class="line">GL_OES_vertex_array_object</span><br><span class="line">GL_OES_vertex_half_float</span><br><span class="line">GL_OES_viewport_array</span><br><span class="line">GL_OVR_multiview</span><br><span class="line">GL_OVR_multiview2</span><br><span class="line">GL_OVR_multiview_multisampled_render_to_texture</span><br><span class="line">GL_ANDROID_extension_pack_es31a</span><br></pre></td></tr></table></figure>
+
+<p>其中支持的纹理压缩扩展为：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">支持纹理压缩扩展:GL_OES_compressed_ETC1_RGB8_texture</span><br><span class="line">支持纹理压缩扩展:GL_EXT_compressed_ETC1_RGB8_sub_texture</span><br><span class="line">支持纹理压缩扩展:GL_EXT_texture_compression_dxt1</span><br><span class="line">支持纹理压缩扩展:GL_EXT_texture_compression_s3tc</span><br><span class="line">支持纹理压缩扩展:GL_EXT_texture_compression_bptc</span><br><span class="line">支持纹理压缩扩展:GL_EXT_texture_compression_rgtc</span><br><span class="line">支持纹理压缩扩展:GL_KHR_texture_compression_astc_ldr</span><br><span class="line">支持纹理压缩扩展:GL_KHR_texture_compression_astc_sliced_3d</span><br><span class="line">支持纹理压缩扩展:GL_NV_texture_compression_latc</span><br><span class="line">支持纹理压缩扩展:GL_NV_texture_compression_s3tc</span><br><span class="line">支持纹理压缩扩展:GL_NV_texture_compression_s3tc_update</span><br></pre></td></tr></table></figure>
+
+<h1 id="纹理压缩"><a href="#纹理压缩" class="headerlink" title="纹理压缩"></a>纹理压缩</h1><p><a target="_blank" rel="noopener" href="https://developer.nvidia.com/astc-texture-compression-for-game-assets">https://developer.nvidia.com/astc-texture-compression-for-game-assets</a></p>
+<h2 id="图像文件的格式与纹理格式"><a href="#图像文件的格式与纹理格式" class="headerlink" title="图像文件的格式与纹理格式"></a>图像文件的格式与纹理格式</h2><ul>
+<li>常用的图像格式有BMP，TGA，JPEG，GIF，PNG等；</li>
+<li>常用的纹理格式有R5G6B5，A4R4G4B4，A1R5G5B5，R8G8B8, A8R8G8B8等。</li>
+</ul>
+<p>图像格式是图像为了存储信息而使用的对信息的特殊编码方式，它存储在磁盘中，或者内存中，但是并不能被GPU所识别，因为以向量计算见长的GPU对于这些复杂的计算无能为力。这些文件格式当被游戏读入后，还是需要经过CPU解压成R5G6B5，A4R4G4B4，A1R5G5B5，R8G8B8, A8R8G8B8等像素格式，再传送到GPU端进行使用。</p>
+<p>纹理格式是能被GPU所识别的像素格式，能被快速寻址并采样。</p>
+<h1 id="常见的压缩纹理格式"><a href="#常见的压缩纹理格式" class="headerlink" title="常见的压缩纹理格式"></a>常见的压缩纹理格式</h1><p>基于OpenGL ES的压缩纹理有常见的如下几种实现：</p>
+<ul>
+<li>ETC1 (Ericsson texture compression)</li>
+<li>ETC2 (Ericsson texture compression)</li>
+<li>PVRTC (PowerVR texture compression)</li>
+<li>ATITC (ATI texture compression)</li>
+<li>S3TC (S3 texture compression)</li>
+<li>ASTC (Adaptive Scalable Texture Compression)</li>
+</ul>
+<p>ETC1：</p>
+<p>ETC1格式是OpenGL ES图形标准的一部分，并且被所有的Android设备所支持。</p>
+<p>扩展名为: GL_OES_compressed_ETC1_RGB8_texture，不支持透明通道，所以仅能用于不透明纹理。</p>
+<p>当加载压缩纹理时，<internal format>参数支持如下格式：</p>
+<pre><code>GL_ETC1_RGB8_OES(RGB，每个像素0.5个字节)
+</code></pre>
+<p>PVRTC：</p>
+<p>支持的GPU为Imagination Technologies的PowerVR SGX系列。</p>
+<p>OpenGL ES的扩展名为: GL_IMG_texture_compression_pvrtc。</p>
+<p>当加载压缩纹理时，<internal format>参数支持如下几种格式：</p>
+<pre><code>GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG (RGB，每个像素0.5个字节)
+
+GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG (RGB，每个像素0.25个字节)
+
+GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG (RGBA，每个像素0.5个字节)
+
+GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG (RGBA，每个像素0.25个字节)
+</code></pre>
+<p>ATITC：</p>
+<p>支持的GPU为Qualcomm的Adreno系列。</p>
+<p>支持的OpenGL ES扩展名为: GL_ATI_texture_compression_atitc。</p>
+<p>当加载压缩纹理时，<internal format>参数支持如下类型的纹理：</p>
+<pre><code>GL_ATC_RGB_AMD (RGB，每个像素0.5个字节)
+
+GL_ATC_RGBA_EXPLICIT_ALPHA_AMD (RGBA，每个像素1个字节)
+
+GL_ATC_RGBA_INTERPOLATED_ALPHA_AMD (RGBA，每个像素1个字节)
+</code></pre>
+<p>S3TC：</p>
+<p>也被称为DXTC，在PC上广泛被使用，但是在移动设备上还是属于新鲜事物。支持的GPU为NVIDIA Tegra系列。</p>
+<p>OpenGL ES扩展名为:</p>
+<p>GL_EXT_texture_compression_dxt1和GL_EXT_texture_compression_s3tc。</p>
+<p>当加载压缩纹理时，<internal format>的参数有如下几种格式：</p>
+<pre><code>GL_COMPRESSED_RGB_S3TC_DXT1 (RGB，每个像素0.5个字节)
+
+GL_COMPRESSED_RGBA_S3TC_DXT1 (RGBA，每个像素0.5个字节)
+
+GL_COMPRESSED_RGBA_S3TC_DXT3 (RGBA，每个像素1个字节)
+
+GL_COMPRESSED_RGBA_S3TC_DXT5 (RGBA，每个像素1个字节)
+
+由此可见，Mali系列GPU只支持ETC1格式的压缩纹理，而且该纹理不支持透明通道，有一定局限性。
+
+以上压缩纹理格式每个像素大小相对A8R8G8B8格式的比例，最高压缩比是16:1，最低压缩比是4:1，对于减小纹理的数据容量有明显作用，相应在显存带宽上也有明显优势，从而提高游戏的运行效率(此特性没有绝对数值，根据每个游戏的用法和瓶颈点不同而有差别)。
+</code></pre>
+<h2 id="S3TC-DXTn-BCn"><a href="#S3TC-DXTn-BCn" class="headerlink" title="S3TC&#x2F;DXTn&#x2F;BCn"></a>S3TC&#x2F;DXTn&#x2F;BCn</h2><p>在现代桌面计算时代，纹理压缩通常只有一个答案：DXT。由于其起源，它也被称为 S3TC，或者对于某些 DirectX 实现称为 BCn。最基本的是，它是一种固定的 4x4 块格式，使用 4bpp 对每个 RGB 块进行编码。为了存储 alpha 信息，可以使用 1 位 alpha（使用 1bpp 的编码空间）或第二个 4bpp 仅 alpha 块，以实现高质量的 alpha 编码。这种方法后来有了变体，将 LA 或 RG 数据存储在两个单独的 4bpp 块中，以获得更好的质量。</p>
+<p>在移动领域，NVIDIA 是为数不多的能够轻松将桌面内容移植到设备的供应商之一，其在 Tegra 处理器中支持 DXT。其他移动芯片供应商创建了其他压缩格式。</p>
+<h2 id="PVRTC-PVRTC2"><a href="#PVRTC-PVRTC2" class="headerlink" title="PVRTC&#x2F;PVRTC2"></a>PVRTC&#x2F;PVRTC2</h2><p>Imagination 开发了 PowerVR GPU，并创建了一种专有的 PVRTC 纹理压缩格式。它以在 iOS 设备上用于纹理压缩而闻名。它提供 4 和 2bpp 选项，以进一步减小尺寸。最近，Imagination 发布了 PVRTC2 格式，在相同的占用空间内提供更好的压缩质量。</p>
+<h2 id="ETC-ETC2"><a href="#ETC-ETC2" class="headerlink" title="ETC&#x2F;ETC2"></a>ETC&#x2F;ETC2</h2><p>为了避免无数特定于供应商的编解码器，Khronos 定义了供应商中立的编解码器。随着 OpenGL ES 2.0 的推出，ETC 压缩格式成为可用的多供应商扩展，以更好的质量水平提供类似 DXT 的压缩。然而，它存在阻碍其广泛采用的问题：它不是 ES 2.0 的必需部分，没有 alpha 支持，而且它只有一种模式，即 4bpp RGB。</p>
+<p>随着 2013 年 OpenGL ES 3.0（以及完整的 OpenGL 4.3）的发布，ETC2 格式成为一种标准，具有向后兼容性和重要的新功能。首先，它添加了完整的 alpha 支持，如 DXT3&#x2F;5（8bpp），以及 1 位“穿透”alpha（4bpp）。其次，它带来了EAC格式，它支持1和2通道数据（R和RG，分别为4和8bpp）。第三，它增加了sRGB数据支持。最后但并非最不重要的一点是，它声称在相同比特率下提供比竞争对手更好的质量。ETC2 最大的问题是对其极慢的压缩工具的抱怨。</p>
+<h2 id="ASTC"><a href="#ASTC" class="headerlink" title="ASTC"></a>ASTC</h2><p>在 Khronos 定义 OpenGL ES 3.0 的同时，人们还努力开发一种行业领先的压缩格式，为开发人员提供更精细的控制。这导致了 2012 年年中 ASTC 纹理压缩格式的推出。ASTC 的关键在于，虽然它使用固定的每块 128 位，但每个纹理可以在这 128 位中具有不同大小的块，这与以前格式的固定 4x4 块不同。利用各种方形和非方形块大小，ASTC 提供了广泛的派生压缩比，从 8bpp 到略低于 1bpp，如下所示：</p>
+<table>
+<thead>
+<tr>
+<th><font style="color:black;">Block Size</font></th>
+<th><font style="color:black;">4x4</font></th>
+<th><font style="color:black;">5x4</font></th>
+<th><font style="color:black;">5x5</font></th>
+<th><font style="color:black;">6x5</font></th>
+<th><font style="color:black;">6x6</font></th>
+<th><font style="color:black;">8x5</font></th>
+<th><font style="color:black;">8x6</font></th>
+<th><font style="color:black;">10x5</font></th>
+<th><font style="color:black;">10x6</font></th>
+<th><font style="color:black;">8x8</font></th>
+<th><font style="color:black;">10x8</font></th>
+<th><font style="color:black;">10x10 30:10</font></th>
+<th><font style="color:black;">12x10 32:10</font></th>
+<th><font style="color:black;">12x12 32:12</font></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><font style="color:black;">Bits Per Pixel </font></td>
+<td><font style="color:black;">8</font></td>
+<td><font style="color:black;">6.4</font></td>
+<td><font style="color:black;">5.12</font></td>
+<td><font style="color:black;">4.27</font></td>
+<td><font style="color:black;">3.56</font></td>
+<td><font style="color:black;">3.2</font></td>
+<td><font style="color:black;">2.67</font></td>
+<td><font style="color:black;">2.56</font></td>
+<td><font style="color:black;">2.13</font></td>
+<td><font style="color:black;">2</font></td>
+<td><font style="color:black;">1.6</font></td>
+<td><font style="color:black;">1.28</font></td>
+<td><font style="color:black;">1.07</font></td>
+<td><font style="color:black;">0.89</font></td>
+</tr>
+</tbody></table>
+<p>因此，ASTC 在调整质量与尺寸方面具有巨大优势。替代格式通常为 RGB 或单通道数据提供 4bpp，有些可以在该封装中容纳 alpha，有些在第二个 4bpp 部分提供更高质量的 alpha 或第二个单通道数据块。PVRTC 是另一个提供较小变体的 2bpp 模式。</p>
+<p>此外，ASTC 还提供对 1-4 通道的支持，包括全 alpha RGBA、正常 RGB、2 通道 RG （LA） 和 1 通道 R （L&#x2F;A） 支持，以及自定义 X+Y 和 XY+Z 法线贴图支持。最终结果是 ASTC 可以处理大多数类型的纹理。</p>
+<p>ASTC 的另一个关键优势是，编码端点、权重等方法是按块而不是全局选择的，因此编码器可以动态调整以分配 128 位，以更好地表示每个块中的内容。这提供了比以前的格式更好的图像质量，即使在更高的压缩率下也是如此。</p>
+<p>支持 ASTC 的硬件已经获得了足够的市场份额，开发人员应该认真考虑如何在他们的游戏中利用它：提高质量、减小存储大小，或两者兼而有之。在需要足够高的图形硬件的游戏中尤其如此，因此 ASTC 是给定的。</p>
+<h1 id="纹理压缩格式详解"><a href="#纹理压缩格式详解" class="headerlink" title="纹理压缩格式详解"></a>纹理压缩格式详解</h1><h2 id="ASTC-1"><a href="#ASTC-1" class="headerlink" title="ASTC"></a>ASTC</h2><p><a target="_blank" rel="noopener" href="https://github.com/KhronosGroup/KTX-Software">https://github.com/KhronosGroup/KTX-Software</a></p>
+<p>由 astcenc 以及许多其他 ASTC 压缩器生成的压缩纹理的默认文件格式是该 .<code>astc</code> 格式。这是一种非常简单的格式，由一个小标头组成，后跟单个图像图面的二进制有效负载</p>
+<h4 id="Header"><a href="#Header" class="headerlink" title="Header"></a>Header</h4><p>标头是一个固定的 16 字节结构，定义为仅存储字节以避免任何字节序问题或产生任何填充开销。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">astc_header</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">uint8_t</span> magic[<span class="number">4</span>];</span><br><span class="line">    <span class="type">uint8_t</span> block_x;</span><br><span class="line">    <span class="type">uint8_t</span> block_y;</span><br><span class="line">    <span class="type">uint8_t</span> block_z;</span><br><span class="line">    <span class="type">uint8_t</span> dim_x[<span class="number">3</span>];</span><br><span class="line">    <span class="type">uint8_t</span> dim_y[<span class="number">3</span>];</span><br><span class="line">    <span class="type">uint8_t</span> dim_z[<span class="number">3</span>];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h4 id="Magic-number"><a href="#Magic-number" class="headerlink" title="Magic number"></a>Magic number</h4><p>文件开头的 4 字节幻数充当格式标识符。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">magic[<span class="number">0</span>] = <span class="number">0x13</span>;</span><br><span class="line">magic[<span class="number">1</span>] = <span class="number">0xAB</span>;</span><br><span class="line">magic[<span class="number">2</span>] = <span class="number">0xA1</span>;</span><br><span class="line">magic[<span class="number">3</span>] = <span class="number">0x5C</span>;</span><br></pre></td></tr></table></figure>
+
+<h4 id="Block-size"><a href="#Block-size" class="headerlink" title="Block size"></a>Block size</h4><p>这些 <code>block_*</code> 字段以纹素形式存储 ASTC 块维度。对于 2D 图像，Z 尺寸必须设置为 1。</p>
+<h4 id="Image-dimensions"><a href="#Image-dimensions" class="headerlink" title="Image dimensions"></a>Image dimensions</h4><p>这些 <code>dim_</code>* 字段以纹素形式存储图像尺寸。对于 2D 图像，Z 尺寸必须设置为 1。</p>
+<p>请注意，图像不需要是压缩块大小的精确倍数;压缩数据可能包括在解压缩过程中丢弃的填充。</p>
+<p>每个维度都是一个 24 位无符号值，该值从存储的字节值重构为：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">decoded_dim = dim[<span class="number">0</span>] + (dim[<span class="number">1</span>] &lt;&lt; <span class="number">8</span>) + (dim[<span class="number">2</span>] &lt;&lt; <span class="number">16</span>);</span><br></pre></td></tr></table></figure>
+
+<h4 id="Image-size"><a href="#Image-size" class="headerlink" title="Image size"></a>Image size</h4><p><a target="_blank" rel="noopener" href="https://registry.khronos.org/OpenGL-Refpages/es3/html/glCompressedTexImage2D.xhtml">https://registry.khronos.org/OpenGL-Refpages/es3/html/glCompressedTexImage2D.xhtml</a></p>
+<table>
+<thead>
+<tr>
+<th><font style="color:black;">Compressed Internal Format</font></th>
+<th><font style="color:black;">Base Internal Format</font></th>
+<th><font style="color:black;">Image Size</font></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><font style="color:black;">GL_COMPRESSED_R11_EAC</font></td>
+<td><font style="color:black;">GL_RED</font></td>
+<td><font style="color:black;">ceil(</font>width&#x2F;4) * ceil(height&#x2F;4) * 8</td>
+</tr>
+<tr>
+<td><font style="color:black;">GL_COMPRESSED_SIGNED_R11_EAC</font></td>
+<td><font style="color:black;">GL_RED</font></td>
+<td><font style="color:black;">ceil(</font>width&#x2F;4) * ceil(height&#x2F;4) * 8</td>
+</tr>
+<tr>
+<td><font style="color:black;">GL_COMPRESSED_RG11_EAC</font></td>
+<td><font style="color:black;">GL_RG</font></td>
+<td><font style="color:black;">ceil(</font>width&#x2F;4) * ceil(height&#x2F;4) * 16</td>
+</tr>
+<tr>
+<td><font style="color:black;">GL_COMPRESSED_SIGNED_RG11_EAC</font></td>
+<td><font style="color:black;">GL_RG</font></td>
+<td><font style="color:black;">ceil(</font>width&#x2F;4) * ceil(height&#x2F;4) * 16</td>
+</tr>
+<tr>
+<td><font style="color:black;">GL_COMPRESSED_RGB8_ETC2</font></td>
+<td><font style="color:black;">GL_RGB</font></td>
+<td><font style="color:black;">ceil(</font>width&#x2F;4) * ceil(height&#x2F;4) * 8</td>
+</tr>
+<tr>
+<td><font style="color:black;">GL_COMPRESSED_SRGB8_ETC2</font></td>
+<td><font style="color:black;">GL_RGB</font></td>
+<td><font style="color:black;">ceil(</font>width&#x2F;4) * ceil(height&#x2F;4) * 8</td>
+</tr>
+<tr>
+<td><font style="color:black;">GL_COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2</font></td>
+<td><font style="color:black;">GL_RGBA</font></td>
+<td><font style="color:black;">ceil(</font>width&#x2F;4) * ceil(height&#x2F;4) * 8</td>
+</tr>
+<tr>
+<td><font style="color:black;">GL_COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2</font></td>
+<td><font style="color:black;">GL_RGBA</font></td>
+<td><font style="color:black;">ceil(</font>width&#x2F;4) * ceil(height&#x2F;4) * 8</td>
+</tr>
+<tr>
+<td><font style="color:black;">GL_COMPRESSED_RGBA8_ETC2_EAC</font></td>
+<td><font style="color:black;">GL_RGBA</font></td>
+<td><font style="color:black;">ceil(</font>width&#x2F;4) * ceil(height&#x2F;4) * 16</td>
+</tr>
+<tr>
+<td><font style="color:black;">GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC</font></td>
+<td><font style="color:black;">GL_RGBA</font></td>
+<td><font style="color:black;">ceil(</font>width&#x2F;4) * ceil(height&#x2F;4) * 16</td>
+</tr>
+<tr>
+<td><font style="color:black;">GL_COMPRESSED_RGBA_ASTC_4x4</font></td>
+<td><font style="color:black;">GL_RGBA</font></td>
+<td><font style="color:black;">ceil(</font>width&#x2F;4) * ceil(height&#x2F;4) * 16</td>
+</tr>
+<tr>
+<td><font style="color:black;">GL_COMPRESSED_RGBA_ASTC_5x4</font></td>
+<td><font style="color:black;">GL_RGBA</font></td>
+<td><font style="color:black;">ceil(</font>width&#x2F;5) * ceil(height&#x2F;4) * 16</td>
+</tr>
+<tr>
+<td><font style="color:black;">GL_COMPRESSED_RGBA_ASTC_5x5</font></td>
+<td><font style="color:black;">GL_RGBA</font></td>
+<td><font style="color:black;">ceil(</font>width&#x2F;5) * ceil(height&#x2F;5) * 16</td>
+</tr>
+<tr>
+<td><font style="color:black;">GL_COMPRESSED_RGBA_ASTC_6x5</font></td>
+<td><font style="color:black;">GL_RGBA</font></td>
+<td><font style="color:black;">ceil(</font>width&#x2F;6) * ceil(height&#x2F;5) * 16</td>
+</tr>
+<tr>
+<td><font style="color:black;">GL_COMPRESSED_RGBA_ASTC_6x6</font></td>
+<td><font style="color:black;">GL_RGBA</font></td>
+<td><font style="color:black;">ceil(</font>width&#x2F;6) * ceil(height&#x2F;6) * 16</td>
+</tr>
+<tr>
+<td><font style="color:black;">GL_COMPRESSED_RGBA_ASTC_8x5</font></td>
+<td><font style="color:black;">GL_RGBA</font></td>
+<td><font style="color:black;">ceil(</font>width&#x2F;8) * ceil(height&#x2F;5) * 16</td>
+</tr>
+<tr>
+<td><font style="color:black;">GL_COMPRESSED_RGBA_ASTC_8x6</font></td>
+<td><font style="color:black;">GL_RGBA</font></td>
+<td><font style="color:black;">ceil(</font>width&#x2F;8) * ceil(height&#x2F;6) * 16</td>
+</tr>
+<tr>
+<td><font style="color:black;">GL_COMPRESSED_RGBA_ASTC_8x8</font></td>
+<td><font style="color:black;">GL_RGBA</font></td>
+<td><font style="color:black;">ceil(</font>width&#x2F;8) * ceil(height&#x2F;8) * 16</td>
+</tr>
+<tr>
+<td><font style="color:black;">GL_COMPRESSED_RGBA_ASTC_10x5</font></td>
+<td><font style="color:black;">GL_RGBA</font></td>
+<td><font style="color:black;">ceil(</font>width&#x2F;10) * ceil(height&#x2F;5) * 16</td>
+</tr>
+<tr>
+<td><font style="color:black;">GL_COMPRESSED_RGBA_ASTC_10x6</font></td>
+<td><font style="color:black;">GL_RGBA</font></td>
+<td><font style="color:black;">ceil(</font>width&#x2F;10) * ceil(height&#x2F;6) * 16</td>
+</tr>
+<tr>
+<td><font style="color:black;">GL_COMPRESSED_RGBA_ASTC_10x8</font></td>
+<td><font style="color:black;">GL_RGBA</font></td>
+<td><font style="color:black;">ceil(</font>width&#x2F;10) * ceil(height&#x2F;8) * 16</td>
+</tr>
+<tr>
+<td><font style="color:black;">GL_COMPRESSED_RGBA_ASTC_10x10</font></td>
+<td><font style="color:black;">GL_RGBA</font></td>
+<td><font style="color:black;">ceil(</font>width&#x2F;10) * ceil(height&#x2F;10) * 16</td>
+</tr>
+<tr>
+<td><font style="color:black;">GL_COMPRESSED_RGBA_ASTC_12x10</font></td>
+<td><font style="color:black;">GL_RGBA</font></td>
+<td><font style="color:black;">ceil(</font>width&#x2F;12) * ceil(height&#x2F;10) * 16</td>
+</tr>
+<tr>
+<td><font style="color:black;">GL_COMPRESSED_RGBA_ASTC_12x12</font></td>
+<td><font style="color:black;">GL_RGBA</font></td>
+<td><font style="color:black;">ceil(</font>width&#x2F;12) * ceil(height&#x2F;12) * 16</td>
+</tr>
+<tr>
+<td><font style="color:black;">GL_COMPRESSED_SRGB8_ALPHA8_ASTC_4x4</font></td>
+<td><font style="color:black;">GL_RGBA</font></td>
+<td><font style="color:black;">ceil(</font>width&#x2F;4) * ceil(height&#x2F;4) * 16</td>
+</tr>
+<tr>
+<td><font style="color:black;">GL_COMPRESSED_SRGB8_ALPHA8_ASTC_5x4</font></td>
+<td><font style="color:black;">GL_RGBA</font></td>
+<td><font style="color:black;">ceil(</font>width&#x2F;5) * ceil(height&#x2F;4) * 16</td>
+</tr>
+<tr>
+<td><font style="color:black;">GL_COMPRESSED_SRGB8_ALPHA8_ASTC_5x5</font></td>
+<td><font style="color:black;">GL_RGBA</font></td>
+<td><font style="color:black;">ceil(</font>width&#x2F;5) * ceil(height&#x2F;5) * 16</td>
+</tr>
+<tr>
+<td><font style="color:black;">GL_COMPRESSED_SRGB8_ALPHA8_ASTC_6x5</font></td>
+<td><font style="color:black;">GL_RGBA</font></td>
+<td><font style="color:black;">ceil(</font>width&#x2F;6) * ceil(height&#x2F;5) * 16</td>
+</tr>
+<tr>
+<td><font style="color:black;">GL_COMPRESSED_SRGB8_ALPHA8_ASTC_6x6</font></td>
+<td><font style="color:black;">GL_RGBA</font></td>
+<td><font style="color:black;">ceil(</font>width&#x2F;6) * ceil(height&#x2F;6) * 16</td>
+</tr>
+</tbody></table>
+<h4 id="Binary-payload"><a href="#Binary-payload" class="headerlink" title="Binary payload"></a>Binary payload</h4><p>二进制有效负载是紧跟在标头后面的字节流。它包含每个压缩块 16 个字节。压缩块的数量由标头信息确定。</p>
+<h3 id="加载示例"><a href="#加载示例" class="headerlink" title="加载示例"></a>加载示例</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">unsigned</span> <span class="type">char</span> * <span class="title">LoadAstc</span><span class="params">(<span class="type">const</span> <span class="type">char</span>* filename, <span class="type">uint64_t</span>* width, <span class="type">uint64_t</span>* height, <span class="type">uint64_t</span>* imageSize)</span> </span>&#123;</span><br><span class="line">	<span class="comment">//仅适配4X4sRGB</span></span><br><span class="line">    <span class="type">bool</span> checkResult = <span class="literal">true</span>;</span><br><span class="line">    <span class="type">const</span> <span class="type">unsigned</span> <span class="type">int</span> MAGIC <span class="number">443</span>;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">char</span>* mpData <span class="literal">nullptr</span>;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">char</span>* originDataPtr <span class="literal">nullptr</span>;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">char</span>* pCurrentPos = <span class="literal">nullptr</span>;</span><br><span class="line">    <span class="type">uint8_t</span> magic[<span class="number">4</span>];</span><br><span class="line">    <span class="type">uint8_t</span> block_x;</span><br><span class="line">    <span class="type">uint8_t</span> block_y;</span><br><span class="line">    <span class="type">uint8_t</span> block_z;</span><br><span class="line">    <span class="type">uint8_t</span> dim_x[<span class="number">3</span>];</span><br><span class="line">    <span class="type">uint8_t</span> dim_y[<span class="number">3</span>];</span><br><span class="line">    <span class="type">uint8_t</span> dim_z[<span class="number">3</span>];</span><br><span class="line">    FILE* mpFile = <span class="built_in">fopen</span>(filename,<span class="string">&quot;rb&quot;</span>);</span><br><span class="line">    <span class="built_in">fseek</span>(mpFile, <span class="number">0</span>, SEEK_END);</span><br><span class="line">    <span class="type">int</span> nFileLen = <span class="built_in">ftell</span>(mpFile);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (nFileLen &lt; <span class="number">16</span>) &#123;</span><br><span class="line">        <span class="built_in">RLOGE</span>(<span class="string">&quot;invalid astc file format,cause:fileLen=%d&quot;</span>,nFileLen);</span><br><span class="line">        checkResult = <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (checkResult) &#123;</span><br><span class="line">        mpData = (<span class="type">unsigned</span> <span class="type">char</span>*)<span class="built_in">malloc</span>(nFileLen * <span class="built_in">sizeof</span>(<span class="type">unsigned</span> <span class="type">char</span>));</span><br><span class="line">        originDataPtr = mpData;</span><br><span class="line">        <span class="built_in">memset</span>(mpData, <span class="number">0</span>, nFileLen)</span><br><span class="line">        <span class="built_in">rewind</span>(mpFile);<span class="comment">//重置文件流指针到文件首</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//从文件中读取数据</span></span><br><span class="line">    <span class="type">int</span> nError = <span class="built_in">fread</span>(mpData, <span class="built_in">sizeof</span>(mpData[<span class="number">0</span>]), nFileLen, mpFile);</span><br><span class="line">    <span class="keyword">if</span> (nError != nFileLen) &#123;</span><br><span class="line">        <span class="built_in">RLOGE</span>(<span class="string">&quot;invalid astc file format,cause:fread Io error&quot;</span>);</span><br><span class="line">        checkResult = <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">fclose</span>(mpFile);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (checkResult) &#123;</span><br><span class="line">        magic[<span class="number">0</span>] = *(<span class="type">uint8_t</span>*)(mpData + <span class="number">0</span>);</span><br><span class="line">        magic[<span class="number">1</span>] = *(<span class="type">uint8_t</span>*)(mpData + <span class="number">1</span>);</span><br><span class="line">        magic[<span class="number">2</span>] = *(<span class="type">uint8_t</span>*)(mpData + <span class="number">2</span>);</span><br><span class="line">        magic[<span class="number">3</span>] = *(<span class="type">uint8_t</span>*)(mpData + <span class="number">3</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (magic[<span class="number">0</span>] + magic[<span class="number">1</span>] + magic[<span class="number">2</span>] + magic[<span class="number">3</span>] != MAGIC)&#123;</span><br><span class="line">    	<span class="built_in">RLOGE</span>(<span class="string">&quot;invalid astc file format,cause:file header is error\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    block_x = *(<span class="type">uint8_t</span>*)(mpData + <span class="number">4</span>);</span><br><span class="line">    block_y = *(<span class="type">uint8_t</span>*)(mpData + <span class="number">5</span>);</span><br><span class="line">    block_z = *(<span class="type">uint8_t</span>*)(mpData + <span class="number">6</span>);</span><br><span class="line">    dim_x[<span class="number">0</span>] = *(<span class="type">uint8_t</span>*)(mpData + <span class="number">7</span>)</span><br><span class="line">    dim_x[<span class="number">1</span>] = *(<span class="type">uint8_t</span>*)(mpData + <span class="number">8</span>);</span><br><span class="line">    dim_x[<span class="number">2</span>] = *(<span class="type">uint8_t</span>*)(mpData + <span class="number">9</span>);</span><br><span class="line">    dim_y[<span class="number">0</span>] = *(<span class="type">uint8_t</span>*)(mpData + <span class="number">10</span>);</span><br><span class="line">    dim_y[<span class="number">1</span>] = *(<span class="type">uint8_t</span>*)(mpData + <span class="number">11</span>);</span><br><span class="line">    dim_y[<span class="number">2</span>] = *(<span class="type">uint8_t</span>*)(mpData + <span class="number">12</span>);</span><br><span class="line">    dim_z[<span class="number">0</span>] = *(<span class="type">uint8_t</span>*)(mpData + <span class="number">13</span>);</span><br><span class="line">    dim_z[<span class="number">1</span>] = *(<span class="type">uint8_t</span>*)(mpData + <span class="number">14</span>);</span><br><span class="line">    dim_z[<span class="number">2</span>] = *(<span class="type">uint8_t</span>*)(mpData + <span class="number">15</span>);</span><br><span class="line">    <span class="type">uint32_t</span> decoded_dim_x = dim_x[<span class="number">0</span>]+(dim_x[<span class="number">1</span>]&lt;&lt;<span class="number">8</span>)+(dim_x[<span class="number">2</span>]&lt;&lt;<span class="number">16</span>);</span><br><span class="line">    <span class="type">uint32_t</span> decoded_dim_y = dim_y[<span class="number">0</span>]+(dim_y[<span class="number">1</span>]&lt;&lt;<span class="number">8</span>)+(dim_y[<span class="number">2</span>]&lt;&lt;<span class="number">16</span>);</span><br><span class="line">    <span class="type">uint32_t</span> decoded_dim_z = dim z[<span class="number">0</span>]+(dim_z[<span class="number">1</span>]&lt;&lt;<span class="number">8</span>)+(dim_z[<span class="number">2</span>]&lt;&lt;<span class="number">16</span>);</span><br><span class="line">    mpData = mpData + <span class="number">16</span>;</span><br><span class="line">    *width = decoded_dim_x;</span><br><span class="line">    *height = decoded_dim_y;</span><br><span class="line">    *imagesize = <span class="built_in">ceil</span>(*width / <span class="number">4.0</span>)<span class="built_in">ceil</span>(*height / <span class="number">4.0</span>)*<span class="number">16</span>;</span><br><span class="line">    <span class="keyword">if</span> (originDataPtr)&#123;</span><br><span class="line">    	<span class="built_in">free</span>(originDataPtr);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> mpData;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="OpenGL纹理压缩接口"><a href="#OpenGL纹理压缩接口" class="headerlink" title="OpenGL纹理压缩接口"></a>OpenGL纹理压缩接口</h2><p>glCompressedTexImage2D</p>
+<p><a target="_blank" rel="noopener" href="https://registry.khronos.org/OpenGL-Refpages/gl4/html/glCompressedTexImage2D.xhtml">https://registry.khronos.org/OpenGL-Refpages/gl4/html/glCompressedTexImage2D.xhtml</a></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">glCompressedTexImage2D</span> <span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">     GLenum target,</span></span></span><br><span class="line"><span class="params"><span class="function">     GLint level,</span></span></span><br><span class="line"><span class="params"><span class="function">     GLenum internalformat,</span></span></span><br><span class="line"><span class="params"><span class="function">     GLsizei width,</span></span></span><br><span class="line"><span class="params"><span class="function">     GLsizei height,</span></span></span><br><span class="line"><span class="params"><span class="function">     GLint border,</span></span></span><br><span class="line"><span class="params"><span class="function">     GLsizei imageSize,</span></span></span><br><span class="line"><span class="params"><span class="function">     <span class="type">const</span> GLvoid * data)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<h4 id="target"><a href="#target" class="headerlink" title="target"></a>target</h4><p>指定目标纹理。必须是GL_TEXTURE_2D, GL_PROXY_TEXTURE_2D, GL_TEXTURE_1D_ARRAY, GL_PROXY_TEXTURE_1D_ARRAY, GL_TEXTURE_CUBE_MAP_POSITIVE_X, GL_TEXTURE_CUBE_MAP_NEGATIVE_X, GL_TEXTURE_CUBE_MAP_POSITIVE_Y, GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, GL_TEXTURE_CUBE_MAP_POSITIVE_Z, GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 或者 GL_PROXY_TEXTURE_CUBE_MAP.</p>
+<h4 id="level"><a href="#level" class="headerlink" title="level"></a>level</h4><p>指定多级纹理详细级别编号。级别 0 是基本映像级别。级别 n 是第 n 个 mipmap 缩减映像。</p>
+<h4 id="internalformat"><a href="#internalformat" class="headerlink" title="internalformat"></a>internalformat</h4><p>指定存储在<code>data</code>地址的压缩图像数据的格式。</p>
+<p>比如：</p>
+<h4 id="width"><a href="#width" class="headerlink" title="width"></a>width</h4><p>指定纹理图像的宽度。所有实现都支持宽度至少为 16384 纹素的 2D 纹理和立方体贴图纹理图像。</p>
+<h4 id="height"><a href="#height" class="headerlink" title="height"></a>height</h4><p>指定纹理图像的高度。所有实现都支持至少 16384 纹素高的 2D 纹理和立方体贴图纹理图像。</p>
+<h4 id="border"><a href="#border" class="headerlink" title="border"></a>border</h4><p>此值必须为 0。</p>
+<h4 id="imageSize"><a href="#imageSize" class="headerlink" title="imageSize"></a>imageSize</h4><p>指定从<code>data</code>指定的地址开始的图像数据的无符号字节数。</p>
+<h4 id="data"><a href="#data" class="headerlink" title="data"></a>data</h4><p>指定指向内存中压缩图像数据的指针。</p>
+<h4 id="错误代码"><a href="#错误代码" class="headerlink" title="错误代码"></a>错误代码</h4><ul>
+<li><code>GL_INVALID_ENUM</code>：如果不是 internalformat 上面表 1 中列出的特定压缩内部格式之一，则生成。</li>
+<li><code>GL_INVALID_VALUE</code>：如果 imageSize 与指定压缩图像数据的格式、尺寸和内容不一致，则生成。</li>
+<li><code>GL_INVALID_VALUE</code>：如果不是 border 0，则生成。</li>
+<li><code>GL_INVALID_OPERATION</code>：如果特定纹理压缩扩展中指定的特定压缩内部格式不支持参数组合，则生成。</li>
+<li><code>GL_INVALID_OPERATION</code>：如果非零缓冲区对象名称绑定到目标，则生成。</li>
+<li><code>GL_INVALID_OPERATION</code>：如果将非零缓冲区对象名称绑定到目标，并且数据将从缓冲区对象中解压缩，则会生成。</li>
+<li>如果 <code>data</code> 编码方式与定义内部压缩格式的扩展规范一致，则会生成未定义的结果，包括异常程序终止。</li>
+</ul>
+<h2 id="KTX"><a href="#KTX" class="headerlink" title="KTX"></a>KTX</h2><p>KTX（Khronos Texture）是一个轻量级的纹理容器，用于OpenGL、Vulkan和其他GPU API。ktx是一种文件格式，用来存储压缩纹理，ktx本身不是一种纹理压缩格式，比如一张<code>img.ktx</code>，其中img的编码格式可以是<code>astc</code>格式的，但是文件后缀是<code>.ktx</code></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/KhronosGroup/KTX-Software">GitHub - KhronosGroup&#x2F;KTX-Software: KTX (Khronos Texture) Library and Tools</a></p>
+<h3 id="libktx"><a href="#libktx" class="headerlink" title="libktx"></a>libktx</h3><p>libktx可以用来读取.ktx图像数据</p>
+<p><a target="_blank" rel="noopener" href="https://github.khronos.org/KTX-Software/libktx/index.html">https://github.khronos.org/KTX-Software/libktx/index.html</a></p>
+<h3 id="读取-KTX-文件以供非-GL-和非-Vulkan-使用"><a href="#读取-KTX-文件以供非-GL-和非-Vulkan-使用" class="headerlink" title="读取 KTX 文件以供非 GL 和非 Vulkan 使用"></a>读取 KTX 文件以供非 GL 和非 Vulkan 使用</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;ktx.h&gt;</span></span></span><br><span class="line"> </span><br><span class="line">ktxTexture* texture;</span><br><span class="line">KTX_error_code result;</span><br><span class="line"><span class="type">ktx_size_t</span> offset;</span><br><span class="line"><span class="type">ktx_uint8_t</span>* image;</span><br><span class="line"><span class="type">ktx_uint32_t</span> level, layer, faceSlice;</span><br><span class="line"> </span><br><span class="line">result = <span class="built_in">ktxTexture_CreateFromNamedFile</span>(<span class="string">&quot;mytex3d.ktx&quot;</span>,</span><br><span class="line">                                        KTX_TEXTURE_CREATE_LOAD_IMAGE_DATA_BIT,</span><br><span class="line">                                        &amp;texture);</span><br><span class="line"> </span><br><span class="line"><span class="comment">// Retrieve information about the texture from fields in the ktxTexture</span></span><br><span class="line"><span class="comment">// such as:</span></span><br><span class="line">ktx_uint32 numLevels = texture-&gt;numLevels;</span><br><span class="line">ktx_uint32 baseWidth = texture-&gt;baseWidth;</span><br><span class="line"><span class="type">ktx_bool_t</span> isArray = texture-&gt;isArray;</span><br><span class="line"> </span><br><span class="line"><span class="comment">// Retrieve a pointer to the image for a specific mip level, array layer</span></span><br><span class="line"><span class="comment">// &amp; face or depth slice.</span></span><br><span class="line">level = <span class="number">1</span>; layer = <span class="number">0</span>; faceSlice = <span class="number">3</span>;</span><br><span class="line">result = <span class="built_in">ktxTexture_GetImageOffset</span>(texture, level, layer, faceSlice, &amp;offset);</span><br><span class="line">image = <span class="built_in">ktxTexture_GetData</span>(texture) + offset;</span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="comment">// Do something with the texture image.</span></span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="built_in">ktxTexture_Destroy</span>(texture);</span><br></pre></td></tr></table></figure>
+
+<h3 id="从-KTX-文件创建-GL-纹理对象"><a href="#从-KTX-文件创建-GL-纹理对象" class="headerlink" title="从 KTX 文件创建 GL 纹理对象"></a>从 KTX 文件创建 GL 纹理对象</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;ktx.h&gt;</span></span></span><br><span class="line"> </span><br><span class="line">ktxTexture* kTexture;</span><br><span class="line">KTX_error_code result;</span><br><span class="line"><span class="type">ktx_size_t</span> offset;</span><br><span class="line"><span class="type">ktx_uint8_t</span>* image;</span><br><span class="line"><span class="type">ktx_uint32_t</span> level, layer, faceSlice;</span><br><span class="line">GLuint texture = <span class="number">0</span>;</span><br><span class="line">GLenum target, glerror;</span><br><span class="line"> </span><br><span class="line">result = <span class="built_in">ktxTexture_CreateFromNamedFile</span>(<span class="string">&quot;mytex3d.ktx&quot;</span>,</span><br><span class="line">                                        KTX_TEXTURE_CREATE_NO_FLAGS,</span><br><span class="line">                                        &amp;kTexture);</span><br><span class="line"><span class="built_in">glGenTextures</span>(<span class="number">1</span>, &amp;texture); <span class="comment">// Optional. GLUpload can generate a texture.</span></span><br><span class="line">result = <span class="built_in">ktxTexture_GLUpload</span>(kTexture, &amp;texture, &amp;target, &amp;glerror);</span><br><span class="line"><span class="built_in">ktxTexture_Destroy</span>(texture);</span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="comment">// GL rendering using the texture</span></span><br><span class="line"><span class="comment">// ...</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>NOTE：不知道什么原因（目前推测是Linear和sRGB的区别）导致渲染图像有色差，临时解决方案是：片段着色器的输出RGB分别偏移0.25，效果基本不偏色。</p>
+<h1 id="压缩工具"><a href="#压缩工具" class="headerlink" title="压缩工具"></a>压缩工具</h1><h2 id="NVIDIA-Texture-Tools-DXT-BCn-压缩器"><a href="#NVIDIA-Texture-Tools-DXT-BCn-压缩器" class="headerlink" title="NVIDIA Texture Tools (DXT &#x2F; BCn 压缩器)"></a>NVIDIA Texture Tools (DXT &#x2F; BCn 压缩器)</h2><p><a target="_blank" rel="noopener" href="https://developer.nvidia.com/gpu-accelerated-texture-compression">https://developer.nvidia.com/gpu-accelerated-texture-compression</a></p>
+<h2 id="ARM-GPU-Texture-Compression-Tool-ASTC-ETC2-压缩器"><a href="#ARM-GPU-Texture-Compression-Tool-ASTC-ETC2-压缩器" class="headerlink" title="ARM GPU Texture Compression Tool (ASTC &#x2F; ETC2 压缩器)"></a>ARM GPU Texture Compression Tool (ASTC &#x2F; ETC2 压缩器)</h2><p><a target="_blank" rel="noopener" href="http://malideveloper.arm.com/develop-for-mali/tools/asset-creation/mali-gpu-texture-compression-tool/">http://malideveloper.arm.com/develop-for-mali/tools/asset-creation/mali-gpu-texture-compression-tool/</a></p>
+<h2 id="Imagination-PVRTexTool-PVRTC-ETC2-…-多功能压缩器"><a href="#Imagination-PVRTexTool-PVRTC-ETC2-…-多功能压缩器" class="headerlink" title="Imagination PVRTexTool (PVRTC &#x2F; ETC2 &#x2F; … 多功能压缩器)"></a>Imagination PVRTexTool (PVRTC &#x2F; ETC2 &#x2F; … 多功能压缩器)</h2><p><a target="_blank" rel="noopener" href="http://community.imgtec.com/developers/powervr/tools/pvrtextool/">http://community.imgtec.com/developers/powervr/tools/pvrtextool/</a></p>
+<h2 id="KTX-Tools（ASTC-ETC1S-UASTC-压缩器）"><a href="#KTX-Tools（ASTC-ETC1S-UASTC-压缩器）" class="headerlink" title="KTX Tools（ASTC &#x2F; ETC1S &#x2F; UASTC 压缩器）"></a>KTX Tools（ASTC &#x2F; ETC1S &#x2F; UASTC 压缩器）</h2><p><a target="_blank" rel="noopener" href="https://github.khronos.org/KTX-Software/ktxtools/toktx.html">https://github.khronos.org/KTX-Software/ktxtools/toktx.html</a></p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/luming1979/archive/2013/02/04/2891421.html">各种移动GPU压缩纹理的使用方法 - LuMing - 博客园</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/347001411?hmsr=toutiao.io">移动平台GPU硬件学习与理解</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/6659c024530a">OpenGL ES 压缩纹理</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/Dango_miracle/article/details/79297937">【GLSL】基本知识以及如何查看电脑显卡和GLSL版本信息_检查您的glsl版本-CSDN博客</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/chenweiyu11962/article/details/121259120">纹理优化三-KTX纹理压缩-CSDN博客</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/cfylove/article/details/51997066">PVR图像文件格式初探_pvrtc4-CSDN博客</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/hgl868/article/details/40888527">glCompressedTexImage2D 压缩纹理-CSDN博客</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/158740249">ASTC纹理压缩格式详解</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/ZJU_fish1996/article/details/110500206">ASTC纹理压缩格式(Adaptive Scalable Texture Compression)_astcenc-CSDN博客</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/659509891">ASTC格式剖析及其GPU编码实现</a></p>
+<p><a target="_blank" rel="noopener" href="https://niepp.github.io/2021/12/18/Compute-ASTC.html">https://niepp.github.io/2021/12/18/Compute-ASTC.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/644439868">[VulkanLearning]KTX</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/aventurine/article/details/121971926">creator贴图纹理压缩(creator2.4.x 实现ETC2和ASTC)-CSDN博客</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/chenweiyu11962/article/details/121259120">纹理优化三-KTX纹理压缩-CSDN博客</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.pianshen.com/article/255021103/">纹理压缩介绍（转） - 程序员大本营</a></p>
+<p><a target="_blank" rel="noopener" href="https://cn.khronos.org/news/press/khronos-ktx-2.0-gltf-3d">Khronos KTX 2.0纹理 启用了紧凑，外观丰富的glTF 3D资产 - Khronos Group Press Release</a></p>
+<p><a target="_blank" rel="noopener" href="https://registry.khronos.org/OpenGL/extensions/KHR/KHR_texture_compression_astc_hdr.txt">Khronos OpenGL ES Registry</a></p>
+<p><a target="_blank" rel="noopener" href="https://registry.khronos.org/OpenGL/index_es.php#specs32">Khronos OpenGL ES Registry - The Khronos Group Inc</a></p>
+<p><a target="_blank" rel="noopener" href="https://e2e.ti.com/support/processors-group/processors/f/processors-forum/889066/j6-entry-how-to-create-mipmap-for-compressed-texture-with-opengles">J6 entry:how to create mipmap for compressed texture with opengles - Processors forum - Processors - TI E2E support forums</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/nothings/stb">https://github.com/nothings/stb</a></p>
+<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/27641932/loading-compressed-textures-in-android-opengles-2-0">Loading compressed textures in Android OpenglES 2.0</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.oldunreal.com/editing/s3tc/ARB_texture_compression.pdf">https://www.oldunreal.com/editing/s3tc/ARB_texture_compression.pdf</a></p>
+<p><a target="_blank" rel="noopener" href="https://developer.nvidia.com/astc-texture-compression-for-game-assets">https://developer.nvidia.com/astc-texture-compression-for-game-assets</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/zhefengzhang/support_astc_etc2">https://github.com/zhefengzhang/support_astc_etc2</a></p>
+<p><a target="_blank" rel="noopener" href="https://forum.cocos.org/t/topic/118585">https://forum.cocos.org/t/topic/118585</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/microsoft/angle/wiki/Loading-textures-from-dds-files">https://github.com/microsoft/angle/wiki/Loading-textures-from-dds-files</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/KhronosGroup/KTX-Software/blob/main/lib/astc-encoder/Docs/FileFormat.md">https://github.com/KhronosGroup/KTX-Software/blob/main/lib/astc-encoder/Docs/FileFormat.md</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a target="_blank" rel="noopener" href="https://github.com/AillianYue">Yilin.Yue</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a target="_blank" rel="noopener" href="https://www.yuque.com/aillian-yue/blog">https://www.yuque.com/aillian-yue/blog</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">此文章版归岳一霖所有，如需转载，请注明来自原作者</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/OpenGL/">OpenGL</a></div><div class="post-share"><div class="social-share" data-image="/img/OpenGL.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2024/12/01/C++%E5%9F%BA%E7%A1%80%EF%BC%9Aprintf%E8%AF%A6%E8%A7%A3/" title="C++基础：printf详解"><img class="cover" src="/img/CPlusPlus.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">C++基础：printf详解</div></div><div class="info-2"><div class="info-item-1">printf 是 C 语言标准库中的一个函数，来自于 &lt;stdio.h&gt; 头文件，虽然 C++ 更倾向于使用 cout，但 printf 在某些情况下仍然非常有用。 printf格式指定符   类型 printf 格式指定符    short %hd   unsigned short %hu   int %d   unsigned int %u   long %ld   unsigned long %lu   long long %lld   unsigned long long %llu   无符号整数（16进制） %x   无符号整数（8进制） %o   float %f   float（科学计数法） %e   float（自动选择%f或%e） %g   double %lf   double（科学计数法） %le   double（自动选择%f或%e） %lg   long double %Lf   long double（科学计数法） %Le   long double（自动选择%f或%e） %Lg   char（窄字符） %c   wchar_t（宽字符） ...</div></div></div></a><a class="pagination-related" href="/2021/06/09/C++%E5%9F%BA%E7%A1%80%EF%BC%9A%E7%BB%A7%E6%89%BF%E4%B8%8E%E6%B4%BE%E7%94%9F/" title="C++基础：继承与派生"><img class="cover" src="/img/CPlusPlus.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">C++基础：继承与派生</div></div><div class="info-2"><div class="info-item-1">继承单继承语法形式1234class 派生类名: 继承方式 基类名&#123;	成员声明;&#125;  12345class Derived: public Base&#123;public:	Derived ();	~Derived ();&#125;;  多继承语法形式1234class 派生类名：继承方式1 基类名1，继承方式2 基类名2，...&#123;	成员声明；&#125;  12345class Derived: public Base1, private Base2&#123;public:	Derived ();	~Derived ();&#125;;  继承方式 公有继承 私有继承 保护继承  公有继承(public) 继承的访问控制 基类的public和protected成员：访问属性在派生类中保持不变； 基类的private成员：不可直接访问。   访问权限 派生类中的成员函数：可以直接访问基类中的public和protected成员，但不能直接访问基类的private成员； 通过派生类的对象：只能访问public成员。    123456789101...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">AillianYue</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">12</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">10</div></a></div><a id="card-info-btn" href="/about/"><i class="fas fa-user-graduate"></i><span>关于我</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/AillianYue" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="https://gitee.com/aillianyue" target="_blank" title="Gitee"><i class="fab fa-github-alt"></i></a><a class="social-icon" href="mailto:634558578@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="tencent://AddContact/?fromId=45&amp;fromSubId=1&amp;subcmd=all&amp;uin=634558578&amp;website=www.oicqzone.com" target="_blank" title="QQ"><i class="fab fa-qq"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站不定期更新，欢迎！</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%86%E8%A7%A3%E5%B9%B3%E5%8F%B0%E4%BF%A1%E6%81%AF"><span class="toc-number">1.</span> <span class="toc-text">了解平台信息</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A7%BB%E5%8A%A8GPU"><span class="toc-number">1.1.</span> <span class="toc-text">移动GPU</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E7%A1%AC%E4%BB%B6GPU%E3%80%81%E6%94%AF%E6%8C%81%E7%9A%84OpenGL%E7%89%88%E6%9C%AC%E3%80%81GLSL%E7%89%88%E6%9C%AC"><span class="toc-number">1.2.</span> <span class="toc-text">查看硬件GPU、支持的OpenGL版本、GLSL版本</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OpenGL%E4%B8%AD%E6%9F%A5%E8%AF%A2%E6%89%A9%E5%B1%95%E7%9B%B8%E5%85%B3%E7%9A%84%E6%8E%A5%E5%8F%A3"><span class="toc-number">1.3.</span> <span class="toc-text">OpenGL中查询扩展相关的接口</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OpenGL%E6%9F%A5%E8%AF%A2%E6%89%80%E6%9C%89%E6%94%AF%E6%8C%81%E7%9A%84%E6%89%A9%E5%B1%95"><span class="toc-number">1.4.</span> <span class="toc-text">OpenGL查询所有支持的扩展</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BA%B9%E7%90%86%E5%8E%8B%E7%BC%A9"><span class="toc-number">2.</span> <span class="toc-text">纹理压缩</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%BE%E5%83%8F%E6%96%87%E4%BB%B6%E7%9A%84%E6%A0%BC%E5%BC%8F%E4%B8%8E%E7%BA%B9%E7%90%86%E6%A0%BC%E5%BC%8F"><span class="toc-number">2.1.</span> <span class="toc-text">图像文件的格式与纹理格式</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E7%9A%84%E5%8E%8B%E7%BC%A9%E7%BA%B9%E7%90%86%E6%A0%BC%E5%BC%8F"><span class="toc-number">3.</span> <span class="toc-text">常见的压缩纹理格式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#S3TC-DXTn-BCn"><span class="toc-number">3.1.</span> <span class="toc-text">S3TC&#x2F;DXTn&#x2F;BCn</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PVRTC-PVRTC2"><span class="toc-number">3.2.</span> <span class="toc-text">PVRTC&#x2F;PVRTC2</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ETC-ETC2"><span class="toc-number">3.3.</span> <span class="toc-text">ETC&#x2F;ETC2</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ASTC"><span class="toc-number">3.4.</span> <span class="toc-text">ASTC</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BA%B9%E7%90%86%E5%8E%8B%E7%BC%A9%E6%A0%BC%E5%BC%8F%E8%AF%A6%E8%A7%A3"><span class="toc-number">4.</span> <span class="toc-text">纹理压缩格式详解</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#ASTC-1"><span class="toc-number">4.1.</span> <span class="toc-text">ASTC</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Header"><span class="toc-number">4.1.0.1.</span> <span class="toc-text">Header</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Magic-number"><span class="toc-number">4.1.0.2.</span> <span class="toc-text">Magic number</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Block-size"><span class="toc-number">4.1.0.3.</span> <span class="toc-text">Block size</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Image-dimensions"><span class="toc-number">4.1.0.4.</span> <span class="toc-text">Image dimensions</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Image-size"><span class="toc-number">4.1.0.5.</span> <span class="toc-text">Image size</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Binary-payload"><span class="toc-number">4.1.0.6.</span> <span class="toc-text">Binary payload</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A0%E8%BD%BD%E7%A4%BA%E4%BE%8B"><span class="toc-number">4.1.1.</span> <span class="toc-text">加载示例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OpenGL%E7%BA%B9%E7%90%86%E5%8E%8B%E7%BC%A9%E6%8E%A5%E5%8F%A3"><span class="toc-number">4.2.</span> <span class="toc-text">OpenGL纹理压缩接口</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#target"><span class="toc-number">4.2.0.1.</span> <span class="toc-text">target</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#level"><span class="toc-number">4.2.0.2.</span> <span class="toc-text">level</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#internalformat"><span class="toc-number">4.2.0.3.</span> <span class="toc-text">internalformat</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#width"><span class="toc-number">4.2.0.4.</span> <span class="toc-text">width</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#height"><span class="toc-number">4.2.0.5.</span> <span class="toc-text">height</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#border"><span class="toc-number">4.2.0.6.</span> <span class="toc-text">border</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#imageSize"><span class="toc-number">4.2.0.7.</span> <span class="toc-text">imageSize</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#data"><span class="toc-number">4.2.0.8.</span> <span class="toc-text">data</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%94%99%E8%AF%AF%E4%BB%A3%E7%A0%81"><span class="toc-number">4.2.0.9.</span> <span class="toc-text">错误代码</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#KTX"><span class="toc-number">4.3.</span> <span class="toc-text">KTX</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#libktx"><span class="toc-number">4.3.1.</span> <span class="toc-text">libktx</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%BB%E5%8F%96-KTX-%E6%96%87%E4%BB%B6%E4%BB%A5%E4%BE%9B%E9%9D%9E-GL-%E5%92%8C%E9%9D%9E-Vulkan-%E4%BD%BF%E7%94%A8"><span class="toc-number">4.3.2.</span> <span class="toc-text">读取 KTX 文件以供非 GL 和非 Vulkan 使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%8E-KTX-%E6%96%87%E4%BB%B6%E5%88%9B%E5%BB%BA-GL-%E7%BA%B9%E7%90%86%E5%AF%B9%E8%B1%A1"><span class="toc-number">4.3.3.</span> <span class="toc-text">从 KTX 文件创建 GL 纹理对象</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8E%8B%E7%BC%A9%E5%B7%A5%E5%85%B7"><span class="toc-number">5.</span> <span class="toc-text">压缩工具</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#NVIDIA-Texture-Tools-DXT-BCn-%E5%8E%8B%E7%BC%A9%E5%99%A8"><span class="toc-number">5.1.</span> <span class="toc-text">NVIDIA Texture Tools (DXT &#x2F; BCn 压缩器)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ARM-GPU-Texture-Compression-Tool-ASTC-ETC2-%E5%8E%8B%E7%BC%A9%E5%99%A8"><span class="toc-number">5.2.</span> <span class="toc-text">ARM GPU Texture Compression Tool (ASTC &#x2F; ETC2 压缩器)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Imagination-PVRTexTool-PVRTC-ETC2-%E2%80%A6-%E5%A4%9A%E5%8A%9F%E8%83%BD%E5%8E%8B%E7%BC%A9%E5%99%A8"><span class="toc-number">5.3.</span> <span class="toc-text">Imagination PVRTexTool (PVRTC &#x2F; ETC2 &#x2F; … 多功能压缩器)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#KTX-Tools%EF%BC%88ASTC-ETC1S-UASTC-%E5%8E%8B%E7%BC%A9%E5%99%A8%EF%BC%89"><span class="toc-number">5.4.</span> <span class="toc-text">KTX Tools（ASTC &#x2F; ETC1S &#x2F; UASTC 压缩器）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">6.</span> <span class="toc-text">参考</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/07/06/%E6%94%BB%E7%95%A5%EF%BC%9A%E9%BB%91%E7%A5%9E%E8%AF%9D%E6%82%9F%E7%A9%BA/" title="攻略：黑神话悟空"><img src="/img/WUKONG.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="攻略：黑神话悟空"/></a><div class="content"><a class="title" href="/2025/07/06/%E6%94%BB%E7%95%A5%EF%BC%9A%E9%BB%91%E7%A5%9E%E8%AF%9D%E6%82%9F%E7%A9%BA/" title="攻略：黑神话悟空">攻略：黑神话悟空</a><time datetime="2025-07-05T16:00:01.000Z" title="发表于 2025-07-06 00:00:01">2025-07-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/05/05/%E6%94%BB%E7%95%A5%EF%BC%9A%E8%89%BE%E5%B0%94%E7%99%BB%E6%B3%95%E7%8E%AF/" title="攻略：艾尔登法环"><img src="/img/ELDENRING.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="攻略：艾尔登法环"/></a><div class="content"><a class="title" href="/2025/05/05/%E6%94%BB%E7%95%A5%EF%BC%9A%E8%89%BE%E5%B0%94%E7%99%BB%E6%B3%95%E7%8E%AF/" title="攻略：艾尔登法环">攻略：艾尔登法环</a><time datetime="2025-05-04T16:00:01.000Z" title="发表于 2025-05-05 00:00:01">2025-05-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/01/02/Android%E5%9F%BA%E7%A1%80%EF%BC%9AAndroid%20Studio/" title="Android基础：Android Studio"><img src="/img/AndroidStudio.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Android基础：Android Studio"/></a><div class="content"><a class="title" href="/2025/01/02/Android%E5%9F%BA%E7%A1%80%EF%BC%9AAndroid%20Studio/" title="Android基础：Android Studio">Android基础：Android Studio</a><time datetime="2025-01-01T16:14:00.000Z" title="发表于 2025-01-02 00:14:00">2025-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/16/WSL%E5%9F%BA%E7%A1%80%EF%BC%9A%E5%BC%80%E5%A7%8B/" title="WSL基础：开始"><img src="/img/Linux.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="WSL基础：开始"/></a><div class="content"><a class="title" href="/2024/12/16/WSL%E5%9F%BA%E7%A1%80%EF%BC%9A%E5%BC%80%E5%A7%8B/" title="WSL基础：开始">WSL基础：开始</a><time datetime="2024-12-15T16:50:00.000Z" title="发表于 2024-12-16 00:50:00">2024-12-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/03/C++%E5%9F%BA%E7%A1%80%EF%BC%9AGDB%E8%B0%83%E8%AF%95/" title="C++基础：GDB调试"><img src="/img/CPlusPlus.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="C++基础：GDB调试"/></a><div class="content"><a class="title" href="/2024/12/03/C++%E5%9F%BA%E7%A1%80%EF%BC%9AGDB%E8%B0%83%E8%AF%95/" title="C++基础：GDB调试">C++基础：GDB调试</a><time datetime="2024-12-02T16:48:00.000Z" title="发表于 2024-12-03 00:48:00">2024-12-03</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2019 - 2025 By AillianYue</span></div><div class="footer_custom_text">Hi, welcome to <a target="_blank" rel="noopener" href="https://github.com/AillianYue">my blog</a>!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
