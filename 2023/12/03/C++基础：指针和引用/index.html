@@ -1,0 +1,862 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>C++基础：指针和引用 | AillianYue's Blog</title><meta name="author" content="AillianYue"><meta name="copyright" content="AillianYue"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="介绍指针和引用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++基础：指针和引用">
+<meta property="og:url" content="http://example.com/2023/12/03/C++%E5%9F%BA%E7%A1%80%EF%BC%9A%E6%8C%87%E9%92%88%E5%92%8C%E5%BC%95%E7%94%A8/index.html">
+<meta property="og:site_name" content="AillianYue&#39;s Blog">
+<meta property="og:description" content="介绍指针和引用">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/CPlusPlus.webp">
+<meta property="article:published_time" content="2023-12-03T11:44:00.000Z">
+<meta property="article:modified_time" content="2025-05-01T12:03:00.000Z">
+<meta property="article:author" content="AillianYue">
+<meta property="article:tag" content="C++">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/CPlusPlus.webp"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "C++基础：指针和引用",
+  "url": "http://example.com/2023/12/03/C++%E5%9F%BA%E7%A1%80%EF%BC%9A%E6%8C%87%E9%92%88%E5%92%8C%E5%BC%95%E7%94%A8/",
+  "image": "http://example.com/img/CPlusPlus.webp",
+  "datePublished": "2023-12-03T11:44:00.000Z",
+  "dateModified": "2025-05-01T12:03:00.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "AillianYue",
+      "url": "https://github.com/AillianYue"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/avatar.png"><link rel="canonical" href="http://example.com/2023/12/03/C++%E5%9F%BA%E7%A1%80%EF%BC%9A%E6%8C%87%E9%92%88%E5%92%8C%E5%BC%95%E7%94%A8/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'C++基础：指针和引用',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">15</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">10</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">AillianYue's Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">C++基础：指针和引用</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">C++基础：指针和引用</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-12-03T11:44:00.000Z" title="发表于 2023-12-03 19:44:00">2023-12-03</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-05-01T12:03:00.000Z" title="更新于 2025-05-01 20:03:00">2025-05-01</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/C/">C++</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/C/C-%E5%9F%BA%E7%A1%80/">C++基础</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">8.3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>30分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><p>VERSION：3.0.0</p>
+<h2 id="指针"><a href="#指针" class="headerlink" title="指针"></a>指针</h2><p>指针是一个变量，其存储的不是数据本身，而是<strong>另一个变量的内存地址</strong>。通过指针可以间接访问、修改目标变量的值，是C++中最灵活也最危险的特性之一。</p>
+<h3 id="寻址变量"><a href="#寻址变量" class="headerlink" title="寻址变量"></a>寻址变量</h3><ul>
+<li><strong>核心概念</strong>：使用<code>&amp;</code>运算符可以获取变量的内存地址，地址的类型由变量类型决定（如<code>int</code>变量的地址类型为<code>int*</code>）。</li>
+<li><strong>语法格式</strong>：</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">变量类型 变量名 = 初始值;</span><br><span class="line">变量类型* 指针名 = &amp;变量名; <span class="comment">// 指针存储变量的地址</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> a = <span class="number">10</span>;</span><br><span class="line">    <span class="type">int</span>* p = &amp;a; <span class="comment">// p存储a的内存地址，p的类型为int*（指向int的指针）</span></span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;变量a的值：&quot;</span> &lt;&lt; a &lt;&lt; endl;       <span class="comment">// 输出：10</span></span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;变量a的地址：&quot;</span> &lt;&lt; &amp;a &lt;&lt; endl;    <span class="comment">// 输出：0x7ffee4b7e7ac（地址值因环境而异）</span></span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;指针p存储的地址：&quot;</span> &lt;&lt; p &lt;&lt; endl; <span class="comment">// 输出：0x7ffee4b7e7ac（与&amp;a完全一致）</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>注意</strong>：<ul>
+<li>指针的类型必须与目标变量的类型匹配（除非使用<code>void*</code>），否则会导致类型错误。</li>
+<li>不能对未初始化的变量取地址（行为未定义）。</li>
+</ul>
+</li>
+</ul>
+<h3 id="指针解引用"><a href="#指针解引用" class="headerlink" title="指针解引用"></a>指针解引用</h3><ul>
+<li><strong>核心概念</strong>：使用<code>*</code>运算符可以通过指针存储的地址，间接访问或修改目标变量的值，称为”解引用”。</li>
+<li><strong>语法格式</strong>：</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">*指针名; <span class="comment">// 访问指针指向的变量</span></span><br><span class="line">*指针名 = 新值; <span class="comment">// 修改指针指向的变量的值</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> a = <span class="number">10</span>;</span><br><span class="line"><span class="type">int</span>* p = &amp;a;</span><br><span class="line">*p = <span class="number">20</span>; <span class="comment">// 解引用p，修改a的值为20</span></span><br><span class="line">cout &lt;&lt; <span class="string">&quot;修改后a的值：&quot;</span> &lt;&lt; a &lt;&lt; endl; <span class="comment">// 输出：20</span></span><br><span class="line">cout &lt;&lt; <span class="string">&quot;解引用p的值：&quot;</span> &lt;&lt; *p &lt;&lt; endl; <span class="comment">// 输出：20</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>注意</strong>：<ul>
+<li>只能对指向有效内存的指针解引用，对野指针（未初始化的指针）、空指针解引用会导致程序崩溃（行为未定义）。</li>
+<li><code>*</code>运算符的优先级低于赋值运算符，修改值时需注意括号（如<code>(*p)++</code>是对目标变量自增，<code>*p++</code>是指针先自增再解引用）。</li>
+</ul>
+</li>
+</ul>
+<h3 id="成员指针运算符"><a href="#成员指针运算符" class="headerlink" title="成员指针运算符"></a>成员指针运算符</h3><ul>
+<li><strong>核心场景</strong>：当指针指向<strong>结构体&#x2F;类对象</strong>时，需要通过特定运算符访问对象的成员（成员变量&#x2F;成员函数）。</li>
+<li><strong>运算符区别</strong>：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>适用场景</th>
+<th>语法格式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>-&gt;</code></td>
+<td>指针指向对象时访问成员</td>
+<td><code>指针名-&gt;成员名</code></td>
+</tr>
+<tr>
+<td><code>.*</code></td>
+<td>指向成员的指针访问成员</td>
+<td><code>对象名.*成员指针名</code></td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>注意</strong>：<code>-&gt;</code>是<code>(*指针名).成员名</code>的简写，本质是先解引用指针再访问成员，语法更简洁。</li>
+</ul>
+<h3 id="指针和数组的关系"><a href="#指针和数组的关系" class="headerlink" title="指针和数组的关系"></a>指针和数组的关系</h3><ul>
+<li>核心原理：数组名本质是一个指向数组首元素的常量指针（不能修改指向，但可以通过算术运算偏移），指针和数组在很多场景下可以等价使用。</li>
+<li>尤其重要的是：数组作为函数参数时，会自动退化为指向首元素的指针（失去数组长度信息），这是 C++ 继承自 C 的特性。</li>
+</ul>
+<p>核心等价关系：</p>
+<ul>
+<li><code>arr[i]</code> 等价于 <code>*(arr + i)</code>（数组名偏移 i 个元素）；</li>
+<li><code>&amp;arr[i]</code> 等价于 <code>arr + i</code>（获取第 i 个元素的地址）；</li>
+<li>数组名作为函数参数时，<code>void func(int arr[])</code> 等价于 <code>void func(int* arr)</code>（均退化为 int * 指针）。</li>
+</ul>
+<p>指针与数组等价使用：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> arr[] = &#123;<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>, <span class="number">40</span>&#125;;</span><br><span class="line"><span class="type">int</span>* p = arr; <span class="comment">// 等价于 int* p = &amp;arr[0];</span></span><br><span class="line"></span><br><span class="line">cout &lt;&lt; arr[<span class="number">0</span>] &lt;&lt; <span class="string">&quot; &quot;</span> &lt;&lt; *p &lt;&lt; endl;     <span class="comment">// 输出：10 10</span></span><br><span class="line">cout &lt;&lt; arr[<span class="number">2</span>] &lt;&lt; <span class="string">&quot; &quot;</span> &lt;&lt; *(p + <span class="number">2</span>) &lt;&lt; endl; <span class="comment">// 输出：30 30</span></span><br><span class="line">cout &lt;&lt; &amp;arr[<span class="number">1</span>] &lt;&lt; <span class="string">&quot; &quot;</span> &lt;&lt; p + <span class="number">1</span> &lt;&lt; endl; <span class="comment">// 输出：0x7ffee4b7e7b0 0x7ffee4b7e7b0</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 指针遍历数组</span></span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">4</span>; ++i) &#123;</span><br><span class="line">    cout &lt;&lt; *(p + i) &lt;&lt; <span class="string">&quot; &quot;</span>; <span class="comment">// 输出：10 20 30 40</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>数组作为函数参数：</p>
+<p>（1）数组传参的三种等价语法</p>
+<p>数组作为函数参数时，以下三种写法完全等价，本质都是接收<code>int*</code>指针：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 写法1：传统数组形式（最直观）</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">printArray1</span><span class="params">(<span class="type">int</span> arr[], <span class="type">int</span> length)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; length; ++i) &#123;</span><br><span class="line">        cout &lt;&lt; arr[i] &lt;&lt; <span class="string">&quot; &quot;</span>; <span class="comment">// 等价于 *(arr + i)</span></span><br><span class="line">    &#125;</span><br><span class="line">    cout &lt;&lt; endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 写法2：数组形式省略[]内长度（推荐，明确表示“退化为指针”）</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">printArray2</span><span class="params">(<span class="type">int</span> arr[], <span class="type">int</span> length)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 注意：函数内 sizeof(arr) 计算的是指针大小（4/8字节），而非数组总长度</span></span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;函数内sizeof(arr)：&quot;</span> &lt;&lt; <span class="built_in">sizeof</span>(arr) &lt;&lt; endl; <span class="comment">// 输出：8（64位系统）</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 写法3：直接用指针形式（最本质，与数组传参完全等价）</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">printArray3</span><span class="params">(<span class="type">int</span>* arr, <span class="type">int</span> length)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; length; ++i) &#123;</span><br><span class="line">        cout &lt;&lt; *(arr + i) &lt;&lt; <span class="string">&quot; &quot;</span>; <span class="comment">// 指针偏移访问</span></span><br><span class="line">    &#125;</span><br><span class="line">    cout &lt;&lt; endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>（2）数组传参的使用示例</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> arr[] = &#123;<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>, <span class="number">40</span>&#125;;</span><br><span class="line">    <span class="type">int</span> length = <span class="built_in">sizeof</span>(arr) / <span class="built_in">sizeof</span>(arr[<span class="number">0</span>]); <span class="comment">// 计算数组实际长度（4）</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 三种写法均可调用，传递数组名（退化为指针）和长度</span></span><br><span class="line">    <span class="built_in">printArray1</span>(arr, length); <span class="comment">// 输出：10 20 30 40</span></span><br><span class="line">    <span class="built_in">printArray2</span>(arr, length); <span class="comment">// 输出：函数内sizeof(arr)：8</span></span><br><span class="line">    <span class="built_in">printArray3</span>(arr, length); <span class="comment">// 输出：10 20 30 40</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>（3）数组传参的核心注意事项</p>
+<ul>
+<li>必须手动传递数组长度：函数内无法通过<code>sizeof(arr)</code>获取数组总长度（arr 已退化为指针），否则会计算错误；</li>
+<li>函数内可修改数组元素：数组传参本质是传递指针，函数内对<code>arr[i]</code>的修改会直接影响原数组（地址传递特性）；</li>
+<li>错误示例（未传递长度）：</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 错误：函数内无法获取数组实际长度，循环可能越界</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">badPrintArray</span><span class="params">(<span class="type">int</span> arr[])</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> len = <span class="built_in">sizeof</span>(arr) / <span class="built_in">sizeof</span>(arr[<span class="number">0</span>]); <span class="comment">// len=8/4=2（64位系统），而非4</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; len; ++i) &#123;</span><br><span class="line">        cout &lt;&lt; arr[i] &lt;&lt; <span class="string">&quot; &quot;</span>; <span class="comment">// 仅输出前2个元素：10 20（运气差会访问非法内存）</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>指针和数组的关键区别：</p>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>数组名（如 arr）</th>
+<th>指针变量（如 int* p）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>本质</td>
+<td>指向首元素的常量指针（int* const）</td>
+<td>指向 int 的变量指针（int*）</td>
+</tr>
+<tr>
+<td>能否修改指向</td>
+<td>不能（arr++ 报错）</td>
+<td>能（p++ 指向下一个元素）</td>
+</tr>
+<tr>
+<td>sizeof 计算结果</td>
+<td>数组总字节数（如 4×4&#x3D;16 字节）</td>
+<td>指针本身字节数（4&#x2F;8 字节）</td>
+</tr>
+<tr>
+<td>作为函数参数</td>
+<td>自动退化为指针（失去长度信息）</td>
+<td>本身就是指针（无退化）</td>
+</tr>
+<tr>
+<td>内存分配</td>
+<td>栈 &#x2F; 全局区（静态数组）</td>
+<td>指针变量在栈区，指向的内存可在任意区域</td>
+</tr>
+</tbody></table>
+<h3 id="指针的算术运算"><a href="#指针的算术运算" class="headerlink" title="指针的算术运算"></a>指针的算术运算</h3><ul>
+<li><strong>核心特性</strong>：指针的算术运算不是简单的数值加减，而是<strong>基于指向类型的字节数偏移</strong>（偏移量 &#x3D; 运算数 × 类型字节数），仅适用于指向数组或连续内存的指针。</li>
+<li><strong>支持的运算</strong>：<ol>
+<li><strong>自增（++）&#x2F;自减（–）</strong>：指针指向当前元素的下一个&#x2F;上一个同类型元素；</li>
+<li><strong>加减整数（+n&#x2F;-n）</strong>：指针偏移n个同类型元素；</li>
+<li><strong>指针相减</strong>：两个指向同一数组的指针相减，结果为元素个数差（非地址差）。</li>
+</ol>
+</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> arr[] = &#123;<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>, <span class="number">40</span>&#125;;</span><br><span class="line"><span class="type">int</span>* p = arr;</span><br><span class="line"></span><br><span class="line">p++; <span class="comment">// 指向arr[1]，地址增加4字节（int占4字节）</span></span><br><span class="line">cout &lt;&lt; *p &lt;&lt; endl; <span class="comment">// 输出：20</span></span><br><span class="line"></span><br><span class="line">p += <span class="number">2</span>; <span class="comment">// 指向arr[3]，地址再增加8字节</span></span><br><span class="line">cout &lt;&lt; *p &lt;&lt; endl; <span class="comment">// 输出：40</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span>* p1 = &amp;arr[<span class="number">0</span>];</span><br><span class="line"><span class="type">int</span>* p2 = &amp;arr[<span class="number">3</span>];</span><br><span class="line">cout &lt;&lt; p2 - p1 &lt;&lt; endl; <span class="comment">// 输出：3（元素个数差，而非地址差12字节）</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>注意</strong>：<ul>
+<li>对非数组指针进行算术运算（如指向单个变量的指针<code>p++</code>）会导致指针指向非法内存（野指针）；</li>
+<li>指针不能进行加法、乘法、除法运算（无意义，编译器报错）。</li>
+</ul>
+</li>
+</ul>
+<h3 id="指向指针的指针"><a href="#指向指针的指针" class="headerlink" title="指向指针的指针"></a>指向指针的指针</h3><ul>
+<li><strong>核心概念</strong>：二级指针是存储<strong>一级指针地址</strong>的指针，用于间接访问指针变量本身，常用于函数中修改一级指针的指向（如动态内存分配、数组指针传递）。</li>
+<li><strong>语法格式</strong>：</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">变量类型** 二级指针名 = &amp;一级指针名;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>内存模型</strong>：<ul>
+<li>一级指针<code>p</code>存储变量<code>a</code>的地址；</li>
+<li>二级指针<code>pp</code>存储一级指针<code>p</code>的地址；</li>
+<li>通过<code>**pp</code>可以间接访问变量<code>a</code>的值。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> a = <span class="number">10</span>;</span><br><span class="line"><span class="type">int</span>* p = &amp;a;     <span class="comment">// 一级指针：指向int变量</span></span><br><span class="line"><span class="type">int</span>** pp = &amp;p;   <span class="comment">// 二级指针：指向int*指针</span></span><br><span class="line"></span><br><span class="line">cout &lt;&lt; <span class="string">&quot;a的值：&quot;</span> &lt;&lt; a &lt;&lt; endl;         <span class="comment">// 输出：10</span></span><br><span class="line">cout &lt;&lt; <span class="string">&quot;*p的值：&quot;</span> &lt;&lt; *p &lt;&lt; endl;       <span class="comment">// 输出：10</span></span><br><span class="line">cout &lt;&lt; <span class="string">&quot;**pp的值：&quot;</span> &lt;&lt; **pp &lt;&lt; endl;   <span class="comment">// 输出：10</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 通过二级指针修改a的值</span></span><br><span class="line">**pp = <span class="number">20</span>;</span><br><span class="line">cout &lt;&lt; <span class="string">&quot;修改后a的值：&quot;</span> &lt;&lt; a &lt;&lt; endl;   <span class="comment">// 输出：20</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 通过二级指针修改一级指针的指向</span></span><br><span class="line"><span class="type">int</span> b = <span class="number">30</span>;</span><br><span class="line">*pp = &amp;b; <span class="comment">// 等价于 p = &amp;b;</span></span><br><span class="line">cout &lt;&lt; <span class="string">&quot;*p的值：&quot;</span> &lt;&lt; *p &lt;&lt; endl;       <span class="comment">// 输出：30</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>应用场景</strong>：<ul>
+<li>函数中修改一级指针的指向（如动态内存分配成功后赋值给外部指针）；</li>
+<li>处理二维数组（二维数组名是指向一维数组的指针，本质是二级指针）。</li>
+</ul>
+</li>
+</ul>
+<h3 id="函数指针"><a href="#函数指针" class="headerlink" title="函数指针"></a>函数指针</h3><ul>
+<li><strong>核心概念</strong>：函数指针存储<strong>函数的入口地址</strong>，可以通过函数指针调用函数，支持动态切换函数逻辑（如回调函数、策略模式）。</li>
+<li><strong>语法格式</strong>：</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义：返回值类型 (*函数指针名)(参数类型列表);</span></span><br><span class="line">返回值类型 (*func_ptr)(参数类型<span class="number">1</span>, 参数类型<span class="number">2</span>, ...);</span><br><span class="line">func_ptr = 函数名; <span class="comment">// 函数名本质是函数入口地址，无需&amp;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>基础使用</strong>：</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">add</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a + b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">subtract</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a - b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 定义函数指针，指向返回int、参数为两个int的函数</span></span><br><span class="line">    <span class="built_in">int</span> (*calc_ptr)(<span class="type">int</span>, <span class="type">int</span>);</span><br><span class="line">    calc_ptr = add; <span class="comment">// 指向add函数</span></span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;3 + 5 = &quot;</span> &lt;&lt; <span class="built_in">calc_ptr</span>(<span class="number">3</span>, <span class="number">5</span>) &lt;&lt; endl; <span class="comment">// 输出：8</span></span><br><span class="line"></span><br><span class="line">    calc_ptr = subtract; <span class="comment">// 切换指向subtract函数</span></span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;3 - 5 = &quot;</span> &lt;&lt; <span class="built_in">calc_ptr</span>(<span class="number">3</span>, <span class="number">5</span>) &lt;&lt; endl; <span class="comment">// 输出：-2</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>回调函数应用</strong>：</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 回调函数类型定义（简化函数指针声明）</span></span><br><span class="line"><span class="function"><span class="keyword">typedef</span> <span class="title">void</span> <span class="params">(*Callback)</span><span class="params">(<span class="type">int</span>)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 遍历数组并通过回调函数处理每个元素</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">traverseArray</span><span class="params">(<span class="type">int</span> arr[], <span class="type">int</span> size, Callback cb)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; size; ++i) &#123;</span><br><span class="line">        <span class="built_in">cb</span>(arr[i]); <span class="comment">// 调用回调函数</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 回调函数1：打印元素</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">printElement</span><span class="params">(<span class="type">int</span> x)</span> </span>&#123;</span><br><span class="line">    cout &lt;&lt; x &lt;&lt; <span class="string">&quot; &quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 回调函数2：打印元素的平方</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">printSquare</span><span class="params">(<span class="type">int</span> x)</span> </span>&#123;</span><br><span class="line">    cout &lt;&lt; x * x &lt;&lt; <span class="string">&quot; &quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> arr[] = &#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>&#125;;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;元素：&quot;</span>;</span><br><span class="line">    <span class="built_in">traverseArray</span>(arr, <span class="number">4</span>, printElement); <span class="comment">// 输出：1 2 3 4</span></span><br><span class="line"></span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;\n平方：&quot;</span>;</span><br><span class="line">    <span class="built_in">traverseArray</span>(arr, <span class="number">4</span>, printSquare);  <span class="comment">// 输出：1 4 9 16</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>注意</strong>：<ul>
+<li>函数指针的参数类型、返回值类型必须与指向的函数完全匹配；</li>
+<li>C++11及以后推荐使用<code>std::function</code>（STL函数包装器）替代原始函数指针，支持lambda表达式、函数对象，更灵活安全。</li>
+</ul>
+</li>
+</ul>
+<h3 id="void指针与std-byte指针"><a href="#void指针与std-byte指针" class="headerlink" title="void指针与std::byte指针"></a>void指针与std::byte指针</h3><ul>
+<li><strong>1. void指针</strong>：<ul>
+<li><strong>核心特性</strong>：无类型指针，可以存储任意类型变量的地址，但<strong>不能直接解引用</strong>（需先强制类型转换），也不能进行算术运算（无明确类型字节数）。</li>
+<li><strong>应用场景</strong>：通用指针（如函数参数接收任意类型数据）、动态内存分配（<code>malloc</code>返回<code>void*</code>）。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> a = <span class="number">10</span>;</span><br><span class="line"><span class="type">void</span>* p = &amp;a; <span class="comment">// void指针存储int变量地址</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 解引用前必须强制类型转换</span></span><br><span class="line"><span class="type">int</span>* p_int = <span class="built_in">static_cast</span>&lt;<span class="type">int</span>*&gt;(p);</span><br><span class="line">cout &lt;&lt; *p_int &lt;&lt; endl; <span class="comment">// 输出：10</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 错误：void指针不能直接解引用</span></span><br><span class="line"><span class="comment">// cout &lt;&lt; *p &lt;&lt; endl;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 错误：void指针不能进行算术运算</span></span><br><span class="line"><span class="comment">// p++;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>2. std::byte指针</strong>：<ul>
+<li><strong>核心特性</strong>：<code>std::byte</code>是C++17提供的<strong>原始字节类型</strong>（区别于<code>char</code>&#x2F;<code>unsigned char</code>），仅用于表示内存字节，不参与算术运算和字符处理，比<code>void*</code>更安全（明确字节操作意图）。</li>
+<li><strong>应用场景</strong>：内存拷贝、字节级访问（如序列化、硬件操作）。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstddef&gt;</span> <span class="comment">// 包含std::byte定义</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> a = <span class="number">0x12345678</span>;</span><br><span class="line">    std::byte* p = <span class="built_in">reinterpret_cast</span>&lt;std::byte*&gt;(&amp;a);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 字节级访问（小端序系统下输出：78 56 34 12）</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">size_t</span> i = <span class="number">0</span>; i &lt; <span class="built_in">sizeof</span>(a); ++i) &#123;</span><br><span class="line">        cout &lt;&lt; hex &lt;&lt; <span class="built_in">static_cast</span>&lt;<span class="type">int</span>&gt;(p[i]) &lt;&lt; <span class="string">&quot; &quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>关键区别</strong>：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>void*</th>
+<th>std::byte*</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>类型安全性</td>
+<td>低（无类型检查）</td>
+<td>高（明确字节操作）</td>
+</tr>
+<tr>
+<td>解引用</td>
+<td>需强制类型转换</td>
+<td>需转换为具体类型</td>
+</tr>
+<tr>
+<td>算术运算</td>
+<td>不支持</td>
+<td>支持有限偏移（按字节）</td>
+</tr>
+<tr>
+<td>应用场景</td>
+<td>通用指针、兼容性代码</td>
+<td>字节级内存操作</td>
+</tr>
+</tbody></table>
+<h3 id="nullptr的使用与指针在布尔表达式中的行为"><a href="#nullptr的使用与指针在布尔表达式中的行为" class="headerlink" title="nullptr的使用与指针在布尔表达式中的行为"></a>nullptr的使用与指针在布尔表达式中的行为</h3><ul>
+<li><strong>1. nullptr（C++11引入）</strong>：<ul>
+<li><strong>核心作用</strong>：替代C语言中的<code>NULL</code>（<code>NULL</code>本质是<code>(void*)0</code>或<code>0</code>，存在类型歧义），专门用于表示空指针（指向无效内存的指针）。</li>
+<li><strong>优势</strong>：类型安全，可隐式转换为任意指针类型，但不能转换为整数类型（避免<code>NULL</code>的类型混淆）。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">func</span><span class="params">(<span class="type">int</span> x)</span> </span>&#123;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;整数参数：&quot;</span> &lt;&lt; x &lt;&lt; endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">func</span><span class="params">(<span class="type">int</span>* p)</span> </span>&#123;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;指针参数：&quot;</span> &lt;&lt; p &lt;&lt; endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// NULL的歧义：调用func(int)，因为NULL被解析为0</span></span><br><span class="line">    <span class="built_in">func</span>(<span class="literal">NULL</span>); <span class="comment">// 输出：整数参数：0</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// nullptr无歧义：调用func(int*)</span></span><br><span class="line">    <span class="built_in">func</span>(<span class="literal">nullptr</span>); <span class="comment">// 输出：指针参数：0x0</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 正确：nullptr隐式转换为int*</span></span><br><span class="line">    <span class="type">int</span>* p = <span class="literal">nullptr</span>;</span><br><span class="line">    <span class="comment">// 错误：nullptr不能转换为int</span></span><br><span class="line">    <span class="comment">// int x = nullptr;</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>2. 指针在布尔表达式中的行为</strong>：<ul>
+<li><strong>规则</strong>：在布尔表达式中，<strong>空指针（nullptr）被视为false</strong>，<strong>非空指针（指向有效内存）被视为true</strong>，无需显式比较<code>== nullptr</code>。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> a = <span class="number">10</span>;</span><br><span class="line"><span class="type">int</span>* p = &amp;a;</span><br><span class="line"><span class="type">int</span>* null_p = <span class="literal">nullptr</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (p) &#123;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;p是有效指针&quot;</span> &lt;&lt; endl; <span class="comment">// 输出：p是有效指针</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (!null_p) &#123;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;null_p是空指针&quot;</span> &lt;&lt; endl; <span class="comment">// 输出：null_p是空指针</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 等价写法（推荐简洁版）</span></span><br><span class="line"><span class="keyword">if</span> (p != <span class="literal">nullptr</span>) &#123; <span class="comment">/* ... */</span> &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="指针的风险与注意事项"><a href="#指针的风险与注意事项" class="headerlink" title="指针的风险与注意事项"></a>指针的风险与注意事项</h3><p>指针的灵活性带来了潜在风险，不当使用会导致程序崩溃、内存泄漏、数据 corruption 等问题，需重点关注以下几点：</p>
+<ol>
+<li><strong>野指针（未初始化的指针）</strong>：<ul>
+<li>风险：指针未初始化时，存储的是随机地址，解引用会访问非法内存（程序崩溃）。</li>
+<li>规避：指针定义时立即初始化（指向有效内存或<code>nullptr</code>）。</li>
+<li>错误示例：</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span>* p; <span class="comment">// 野指针，存储随机地址</span></span><br><span class="line"><span class="comment">// *p = 10; // 严重错误：访问非法内存</span></span><br></pre></td></tr></table></figure>
+
+<pre><code>- 正确示例：
+</code></pre>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span>* p = <span class="literal">nullptr</span>; <span class="comment">// 初始化为空指针</span></span><br><span class="line"><span class="type">int</span> a = <span class="number">10</span>;</span><br><span class="line">p = &amp;a; <span class="comment">// 指向有效内存后再使用</span></span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><strong>悬空指针（指向已释放内存的指针）</strong>：<ul>
+<li>风险：指针指向的内存被释放（如<code>delete</code>、局部变量销毁）后，指针仍保留原地址，解引用会访问无效内存。</li>
+<li>规避：内存释放后，将指针置为<code>nullptr</code>，使用前检查指针有效性。</li>
+<li>错误示例：</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span>* p = <span class="keyword">new</span> <span class="built_in">int</span>(<span class="number">10</span>);</span><br><span class="line"><span class="keyword">delete</span> p; <span class="comment">// 内存释放，但p仍指向原地址（悬空指针）</span></span><br><span class="line"><span class="comment">// *p = 20; // 错误：访问已释放内存</span></span><br></pre></td></tr></table></figure>
+
+<pre><code>- 正确示例：
+</code></pre>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span>* p = <span class="keyword">new</span> <span class="built_in">int</span>(<span class="number">10</span>);</span><br><span class="line"><span class="keyword">delete</span> p;</span><br><span class="line">p = <span class="literal">nullptr</span>; <span class="comment">// 避免悬空指针</span></span><br><span class="line"><span class="keyword">if</span> (p != <span class="literal">nullptr</span>) &#123;</span><br><span class="line">    *p = <span class="number">20</span>; <span class="comment">// 不会执行，避免错误</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li><strong>内存泄漏</strong>：<ul>
+<li>风险：动态分配的内存（<code>new</code>&#x2F;<code>malloc</code>）未释放，导致内存资源耗尽。</li>
+<li>规避：使用智能指针（<code>std::unique_ptr</code>&#x2F;<code>std::shared_ptr</code>）自动管理内存，或严格遵循”谁分配谁释放”原则。</li>
+</ul>
+</li>
+<li><strong>越界访问</strong>：<ul>
+<li>风险：指针算术运算超出数组或动态内存的边界，修改非法内存的数据。</li>
+<li>规避：明确内存边界，遍历数组时使用下标或迭代器，避免指针偏移超出范围。</li>
+</ul>
+</li>
+<li><strong>类型不匹配</strong>：<ul>
+<li>风险：指针类型与目标变量类型不匹配（如<code>int*</code>指向<code>double</code>变量），解引用会导致数据解析错误。</li>
+<li>规避：避免随意强制类型转换，使用<code>static_cast</code>&#x2F;<code>reinterpret_cast</code>时确保类型兼容性。</li>
+</ul>
+</li>
+</ol>
+<h2 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h2><p>引用（Reference）是变量的<strong>别名</strong>，它本身不占用独立内存空间（编译器优化），与原变量共享同一内存地址。引用的核心优势是<strong>安全、简洁</strong>，避免了指针的野指针、悬空指针等风险，是C++中优先推荐的间接访问方式。</p>
+<h3 id="引用的定义与初始化"><a href="#引用的定义与初始化" class="headerlink" title="引用的定义与初始化"></a>引用的定义与初始化</h3><ul>
+<li><strong>规则</strong>：引用必须在定义时初始化，且初始化后不能修改指向（始终指向初始变量）。</li>
+<li><strong>语法格式</strong>：</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">变量类型&amp; 引用名 = 原变量名;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> a = <span class="number">10</span>;</span><br><span class="line"><span class="type">int</span>&amp; ref_a = a; <span class="comment">// ref_a是a的别名，与a共享内存地址</span></span><br><span class="line"></span><br><span class="line">cout &lt;&lt; <span class="string">&quot;a的值：&quot;</span> &lt;&lt; a &lt;&lt; endl;       <span class="comment">// 输出：10</span></span><br><span class="line">cout &lt;&lt; <span class="string">&quot;ref_a的值：&quot;</span> &lt;&lt; ref_a &lt;&lt; endl; <span class="comment">// 输出：10</span></span><br><span class="line">cout &lt;&lt; <span class="string">&quot;a的地址：&quot;</span> &lt;&lt; &amp;a &lt;&lt; endl;    <span class="comment">// 输出：0x7ffee4b7e7ac</span></span><br><span class="line">cout &lt;&lt; <span class="string">&quot;ref_a的地址：&quot;</span> &lt;&lt; &amp;ref_a &lt;&lt; endl; <span class="comment">// 输出：0x7ffee4b7e7ac（与a一致）</span></span><br><span class="line"></span><br><span class="line">ref_a = <span class="number">20</span>; <span class="comment">// 修改引用的值，等价于修改a的值</span></span><br><span class="line">cout &lt;&lt; <span class="string">&quot;修改后a的值：&quot;</span> &lt;&lt; a &lt;&lt; endl; <span class="comment">// 输出：20</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>注意</strong>：<ul>
+<li>错误1：引用未初始化（编译器报错）：</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span>&amp; ref; <span class="comment">// 错误：引用必须初始化</span></span><br></pre></td></tr></table></figure>
+
+<pre><code>- 错误2：引用不能指向临时变量（临时变量销毁后引用悬空）：
+</code></pre>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 错误：临时变量int(30)销毁后，ref_b悬空</span></span><br><span class="line"><span class="type">int</span>&amp; ref_b = <span class="number">30</span>;</span><br></pre></td></tr></table></figure>
+
+<pre><code>- 例外：`const`引用可以指向临时变量（编译器会延长临时变量的生命周期）：
+</code></pre>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> <span class="type">int</span>&amp; ref_c = <span class="number">30</span>; <span class="comment">// 合法：临时变量生命周期与ref_c一致</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="引用的核心特性"><a href="#引用的核心特性" class="headerlink" title="引用的核心特性"></a>引用的核心特性</h3><p>引用的特性决定了其使用场景，核心特性总结如下：</p>
+<ol>
+<li><strong>不可修改指向</strong>：引用初始化后，始终指向初始变量，不能重新绑定到其他变量。</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> a = <span class="number">10</span>, b = <span class="number">20</span>;</span><br><span class="line"><span class="type">int</span>&amp; ref = a;</span><br><span class="line">ref = b; <span class="comment">// 不是修改指向，而是将b的值赋给a（a变为20）</span></span><br><span class="line">cout &lt;&lt; a &lt;&lt; endl; <span class="comment">// 输出：20</span></span><br><span class="line">cout &lt;&lt; &amp;ref &lt;&lt; <span class="string">&quot; &quot;</span> &lt;&lt; &amp;a &lt;&lt; endl; <span class="comment">// 地址仍一致</span></span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><strong>无独立内存空间</strong>：引用本质是编译器优化后的”别名”，不占用额外内存（与原变量地址相同）。<ul>
+<li>注意：函数参数中的引用可能被编译器优化为指针实现，但语法上仍表现为引用特性。</li>
+</ul>
+</li>
+<li><strong>必须指向有效变量</strong>：引用不能指向<code>nullptr</code>，也不能指向已销毁的变量（避免悬空引用）。</li>
+<li><strong>类型严格匹配</strong>：引用的类型必须与原变量类型完全匹配（除非使用<code>const</code>引用兼容隐式类型转换）。</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">double</span> d = <span class="number">3.14</span>;</span><br><span class="line"><span class="comment">// 错误：int&amp;不能指向double变量</span></span><br><span class="line"><span class="comment">// int&amp; ref_d = d;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 合法：const int&amp;可以接收double临时变量（隐式转换为int）</span></span><br><span class="line"><span class="type">const</span> <span class="type">int</span>&amp; ref_d = d;</span><br><span class="line">cout &lt;&lt; ref_d &lt;&lt; endl; <span class="comment">// 输出：3（截断为int）</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="常引用"><a href="#常引用" class="headerlink" title="常引用"></a>常引用</h3><ul>
+<li><strong>核心概念</strong>：<code>const</code>引用（<code>const 类型&amp;</code>）是只读引用，只能访问原变量的值，不能通过引用修改原变量。</li>
+<li><strong>语法格式</strong>：</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> 变量类型&amp; 引用名 = 原变量名;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>核心优势</strong>：<ul>
+<li>支持指向临时变量（延长临时变量生命周期）；</li>
+<li>函数传参时避免拷贝，同时保护原变量不被修改；</li>
+<li>兼容隐式类型转换（如<code>double</code>→<code>int</code>）。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> a = <span class="number">10</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span>&amp; ref_a = a;</span><br><span class="line"></span><br><span class="line">cout &lt;&lt; ref_a &lt;&lt; endl; <span class="comment">// 合法：访问a的值</span></span><br><span class="line"><span class="comment">// ref_a = 20; // 错误：const引用不能修改原变量</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 指向临时变量（合法）</span></span><br><span class="line"><span class="type">const</span> <span class="type">double</span>&amp; ref_pi = <span class="number">3.14159</span>;</span><br><span class="line">cout &lt;&lt; ref_pi &lt;&lt; endl; <span class="comment">// 输出：3.14159</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 隐式类型转换（合法）</span></span><br><span class="line"><span class="type">int</span> b = <span class="number">5</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">double</span>&amp; ref_b = b; <span class="comment">// b隐式转换为double(5.0)</span></span><br><span class="line">cout &lt;&lt; ref_b &lt;&lt; endl; <span class="comment">// 输出：5.0</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>应用场景</strong>：<ul>
+<li>函数参数：接收大型对象（如<code>std::string</code>、自定义结构体），避免拷贝开销，同时保证原对象不被修改；</li>
+<li>接收临时变量：如函数返回值为临时对象时，用<code>const</code>引用接收（避免拷贝）。</li>
+</ul>
+</li>
+</ul>
+<h3 id="引用作为函数参数与返回值"><a href="#引用作为函数参数与返回值" class="headerlink" title="引用作为函数参数与返回值"></a>引用作为函数参数与返回值</h3><p>引用在函数中的应用是其核心价值之一，主要用于<strong>高效传参</strong>和<strong>返回对象别名</strong>。</p>
+<h4 id="引用作为函数参数"><a href="#引用作为函数参数" class="headerlink" title="引用作为函数参数"></a>引用作为函数参数</h4><ul>
+<li><strong>核心优势</strong>：<ul>
+<li>避免值拷贝（尤其对大型对象，提升效率）；</li>
+<li>直接修改实参的值（无需指针解引用，语法简洁）；</li>
+<li><code>const</code>引用兼顾效率与安全性（保护实参不被修改）。</li>
+</ul>
+</li>
+<li><strong>示例代码（修改实参）</strong>：</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 传引用：直接修改实参</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">swap</span><span class="params">(<span class="type">int</span>&amp; x, <span class="type">int</span>&amp; y)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> temp = x;</span><br><span class="line">    x = y;</span><br><span class="line">    y = temp;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> a = <span class="number">10</span>, b = <span class="number">20</span>;</span><br><span class="line">    <span class="built_in">swap</span>(a, b);</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;a=&quot;</span> &lt;&lt; a &lt;&lt; <span class="string">&quot;, b=&quot;</span> &lt;&lt; b &lt;&lt; endl; <span class="comment">// 输出：a=20, b=10</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>示例代码（const引用传参）</strong>：</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="comment">// const引用：避免拷贝，且保护实参不被修改</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">printString</span><span class="params">(<span class="type">const</span> string&amp; s)</span> </span>&#123;</span><br><span class="line">    cout &lt;&lt; s &lt;&lt; endl;</span><br><span class="line">    <span class="comment">// s += &quot;test&quot;; // 错误：const引用不能修改实参</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    string str = <span class="string">&quot;Hello World&quot;</span>;</span><br><span class="line">    <span class="built_in">printString</span>(str); <span class="comment">// 无拷贝，直接传递别名</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>传值、传指针、传引用对比</strong>：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>传参方式</th>
+<th>效率</th>
+<th>安全性</th>
+<th>能否修改实参</th>
+<th>语法简洁度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>传值</td>
+<td>低（拷贝）</td>
+<td>高（隔离）</td>
+<td>不能</td>
+<td>高</td>
+</tr>
+<tr>
+<td>传指针</td>
+<td>高（无拷贝）</td>
+<td>低（野指针）</td>
+<td>能</td>
+<td>低（解引用）</td>
+</tr>
+<tr>
+<td>传引用</td>
+<td>高（无拷贝）</td>
+<td>高（无悬空）</td>
+<td>能（非const）</td>
+<td>高</td>
+</tr>
+</tbody></table>
+<h4 id="引用作为函数返回值"><a href="#引用作为函数返回值" class="headerlink" title="引用作为函数返回值"></a>引用作为函数返回值</h4><ul>
+<li><strong>规则</strong>：<ul>
+<li>不能返回局部变量的引用（局部变量销毁后，引用悬空）；</li>
+<li>可以返回全局变量、静态变量、类成员变量的引用；</li>
+<li>返回<code>const</code>引用可以避免返回值被修改（如<code>std::vector::operator[]</code>的<code>const</code>重载）。</li>
+</ul>
+</li>
+<li><strong>示例代码（合法返回）</strong>：</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 全局变量</span></span><br><span class="line"><span class="type">int</span> g_val = <span class="number">100</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回全局变量的引用</span></span><br><span class="line"><span class="function"><span class="type">int</span>&amp; <span class="title">getGlobalVal</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> g_val;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span>&amp; ref = <span class="built_in">getGlobalVal</span>();</span><br><span class="line">    ref = <span class="number">200</span>; <span class="comment">// 修改全局变量的值</span></span><br><span class="line">    cout &lt;&lt; g_val &lt;&lt; endl; <span class="comment">// 输出：200</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>示例代码（错误返回）</strong>：</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 错误：返回局部变量的引用（函数结束后local_val销毁）</span></span><br><span class="line"><span class="function"><span class="type">int</span>&amp; <span class="title">getLocalVal</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> local_val = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">return</span> local_val; <span class="comment">// 编译器警告：返回局部变量的引用</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span>&amp; ref = <span class="built_in">getLocalVal</span>();</span><br><span class="line">    cout &lt;&lt; ref &lt;&lt; endl; <span class="comment">// 未定义行为：访问销毁的变量</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>应用场景</strong>：<ul>
+<li>链式调用（如<code>cout &lt;&lt; a &lt;&lt; b</code>，<code>operator&lt;&lt;</code>返回<code>ostream&amp;</code>）；</li>
+<li>类成员访问（如<code>std::vector::operator[]</code>返回元素引用，支持修改）。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="指针与引用的应用和对比"><a href="#指针与引用的应用和对比" class="headerlink" title="指针与引用的应用和对比"></a>指针与引用的应用和对比</h2><h3 id="指针与引用的差异"><a href="#指针与引用的差异" class="headerlink" title="指针与引用的差异"></a>指针与引用的差异</h3><p>指针与引用都是间接访问工具，但在语法、语义和使用场景上有本质区别，下表总结核心差异：</p>
+<table>
+<thead>
+<tr>
+<th>对比维度</th>
+<th>指针（Pointer）</th>
+<th>引用（Reference）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>定义与初始化</td>
+<td>可单独定义（未初始化为野指针），可指向<code>nullptr</code></td>
+<td>必须在定义时初始化，不能指向<code>nullptr</code></td>
+</tr>
+<tr>
+<td>指向修改</td>
+<td>可重新指向其他变量（<code>p = &amp;b</code>）</td>
+<td>初始化后不能修改指向（始终绑定原变量）</td>
+</tr>
+<tr>
+<td>内存占用</td>
+<td>占用独立内存（32位4字节，64位8字节）</td>
+<td>不占用独立内存（编译器优化为别名）</td>
+</tr>
+<tr>
+<td>解引用</td>
+<td>需使用<code>*</code>运算符（指针数组除外）</td>
+<td>直接使用（无需解引用语法）</td>
+</tr>
+<tr>
+<td>空值支持</td>
+<td>支持<code>nullptr</code>（空指针）</td>
+<td>不支持（必须指向有效变量）</td>
+</tr>
+<tr>
+<td>多级间接访问</td>
+<td>支持二级指针（<code>int**</code>）、三级指针等</td>
+<td>不支持多级引用（<code>int&amp;&amp;</code>是右值引用，非多级）</td>
+</tr>
+<tr>
+<td>类型转换</td>
+<td>支持显式&#x2F;隐式类型转换（如<code>void*</code>转<code>int*</code>）</td>
+<td>仅<code>const</code>引用支持有限隐式转换</td>
+</tr>
+<tr>
+<td>安全性</td>
+<td>低（野指针、悬空指针、越界访问风险）</td>
+<td>高（无空值、无指向修改、编译器检查）</td>
+</tr>
+<tr>
+<td>语法复杂度</td>
+<td>高（需关注解引用、指针算术、空指针检查）</td>
+<td>低（简洁直观，接近直接访问）</td>
+</tr>
+<tr>
+<td>适用场景</td>
+<td>动态内存分配、数据结构（链表&#x2F;树）、函数指针</td>
+<td>函数传参、返回值、替代指针简化代码</td>
+</tr>
+</tbody></table>
+<h3 id="函数中指针与引用"><a href="#函数中指针与引用" class="headerlink" title="函数中指针与引用"></a>函数中指针与引用</h3><p>函数传参是指针与引用最常用的场景，选择原则如下：</p>
+<h4 id="1-传参效率对比"><a href="#1-传参效率对比" class="headerlink" title="1. 传参效率对比"></a>1. 传参效率对比</h4><ul>
+<li>传值：拷贝整个对象（大型对象如<code>std::string</code>、<code>std::vector</code>效率极低）；</li>
+<li>传指针&#x2F;传引用：仅传递地址（4&#x2F;8字节），效率一致，远高于传值。</li>
+</ul>
+<h4 id="2-安全性对比"><a href="#2-安全性对比" class="headerlink" title="2. 安全性对比"></a>2. 安全性对比</h4><ul>
+<li>传指针：<ul>
+<li>风险：实参可能为<code>nullptr</code>，函数内需检查指针有效性；</li>
+<li>优势：可传递空值（表示”无数据”），可修改指针指向（如输出参数）。</li>
+</ul>
+</li>
+<li>传引用：<ul>
+<li>风险：无（必须指向有效变量，编译器检查）；</li>
+<li>优势：无需空指针检查，语法简洁，避免解引用错误。</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-选择建议"><a href="#3-选择建议" class="headerlink" title="3. 选择建议"></a>3. 选择建议</h4><table>
+<thead>
+<tr>
+<th>场景需求</th>
+<th>推荐方案</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>需修改实参的值</td>
+<td>传引用（非const）或传指针</td>
+</tr>
+<tr>
+<td>无需修改实参，且对象较大</td>
+<td>传const引用（优先）</td>
+</tr>
+<tr>
+<td>需传递空值（表示”无数据”）</td>
+<td>传指针（配合<code>nullptr</code>）</td>
+</tr>
+<tr>
+<td>实现输出参数（函数返回多个值）</td>
+<td>传引用（简洁）或传指针</td>
+</tr>
+<tr>
+<td>兼容C语言代码</td>
+<td>传指针（C语言无引用）</td>
+</tr>
+</tbody></table>
+<h3 id="this指针"><a href="#this指针" class="headerlink" title="this指针"></a>this指针</h3><ul>
+<li><strong>核心概念</strong>：<code>this</code>指针是C++编译器隐式传入类成员函数的<strong>常量指针</strong>，指向当前调用成员函数的对象，用于访问当前对象的成员变量和成员函数。</li>
+<li><strong>本质特性</strong>：<ul>
+<li><code>this</code>指针是成员函数的隐藏参数（编译器自动添加，无需手动声明）；</li>
+<li><code>this</code>指针的类型为<code>类名* const</code>（非const成员函数）或<code>const 类名* const</code>（const成员函数）；</li>
+<li><code>this</code>指针不能被修改指向（常量指针），也不能被赋值为<code>nullptr</code>；</li>
+<li><code>this</code>指针仅在类的非静态成员函数中可用（静态成员函数无<code>this</code>指针）。</li>
+</ul>
+</li>
+</ul>
+<p>显式使用this指针：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Person</span> &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    string name;</span><br><span class="line">    <span class="type">int</span> age;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">// 构造函数：this指针区分成员变量和参数名</span></span><br><span class="line">    <span class="built_in">Person</span>(string name, <span class="type">int</span> age) &#123;</span><br><span class="line">        <span class="keyword">this</span>-&gt;name = name; <span class="comment">// this-&gt;name：成员变量；name：参数</span></span><br><span class="line">        <span class="keyword">this</span>-&gt;age = age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 成员函数：返回当前对象的引用（支持链式调用）</span></span><br><span class="line">    <span class="function">Person&amp; <span class="title">setName</span><span class="params">(string name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>-&gt;name = name;</span><br><span class="line">        <span class="keyword">return</span> *<span class="keyword">this</span>; <span class="comment">// 返回当前对象的引用</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function">Person&amp; <span class="title">setAge</span><span class="params">(<span class="type">int</span> age)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>-&gt;age = age;</span><br><span class="line">        <span class="keyword">return</span> *<span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;姓名：&quot;</span> &lt;&lt; <span class="keyword">this</span>-&gt;name &lt;&lt; <span class="string">&quot;，年龄：&quot;</span> &lt;&lt; <span class="keyword">this</span>-&gt;age &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="function">Person <span class="title">p</span><span class="params">(<span class="string">&quot;张三&quot;</span>, <span class="number">25</span>)</span></span>;</span><br><span class="line">    <span class="comment">// 链式调用：setName和setAge返回*this（当前对象引用）</span></span><br><span class="line">    p.<span class="built_in">setName</span>(<span class="string">&quot;李四&quot;</span>).<span class="built_in">setAge</span>(<span class="number">30</span>);</span><br><span class="line">    p.<span class="built_in">print</span>(); <span class="comment">// 输出：姓名：李四，年龄：30</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>const成员函数中的this指针：</p>
+<ul>
+<li>const成员函数的<code>this</code>指针类型为<code>const 类名* const</code>，不能通过<code>this</code>指针修改成员变量（保证对象只读）。</li>
+<li>语法格式：<code>返回值类型 函数名(参数列表) const;</code></li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Person</span> &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">int</span> age;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">getAge</span><span class="params">()</span> <span class="type">const</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 错误：const成员函数不能修改成员变量</span></span><br><span class="line">        <span class="comment">// this-&gt;age = 30;</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>-&gt;age; <span class="comment">// 合法：仅访问成员变量</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>this指针的应用场景：</p>
+<ul>
+<li>区分成员变量和函数参数（参数名与成员变量名相同时）；</li>
+<li>从成员函数中返回当前对象（支持链式调用）；</li>
+<li>作为函数参数传递当前对象（如运算符重载）；</li>
+<li>访问类的嵌套成员（如<code>this-&gt;nestedObj.func()</code>）。</li>
+</ul>
+<h3 id="const与指针-引用"><a href="#const与指针-引用" class="headerlink" title="const与指针&#x2F;引用"></a>const与指针&#x2F;引用</h3><p><code>const</code>与指针、引用的结合是C++类型安全的核心机制，称为”const正确性”（Const Correctness），其核心原则是：<strong>不允许通过const修饰的指针&#x2F;引用修改原变量</strong>。正确使用<code>const</code>可以避免意外修改，提升代码可读性和安全性。</p>
+<h4 id="const与指针的结合"><a href="#const与指针的结合" class="headerlink" title="const与指针的结合"></a>const与指针的结合</h4><table>
+<thead>
+<tr>
+<th>语法格式</th>
+<th>含义</th>
+<th>能否修改指针指向</th>
+<th>能否通过指针修改目标变量</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>const 类型* 指针名</code></td>
+<td>指向const变量的指针（指针常量）</td>
+<td>能</td>
+<td>不能</td>
+</tr>
+<tr>
+<td><code>类型* const 指针名</code></td>
+<td>const指针（指针本身是常量）</td>
+<td>不能</td>
+<td>能（目标变量非const时）</td>
+</tr>
+<tr>
+<td><code>const 类型* const 指针名</code></td>
+<td>指向const变量的const指针</td>
+<td>不能</td>
+<td>不能</td>
+</tr>
+</tbody></table>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> a = <span class="number">10</span>, b = <span class="number">20</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 1. const int* p：指向const变量的指针</span></span><br><span class="line"><span class="type">const</span> <span class="type">int</span>* p1 = &amp;a;</span><br><span class="line"><span class="comment">// *p1 = 20; // 错误：不能通过p1修改a的值</span></span><br><span class="line">p1 = &amp;b; <span class="comment">// 合法：可以修改指针指向</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. int* const p：const指针</span></span><br><span class="line"><span class="type">int</span>* <span class="type">const</span> p2 = &amp;a;</span><br><span class="line">*p2 = <span class="number">20</span>; <span class="comment">// 合法：可以修改a的值</span></span><br><span class="line"><span class="comment">// p2 = &amp;b; // 错误：不能修改指针指向</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 3. const int* const p：指向const变量的const指针</span></span><br><span class="line"><span class="type">const</span> <span class="type">int</span>* <span class="type">const</span> p3 = &amp;a;</span><br><span class="line"><span class="comment">// *p3 = 20; // 错误：不能修改a的值</span></span><br><span class="line"><span class="comment">// p3 = &amp;b; // 错误：不能修改指针指向</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="const与引用的结合"><a href="#const与引用的结合" class="headerlink" title="const与引用的结合"></a>const与引用的结合</h4><table>
+<thead>
+<tr>
+<th>语法格式</th>
+<th>含义</th>
+<th>能否通过引用修改原变量</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>类型&amp; 引用名</code></td>
+<td>普通引用</td>
+<td>能</td>
+</tr>
+<tr>
+<td><code>const 类型&amp; 引用名</code></td>
+<td>常引用</td>
+<td>不能</td>
+</tr>
+</tbody></table>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> a = <span class="number">10</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span>&amp; ref = a;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ref = 20; // 错误：常引用不能修改原变量</span></span><br><span class="line">a = <span class="number">20</span>; <span class="comment">// 合法：原变量本身非const，可直接修改</span></span><br><span class="line">cout &lt;&lt; ref &lt;&lt; endl; <span class="comment">// 输出：20（引用值同步更新）</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="const正确性的实践原则"><a href="#const正确性的实践原则" class="headerlink" title="const正确性的实践原则"></a>const正确性的实践原则</h4><ol>
+<li><strong>函数参数</strong>：<ul>
+<li>不需要修改的参数，优先使用<code>const 引用</code>（避免拷贝，保护实参）；</li>
+<li>不需要修改的指针参数，使用<code>const 类型*</code>（避免通过指针修改实参）。</li>
+</ul>
+</li>
+<li><strong>函数返回值</strong>：<ul>
+<li>返回对象时，若无需修改返回值，返回<code>const 类型</code>（如<code>const std::string getString()</code>）；</li>
+<li>返回引用时，若返回的是类成员变量，且不希望外部修改，返回<code>const 类型&amp;</code>（如<code>const int&amp; getAge()</code>）。</li>
+</ul>
+</li>
+<li><strong>类成员函数</strong>：<ul>
+<li>不修改成员变量的成员函数，必须声明为<code>const</code>（如<code>int getAge() const</code>）；</li>
+<li>const成员函数不能调用非const成员函数（避免通过非const函数修改对象）。</li>
+</ul>
+</li>
+</ol>
+<h2 id="auto类型推断与指针-引用的结合"><a href="#auto类型推断与指针-引用的结合" class="headerlink" title="auto类型推断与指针&#x2F;引用的结合"></a>auto类型推断与指针&#x2F;引用的结合</h2><p>C++11引入的<code>auto</code>关键字可以根据初始化表达式自动推断变量类型，简化代码书写，尤其适用于复杂指针、引用类型。<code>auto</code>与指针、引用的结合使用是现代C++的常用技巧，需掌握其推断规则和最佳实践。</p>
+<h3 id="用auto进行变量初始化"><a href="#用auto进行变量初始化" class="headerlink" title="用auto进行变量初始化"></a>用auto进行变量初始化</h3><ul>
+<li><strong>规则</strong>：<code>auto</code>根据初始化表达式的类型自动推断变量类型，无需显式声明。</li>
+<li><strong>优势</strong>：<ul>
+<li>简化复杂类型书写（如<code>std::map&lt;int, std::string&gt;::iterator</code>可简化为<code>auto</code>）；</li>
+<li>提升代码可维护性（类型修改时无需同步修改变量声明）；</li>
+<li>避免类型错误（推断结果与初始化表达式一致）。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 基础类型推断</span></span><br><span class="line">    <span class="keyword">auto</span> a = <span class="number">10</span>;         <span class="comment">// a的类型：int</span></span><br><span class="line">    <span class="keyword">auto</span> b = <span class="number">3.14</span>;       <span class="comment">// b的类型：double</span></span><br><span class="line">    <span class="keyword">auto</span> c = <span class="string">&quot;hello&quot;</span>;    <span class="comment">// c的类型：const char*</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 指针类型推断（自动识别指针）</span></span><br><span class="line">    <span class="type">int</span> x = <span class="number">20</span>;</span><br><span class="line">    <span class="keyword">auto</span> p = &amp;x;         <span class="comment">// p的类型：int*</span></span><br><span class="line">    cout &lt;&lt; *p &lt;&lt; endl;  <span class="comment">// 输出：20</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 容器迭代器推断（简化复杂类型）</span></span><br><span class="line">    vector&lt;<span class="type">int</span>&gt; vec = &#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;;</span><br><span class="line">    <span class="keyword">auto</span> it = vec.<span class="built_in">begin</span>(); <span class="comment">// it的类型：vector&lt;int&gt;::iterator</span></span><br><span class="line">    cout &lt;&lt; *it &lt;&lt; endl;   <span class="comment">// 输出：1</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>注意</strong>：<ul>
+<li><code>auto</code>必须初始化（未初始化的<code>auto</code>变量编译器报错）；</li>
+<li><code>auto</code>不会推断为<code>const</code>或引用类型（除非初始化表达式是const或引用）。</li>
+</ul>
+</li>
+</ul>
+<h3 id="auto与引用类型"><a href="#auto与引用类型" class="headerlink" title="auto与引用类型"></a>auto与引用类型</h3><ul>
+<li><strong>规则</strong>：<ul>
+<li><code>auto&amp;</code>：推断为引用类型，绑定到初始化表达式的变量；</li>
+<li><code>const auto&amp;</code>：推断为常引用类型，绑定到初始化表达式（支持临时变量）。</li>
+</ul>
+</li>
+<li><strong>应用场景</strong>：<ul>
+<li><code>auto&amp;</code>：函数参数、修改容器元素、绑定非const变量；</li>
+<li><code>const auto&amp;</code>：容器遍历（避免拷贝）、接收临时变量、保护原变量不被修改。</li>
+</ul>
+</li>
+</ul>
+<h3 id="auto与指针类型"><a href="#auto与指针类型" class="headerlink" title="auto与指针类型"></a>auto与指针类型</h3><ul>
+<li><strong>规则</strong>：<code>auto*</code>明确推断为指针类型，初始化表达式必须是指针（否则编译器报错），与<code>auto</code>推断指针的区别在于更明确的语法意图。</li>
+<li><strong>应用场景</strong>：明确变量是指针类型，提升代码可读性（如函数返回指针、指针参数传递）。</li>
+</ul>
+<h3 id="auto在代码重构中的优势"><a href="#auto在代码重构中的优势" class="headerlink" title="auto在代码重构中的优势"></a>auto在代码重构中的优势</h3><ul>
+<li><strong>核心优势</strong>：当变量类型修改时，<code>auto</code>无需手动同步修改，减少重构错误。</li>
+<li><strong>其他重构场景</strong>：<ul>
+<li>容器类型修改（如<code>vector&lt;int&gt;</code>→<code>vector&lt;long&gt;</code>），迭代器<code>auto it</code>无需修改；</li>
+<li>函数返回值类型修改（如<code>std::string</code>→<code>std::wstring</code>），接收变量<code>auto s</code>无需修改；</li>
+<li>指针类型修改（如<code>int*</code>→<code>const int*</code>），<code>auto p</code>自动适配。</li>
+</ul>
+</li>
+</ul>
+<h3 id="auto与const-volatile"><a href="#auto与const-volatile" class="headerlink" title="auto与const&#x2F;volatile"></a>auto与const&#x2F;volatile</h3><ul>
+<li><strong>规则</strong>：<code>auto</code>会忽略初始化表达式的顶层const&#x2F;volatile，但会保留底层const&#x2F;volatile。<ul>
+<li>顶层const：const修饰变量本身（如<code>const int x</code>）；</li>
+<li>底层const：const修饰指针指向的对象（如<code>const int* p</code>）。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> <span class="type">int</span> a = <span class="number">10</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span>* p = &amp;a;</span><br><span class="line"></span><br><span class="line"><span class="comment">// auto：忽略顶层const，推断为int（a的顶层const被忽略）</span></span><br><span class="line"><span class="keyword">auto</span> x = a;</span><br><span class="line">x = <span class="number">20</span>; <span class="comment">// 合法：x是int，非const</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// auto：保留底层const，推断为const int*（p的底层const被保留）</span></span><br><span class="line"><span class="keyword">auto</span> q = p;</span><br><span class="line"><span class="comment">// *q = 30; // 错误：q是const int*，不能修改指向的对象</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// const auto：保留顶层const，推断为const int</span></span><br><span class="line"><span class="type">const</span> <span class="keyword">auto</span> y = a;</span><br><span class="line"><span class="comment">// y = 20; // 错误：y是const int</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// volatile结合（类似const）</span></span><br><span class="line"><span class="keyword">volatile</span> <span class="type">int</span> b = <span class="number">30</span>;</span><br><span class="line"><span class="keyword">auto</span> z = b; <span class="comment">// z的类型：int（忽略顶层volatile）</span></span><br><span class="line"><span class="keyword">volatile</span> <span class="keyword">auto</span> w = b; <span class="comment">// w的类型：volatile int</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>注意</strong>：<ul>
+<li>若需保留顶层const，需显式声明<code>const auto</code>；</li>
+<li>底层const会被<code>auto</code>自动保留（如指针、引用的const修饰）。</li>
+</ul>
+</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a target="_blank" rel="noopener" href="https://github.com/AillianYue">AillianYue</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a target="_blank" rel="noopener" href="https://www.yuque.com/aillian-yue/blog">https://www.yuque.com/aillian-yue/blog</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">此文章版归AillianYue所有，如需转载，请注明来自原作者</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/C/">C++</a></div><div class="post-share"><div class="social-share" data-image="/img/CPlusPlus.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2023/12/03/C++%E5%9F%BA%E7%A1%80%EF%BC%9A%E7%B1%BB%E5%92%8C%E5%AF%B9%E8%B1%A1/" title="C++基础：类和对象"><img class="cover" src="/img/CPlusPlus.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">C++基础：类和对象</div></div><div class="info-2"><div class="info-item-1">介绍面向对象程序设计、类和对象基础、构造与析构、特殊成员、结构体、联合和枚举</div></div></div></a><a class="pagination-related" href="/2023/12/03/C++%E5%9F%BA%E7%A1%80%EF%BC%9A%E8%AF%AD%E5%8F%A5%E5%92%8C%E5%87%BD%E6%95%B0/" title="C++基础：语句和函数"><img class="cover" src="/img/CPlusPlus.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">C++基础：语句和函数</div></div><div class="info-2"><div class="info-item-1">介绍基础、选择、迭代、跳转语句和函数基础、重载、可变参数、模板、函数指针、匿名函数、main函数</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2023/12/03/C++%E5%9F%BA%E7%A1%80%EF%BC%9ASTL/" title="C++基础：STL"><img class="cover" src="/img/CPlusPlus.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-12-03</div><div class="info-item-2">C++基础：STL</div></div><div class="info-2"><div class="info-item-1">介绍STL的容器、迭代器、函数对象、算法</div></div></div></a><a class="pagination-related" href="/2023/12/03/C++%E5%9F%BA%E7%A1%80%EF%BC%9A%E7%B1%BB%E5%9E%8B/" title="C++基础：类型"><img class="cover" src="/img/CPlusPlus.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-12-03</div><div class="info-item-2">C++基础：类型</div></div><div class="info-2"><div class="info-item-1">介绍基本类型、数组、用户自定义类型、大括号初始化以及printf</div></div></div></a><a class="pagination-related" href="/2023/12/03/C++%E5%9F%BA%E7%A1%80%EF%BC%9A%E8%AF%AD%E5%8F%A5%E5%92%8C%E5%87%BD%E6%95%B0/" title="C++基础：语句和函数"><img class="cover" src="/img/CPlusPlus.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-12-03</div><div class="info-item-2">C++基础：语句和函数</div></div><div class="info-2"><div class="info-item-1">介绍基础、选择、迭代、跳转语句和函数基础、重载、可变参数、模板、函数指针、匿名函数、main函数</div></div></div></a><a class="pagination-related" href="/2023/12/03/C++%E5%9F%BA%E7%A1%80%EF%BC%9A%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/" title="C++基础：异常处理"><img class="cover" src="/img/CPlusPlus.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-12-03</div><div class="info-item-2">C++基础：异常处理</div></div><div class="info-2"><div class="info-item-1">介绍异常处理基础、主要用法示例以及GDB调试</div></div></div></a><a class="pagination-related" href="/2023/12/03/C++%E5%9F%BA%E7%A1%80%EF%BC%9A%E5%AD%97%E7%AC%A6%E4%B8%B2/" title="C++基础：字符串"><img class="cover" src="/img/CPlusPlus.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-12-03</div><div class="info-item-2">C++基础：字符串</div></div><div class="info-2"><div class="info-item-1">介绍C风格字符串、字符串基本操作、特殊字符串处理以及性能优化</div></div></div></a><a class="pagination-related" href="/2023/12/03/C++%E5%9F%BA%E7%A1%80%EF%BC%9A%E7%BB%A7%E6%89%BF%E5%92%8C%E5%A4%9A%E6%80%81/" title="C++基础：继承和多态"><img class="cover" src="/img/CPlusPlus.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-12-03</div><div class="info-item-2">C++基础：继承和多态</div></div><div class="info-2"><div class="info-item-1">介绍继承、派生、虚函数、抽象类、绑定</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">AillianYue</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">15</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">10</div></a></div><a id="card-info-btn" href="/about/"><i class="fas fa-user-graduate"></i><span>关于我</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/AillianYue" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="https://gitee.com/aillianyue" target="_blank" title="Gitee"><i class="fab fa-github-alt"></i></a><a class="social-icon" href="mailto:634558578@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="tencent://AddContact/?fromId=45&amp;fromSubId=1&amp;subcmd=all&amp;uin=634558578&amp;website=www.oicqzone.com" target="_blank" title="QQ"><i class="fab fa-qq"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站不定期更新，欢迎！</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%87%E9%92%88"><span class="toc-number">1.</span> <span class="toc-text">指针</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%BB%E5%9D%80%E5%8F%98%E9%87%8F"><span class="toc-number">1.1.</span> <span class="toc-text">寻址变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%87%E9%92%88%E8%A7%A3%E5%BC%95%E7%94%A8"><span class="toc-number">1.2.</span> <span class="toc-text">指针解引用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%88%90%E5%91%98%E6%8C%87%E9%92%88%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-number">1.3.</span> <span class="toc-text">成员指针运算符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%87%E9%92%88%E5%92%8C%E6%95%B0%E7%BB%84%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-number">1.4.</span> <span class="toc-text">指针和数组的关系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%87%E9%92%88%E7%9A%84%E7%AE%97%E6%9C%AF%E8%BF%90%E7%AE%97"><span class="toc-number">1.5.</span> <span class="toc-text">指针的算术运算</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%87%E5%90%91%E6%8C%87%E9%92%88%E7%9A%84%E6%8C%87%E9%92%88"><span class="toc-number">1.6.</span> <span class="toc-text">指向指针的指针</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88"><span class="toc-number">1.7.</span> <span class="toc-text">函数指针</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#void%E6%8C%87%E9%92%88%E4%B8%8Estd-byte%E6%8C%87%E9%92%88"><span class="toc-number">1.8.</span> <span class="toc-text">void指针与std::byte指针</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#nullptr%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B8%8E%E6%8C%87%E9%92%88%E5%9C%A8%E5%B8%83%E5%B0%94%E8%A1%A8%E8%BE%BE%E5%BC%8F%E4%B8%AD%E7%9A%84%E8%A1%8C%E4%B8%BA"><span class="toc-number">1.9.</span> <span class="toc-text">nullptr的使用与指针在布尔表达式中的行为</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%87%E9%92%88%E7%9A%84%E9%A3%8E%E9%99%A9%E4%B8%8E%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-number">1.10.</span> <span class="toc-text">指针的风险与注意事项</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%95%E7%94%A8"><span class="toc-number">2.</span> <span class="toc-text">引用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%95%E7%94%A8%E7%9A%84%E5%AE%9A%E4%B9%89%E4%B8%8E%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-number">2.1.</span> <span class="toc-text">引用的定义与初始化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%95%E7%94%A8%E7%9A%84%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7"><span class="toc-number">2.2.</span> <span class="toc-text">引用的核心特性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E5%BC%95%E7%94%A8"><span class="toc-number">2.3.</span> <span class="toc-text">常引用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%95%E7%94%A8%E4%BD%9C%E4%B8%BA%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0%E4%B8%8E%E8%BF%94%E5%9B%9E%E5%80%BC"><span class="toc-number">2.4.</span> <span class="toc-text">引用作为函数参数与返回值</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BC%95%E7%94%A8%E4%BD%9C%E4%B8%BA%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0"><span class="toc-number">2.4.1.</span> <span class="toc-text">引用作为函数参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BC%95%E7%94%A8%E4%BD%9C%E4%B8%BA%E5%87%BD%E6%95%B0%E8%BF%94%E5%9B%9E%E5%80%BC"><span class="toc-number">2.4.2.</span> <span class="toc-text">引用作为函数返回值</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%87%E9%92%88%E4%B8%8E%E5%BC%95%E7%94%A8%E7%9A%84%E5%BA%94%E7%94%A8%E5%92%8C%E5%AF%B9%E6%AF%94"><span class="toc-number">3.</span> <span class="toc-text">指针与引用的应用和对比</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%87%E9%92%88%E4%B8%8E%E5%BC%95%E7%94%A8%E7%9A%84%E5%B7%AE%E5%BC%82"><span class="toc-number">3.1.</span> <span class="toc-text">指针与引用的差异</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E4%B8%AD%E6%8C%87%E9%92%88%E4%B8%8E%E5%BC%95%E7%94%A8"><span class="toc-number">3.2.</span> <span class="toc-text">函数中指针与引用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E4%BC%A0%E5%8F%82%E6%95%88%E7%8E%87%E5%AF%B9%E6%AF%94"><span class="toc-number">3.2.1.</span> <span class="toc-text">1. 传参效率对比</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E5%AE%89%E5%85%A8%E6%80%A7%E5%AF%B9%E6%AF%94"><span class="toc-number">3.2.2.</span> <span class="toc-text">2. 安全性对比</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E9%80%89%E6%8B%A9%E5%BB%BA%E8%AE%AE"><span class="toc-number">3.2.3.</span> <span class="toc-text">3. 选择建议</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#this%E6%8C%87%E9%92%88"><span class="toc-number">3.3.</span> <span class="toc-text">this指针</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#const%E4%B8%8E%E6%8C%87%E9%92%88-%E5%BC%95%E7%94%A8"><span class="toc-number">3.4.</span> <span class="toc-text">const与指针&#x2F;引用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#const%E4%B8%8E%E6%8C%87%E9%92%88%E7%9A%84%E7%BB%93%E5%90%88"><span class="toc-number">3.4.1.</span> <span class="toc-text">const与指针的结合</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#const%E4%B8%8E%E5%BC%95%E7%94%A8%E7%9A%84%E7%BB%93%E5%90%88"><span class="toc-number">3.4.2.</span> <span class="toc-text">const与引用的结合</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#const%E6%AD%A3%E7%A1%AE%E6%80%A7%E7%9A%84%E5%AE%9E%E8%B7%B5%E5%8E%9F%E5%88%99"><span class="toc-number">3.4.3.</span> <span class="toc-text">const正确性的实践原则</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#auto%E7%B1%BB%E5%9E%8B%E6%8E%A8%E6%96%AD%E4%B8%8E%E6%8C%87%E9%92%88-%E5%BC%95%E7%94%A8%E7%9A%84%E7%BB%93%E5%90%88"><span class="toc-number">4.</span> <span class="toc-text">auto类型推断与指针&#x2F;引用的结合</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%A8auto%E8%BF%9B%E8%A1%8C%E5%8F%98%E9%87%8F%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-number">4.1.</span> <span class="toc-text">用auto进行变量初始化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#auto%E4%B8%8E%E5%BC%95%E7%94%A8%E7%B1%BB%E5%9E%8B"><span class="toc-number">4.2.</span> <span class="toc-text">auto与引用类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#auto%E4%B8%8E%E6%8C%87%E9%92%88%E7%B1%BB%E5%9E%8B"><span class="toc-number">4.3.</span> <span class="toc-text">auto与指针类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#auto%E5%9C%A8%E4%BB%A3%E7%A0%81%E9%87%8D%E6%9E%84%E4%B8%AD%E7%9A%84%E4%BC%98%E5%8A%BF"><span class="toc-number">4.4.</span> <span class="toc-text">auto在代码重构中的优势</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#auto%E4%B8%8Econst-volatile"><span class="toc-number">4.5.</span> <span class="toc-text">auto与const&#x2F;volatile</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/04/28/%E6%94%BB%E7%95%A5%EF%BC%9A%E9%BB%91%E7%A5%9E%E8%AF%9D%E6%82%9F%E7%A9%BA/" title="攻略：黑神话悟空"><img src="/img/WUKONG.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="攻略：黑神话悟空"/></a><div class="content"><a class="title" href="/2025/04/28/%E6%94%BB%E7%95%A5%EF%BC%9A%E9%BB%91%E7%A5%9E%E8%AF%9D%E6%82%9F%E7%A9%BA/" title="攻略：黑神话悟空">攻略：黑神话悟空</a><time datetime="2025-04-27T16:00:01.000Z" title="发表于 2025-04-28 00:00:01">2025-04-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/04/27/%E6%94%BB%E7%95%A5%EF%BC%9A%E8%89%BE%E5%B0%94%E7%99%BB%E6%B3%95%E7%8E%AF/" title="攻略：艾尔登法环"><img src="/img/ELDENRING.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="攻略：艾尔登法环"/></a><div class="content"><a class="title" href="/2025/04/27/%E6%94%BB%E7%95%A5%EF%BC%9A%E8%89%BE%E5%B0%94%E7%99%BB%E6%B3%95%E7%8E%AF/" title="攻略：艾尔登法环">攻略：艾尔登法环</a><time datetime="2025-04-26T16:00:01.000Z" title="发表于 2025-04-27 00:00:01">2025-04-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/01/02/Android%E5%9F%BA%E7%A1%80%EF%BC%9AAndroid%20Studio/" title="Android基础：Android Studio"><img src="/img/AndroidStudio.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Android基础：Android Studio"/></a><div class="content"><a class="title" href="/2025/01/02/Android%E5%9F%BA%E7%A1%80%EF%BC%9AAndroid%20Studio/" title="Android基础：Android Studio">Android基础：Android Studio</a><time datetime="2025-01-01T16:14:00.000Z" title="发表于 2025-01-02 00:14:00">2025-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/16/WSL%E5%9F%BA%E7%A1%80%EF%BC%9A%E5%BC%80%E5%A7%8B/" title="WSL基础：开始"><img src="/img/Linux.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="WSL基础：开始"/></a><div class="content"><a class="title" href="/2024/12/16/WSL%E5%9F%BA%E7%A1%80%EF%BC%9A%E5%BC%80%E5%A7%8B/" title="WSL基础：开始">WSL基础：开始</a><time datetime="2024-12-15T16:50:00.000Z" title="发表于 2024-12-16 00:50:00">2024-12-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/12/13/%E7%BA%B9%E7%90%86%E5%8E%8B%E7%BC%A9%E5%AD%A6%E4%B9%A0%E4%B8%8EASTC%E5%8A%A0%E8%BD%BD/" title="纹理压缩学习与ASTC加载"><img src="/img/OpenGL.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="纹理压缩学习与ASTC加载"/></a><div class="content"><a class="title" href="/2023/12/13/%E7%BA%B9%E7%90%86%E5%8E%8B%E7%BC%A9%E5%AD%A6%E4%B9%A0%E4%B8%8EASTC%E5%8A%A0%E8%BD%BD/" title="纹理压缩学习与ASTC加载">纹理压缩学习与ASTC加载</a><time datetime="2023-12-13T02:14:00.000Z" title="发表于 2023-12-13 10:14:00">2023-12-13</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2019 - 2025 By AillianYue</span></div><div class="footer_custom_text">Hi, welcome to <a target="_blank" rel="noopener" href="https://github.com/AillianYue">my blog</a>!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
