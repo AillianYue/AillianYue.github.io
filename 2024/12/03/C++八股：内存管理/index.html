@@ -1,0 +1,513 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>C++八股：内存管理 | AillianYue's Blog</title><meta name="author" content="AillianYue"><meta name="copyright" content="AillianYue"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="介绍C++的内存管理八股知识">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++八股：内存管理">
+<meta property="og:url" content="http://example.com/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/index.html">
+<meta property="og:site_name" content="AillianYue&#39;s Blog">
+<meta property="og:description" content="介绍C++的内存管理八股知识">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/CPlusPlus.webp">
+<meta property="article:published_time" content="2024-12-03T11:49:00.000Z">
+<meta property="article:modified_time" content="2025-12-22T12:54:00.000Z">
+<meta property="article:author" content="AillianYue">
+<meta property="article:tag" content="C++">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/CPlusPlus.webp"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "C++八股：内存管理",
+  "url": "http://example.com/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/",
+  "image": "http://example.com/img/CPlusPlus.webp",
+  "datePublished": "2024-12-03T11:49:00.000Z",
+  "dateModified": "2025-12-22T12:54:00.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "AillianYue",
+      "url": "https://github.com/AillianYue"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/avatar.png"><link rel="canonical" href="http://example.com/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'C++八股：内存管理',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">18</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">11</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 历程</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">AillianYue's Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">C++八股：内存管理</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 历程</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">C++八股：内存管理</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-12-03T11:49:00.000Z" title="发表于 2024-12-03 19:49:00">2024-12-03</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-12-22T12:54:00.000Z" title="更新于 2025-12-22 20:54:00">2025-12-22</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/C/">C++</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/C/C-%E5%85%AB%E8%82%A1/">C++八股</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">5.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>16分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><p>VERSION：1.0.0</p>
+<h4 id="聊一聊C-的智能指针？"><a href="#聊一聊C-的智能指针？" class="headerlink" title="聊一聊C++的智能指针？"></a>聊一聊C++的智能指针？</h4><p>为什么需要智能指针？</p>
+<p>在原生指针（Raw Pointer）的世界里，程序员需要手动管理内存：</p>
+<ol>
+<li>使用 <code>new</code> 分配内存。</li>
+<li>使用 <code>delete</code> 释放内存。</li>
+</ol>
+<p>这很容易出错：</p>
+<ul>
+<li>内存泄漏（Memory Leak）：忘记 <code>delete</code>。</li>
+<li>悬空指针（Dangling Pointer）：提前 <code>delete</code> 了仍在使用的内存。</li>
+<li>双重释放（Double Delete）：对同一块内存 <code>delete</code> 两次。</li>
+</ul>
+<p>智能指针的核心思想：将动态分配的内存的生命周期与一个对象（智能指针）绑定。这个对象在析构时，会自动释放其管理的内存。这利用了 C++ 的 RAII (Resource Acquisition Is Initialization) 原则。</p>
+<p>智能指针有哪几种？分别介绍一下？</p>
+<p>C++ 标准库在 <code>&lt;memory&gt;</code> 头文件中提供了以下几种主要的智能指针：</p>
+<ol>
+<li><code>std::unique_ptr</code> (独占所有权指针)</li>
+<li><code>std::shared_ptr</code> (共享所有权指针)</li>
+<li><code>std::weak_ptr</code> (弱引用指针)</li>
+<li><code>std::auto_ptr</code> (已弃用，C++17 中移除，切勿使用)</li>
+</ol>
+<p><code>std::unique_ptr</code></p>
+<p>特点：</p>
+<ul>
+<li>独占：同一时间只有一个 <code>unique_ptr</code> 可以拥有一个给定的对象。</li>
+<li>移动语义：所有权可以通过 <code>std::move</code> 转移给另一个 <code>unique_ptr</code>，但无法复制。</li>
+<li>轻量高效：开销极小，通常与裸指针相同。</li>
+<li>自定义删除器：支持指定自定义的释放逻辑（例如用于 <code>FILE*</code>, DLL 句柄等）。</li>
+</ul>
+<p>适用场景：当你想要一个对象在其当前作用域结束时（例如函数返回、块结束）被自动删除，并且不需要多个指针共享所有权时。这是最常用、默认应优先考虑的智能指针。</p>
+<p><code>std::shared_ptr</code></p>
+<p>特点：</p>
+<ul>
+<li>共享：多个 <code>shared_ptr</code> 可以共同拥有同一个对象。</li>
+<li>引用计数：内部维护一个引用计数器。每拷贝一个 <code>shared_ptr</code>，计数加一；每析构一个 <code>shared_ptr</code>，计数减一。当计数变为 0 时，自动删除管理的对象。</li>
+<li>可复制：支持拷贝构造和拷贝赋值。</li>
+<li>开销稍大：需要维护控制块（包含引用计数等）。</li>
+</ul>
+<p>适用场景：当多个部分 of your code 都需要访问同一个对象，并且你无法确定哪个部分最后使用完这个对象时。</p>
+<p><code>std::weak_ptr</code></p>
+<p>特点：</p>
+<ul>
+<li>不拥有所有权：<code>weak_ptr</code> 指向一个由 <code>shared_ptr</code> 管理的对象，但不增加其引用计数。</li>
+<li>解决循环引用：主要用于打破 <code>shared_ptr</code> 之间的循环引用问题（例如：父节点持有子节点的 <code>shared_ptr</code>，子节点又持有父节点的 <code>shared_ptr</code>），否则会导致内存泄漏。</li>
+<li>检查有效性：必须通过 <code>lock()</code> 方法将其转换为一个临时的 <code>shared_ptr</code> 来访问对象，以此检查对象是否还存在。</li>
+</ul>
+<p><code>make_xxx</code></p>
+<p>创建智能指针优先使用 <code>std::make_unique</code> (C++14) 和 <code>std::make_shared</code> (C++11)：</p>
+<p>优点：</p>
+<ol>
+<li>异常安全：避免了因函数参数求值顺序可能导致的内存泄漏。</li>
+<li>性能提升（对 <code>make_shared</code>）：<code>make_shared</code> 通常只需一次内存分配（将对象本身和控制块分配在一起），而 <code>new</code> + <code>shared_ptr</code> 构造函数需要两次。</li>
+<li>代码简洁：不需要重复写类型，更清晰。</li>
+</ol>
+<h4 id="聊一聊C-的内存管理？"><a href="#聊一聊C-的内存管理？" class="headerlink" title="聊一聊C++的内存管理？"></a>聊一聊C++的内存管理？</h4><p>一个典型的 C++ 程序在内存中（从低地址到高地址）会包含以下部分：</p>
+<table>
+<thead>
+<tr>
+<th>区域</th>
+<th>存放内容</th>
+<th>特性</th>
+<th>管理方式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>栈 (Stack)</td>
+<td>函数参数、局部变量、函数返回地址等</td>
+<td>自动分配和释放，速度快，容量有限（通常几MB）。</td>
+<td>编译器自动管理</td>
+</tr>
+<tr>
+<td>堆 (Heap)</td>
+<td>动态分配的内存（<code>malloc</code>, <code>new</code> 等）</td>
+<td>手动分配和释放，容量大（受限于系统虚拟内存），速度慢，使用不当易产生内存泄漏和碎片。</td>
+<td>程序员手动管理</td>
+</tr>
+<tr>
+<td>全局&#x2F;静态存储区</td>
+<td>全局变量、静态变量（<code>static</code>）、字符串常量等</td>
+<td>在程序编译期分配，整个程序生命周期都存在。分为<code>.data</code>（已初始化）和<code>.bss</code>（未初始化）段。</td>
+<td>编译器&#x2F;系统管理</td>
+</tr>
+<tr>
+<td>常量区</td>
+<td>字符串常量和其他常量（如 <code>const</code> 全局变量）</td>
+<td>只读，试图修改会导致段错误（Segmentation Fault）。</td>
+<td>编译器&#x2F;系统管理</td>
+</tr>
+<tr>
+<td>代码区</td>
+<td>程序的二进制机器指令（函数体的代码）</td>
+<td>只读，共享的（多个实例可共享同一份代码）。</td>
+<td>编译器&#x2F;系统管理</td>
+</tr>
+</tbody></table>
+<p>示意图（进程地址空间典型布局）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">高地址 (0xFFFF...)</span><br><span class="line">+----------------------+ &lt;-- 栈底 (初始SP)</span><br><span class="line">|        栈 区         |  编译器自动分配释放,存放局部变量,形参,返回值</span><br><span class="line">|          |           |  (向下生长: 高地址 -&gt; 低地址)</span><br><span class="line">|          v           |</span><br><span class="line">+----------------------+ &lt;-- 栈顶 (当前SP)</span><br><span class="line">|          ^           |  </span><br><span class="line">|          |           |  程序员分配释放,调用malloc,free</span><br><span class="line">|        堆 区         |  (向上生长:低地址 -&gt; 高地址)</span><br><span class="line">+----------------------+</span><br><span class="line">| 未初始化全局（静态）区 | (.bss)</span><br><span class="line">| 已初始化全局（静态）区 | (.data)</span><br><span class="line">+----------------------+</span><br><span class="line">|      只读常量区       | (.rodata)</span><br><span class="line">+----------------------+</span><br><span class="line">|        代码段        | (.text)</span><br><span class="line">低地址 (0x000...)</span><br><span class="line">(注意：这是一个高度简化的示意图，实际布局更复杂，并且包含共享库、内存映射文件等区域)</span><br></pre></td></tr></table></figure>
+
+<p>更加完整的进程地址空间布局：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">高地址 (用户空间上限：0x7FFFFFFFFFFF)</span><br><span class="line">+----------------------+ &lt;-- 内核空间（用户不可访问，0x800000000000+）</span><br><span class="line">| 内核空间（Kernel）    |</span><br><span class="line">+----------------------+</span><br><span class="line">|        栈 区         | （向下生长：高→低地址，含局部变量/形参/argv/env）</span><br><span class="line">| (Stack, 0x7fxxxxxx) | 栈底（初始RSP）→ 栈顶（当前RSP，低地址）</span><br><span class="line">+----------------------+</span><br><span class="line">|   内存映射区（mmap）  | （共享库、mmap文件、大块malloc、vDSO）</span><br><span class="line">|(0x7exxxx ~ 0x7fxxxx) |</span><br><span class="line">+----------------------+</span><br><span class="line">|        堆 区         | （向上生长：低→高地址，brk/sbrk管理）</span><br><span class="line">|  (Heap, 0x5xxxxxxx)  | 堆底（初始brk）→ 堆顶（当前brk，高地址）</span><br><span class="line">+----------------------+</span><br><span class="line">| 未初始化全局/静态区   | (.bss，零初始化，仅占地址不占可执行文件空间)</span><br><span class="line">+----------------------+</span><br><span class="line">| 已初始化全局/静态区   | (.data，读写，占用可执行文件空间)</span><br><span class="line">+----------------------+</span><br><span class="line">| 只读常量区            | (.rodata，如字符串常量、const全局变量)</span><br><span class="line">+----------------------+</span><br><span class="line">|        代码段         | (.text，只读，机器指令/函数体)</span><br><span class="line">| (Text, 0x400000+)    |</span><br><span class="line">+----------------------+</span><br><span class="line">低地址 (0x00000000)</span><br><span class="line">（注：地址范围为示例，不同系统/进程略有差异）</span><br></pre></td></tr></table></figure>
+
+<p>栈 (Stack)</p>
+<ul>
+<li>功能：用于函数调用。每次调用函数时，会在栈上分配一个“栈帧”(Stack Frame)，用于存放该函数的参数、局部变量以及返回地址。函数执行完毕时，其栈帧被自动销毁。</li>
+<li>优点：分配和释放由编译器自动完成，极其高效。</li>
+<li>缺点：空间有限，大小在编译时通常就已确定（或设置）。分配过大（如大数组）或过深递归会导致栈溢出 (Stack Overflow)。</li>
+</ul>
+<p>堆 (Heap) &#x2F; 自由存储区 (Free Store)</p>
+<ul>
+<li>功能：用于程序运行期间动态申请任意大小的内存。这块内存的生命周期不完全受作用域限制，需要程序员显式控制。</li>
+<li>C 风格：使用 <code>malloc()</code>, <code>calloc()</code>, <code>realloc()</code> 分配，使用 <code>free()</code> 释放。</li>
+<li>C++ 风格：使用 <code>new</code> 和 <code>delete</code> (或 <code>new[]</code> 和 <code>delete[]</code>) 操作符。</li>
+<li>优点：空间大，分配灵活。</li>
+<li>缺点：<ul>
+<li>内存泄漏 (Memory Leak)：如果分配后忘记释放，这块内存就无法被再次使用。</li>
+<li>野指针 (Dangling Pointer)：释放后未将指针置空，再次使用会导致未定义行为。</li>
+<li>碎片化 (Fragmentation)：频繁分配和释放不同大小的内存块会导致内存碎片，降低利用率。</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>技术细节：严格来说，堆 (Heap) 是 C 语言和操作系统术语，由 <code>malloc</code> 管理；自由存储区 (Free Store) 是 C++ 术语，由 <code>new</code> 管理。但在大多数实现中，<code>new</code> 底层是调用 <code>malloc</code> 来实现的，所以它们通常指的是同一块区域。但在语言标准上，这是两个不同的概念。</p>
+</blockquote>
+<p>全局&#x2F;静态存储区 (Global&#x2F;Static Storage)</p>
+<ul>
+<li>功能：存储全局变量和静态变量。</li>
+<li><code>.data</code> 段：存放已初始化的全局变量和静态变量。</li>
+<li><code>.bss</code> 段：存放未初始化的全局变量和静态变量（在程序开始执行前会被系统自动初始化为零）。</li>
+<li>生命周期：在 <code>main</code> 函数开始前分配，在 <code>main</code> 函数结束后释放。</li>
+</ul>
+<p>常量区 (Constant Data Segment)</p>
+<ul>
+<li>功能：存放字符串常量和其他 <code>constexpr</code> 或常量数据。</li>
+<li>特性：只读。任何试图修改的操作都会引发段错误。</li>
+</ul>
+<p>代码区 (Text Segment)</p>
+<ul>
+<li>功能：存放程序执行代码（机器指令）的区域。</li>
+<li>特性：只读、共享。多个运行同一程序的进程可以在内存中共享一份代码段的副本，节省内存。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>定义</th>
+<th>全局定义</th>
+<th>函数内</th>
+<th>类内定义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>int a;</code></td>
+<td>BSS</td>
+<td>栈</td>
+<td>对象实例中</td>
+</tr>
+<tr>
+<td><code>int a = 0;</code></td>
+<td>BSS</td>
+<td>栈</td>
+<td>对象实例中</td>
+</tr>
+<tr>
+<td><code>int a = 1;</code></td>
+<td>data</td>
+<td>栈</td>
+<td>对象实例中</td>
+</tr>
+<tr>
+<td><code>const int a = 1;</code></td>
+<td>rodata</td>
+<td>栈</td>
+<td>对象实例中（需构造初始化）</td>
+</tr>
+<tr>
+<td><code>static int a;</code></td>
+<td>BSS</td>
+<td>BSS</td>
+<td>需类外定义，BSS</td>
+</tr>
+<tr>
+<td><code>static int a = 0;</code></td>
+<td>BSS</td>
+<td>BSS</td>
+<td>需类外定义，BSS</td>
+</tr>
+<tr>
+<td><code>static int a = 1;</code></td>
+<td>data</td>
+<td>data</td>
+<td>需类外定义，data</td>
+</tr>
+<tr>
+<td><code>char s[] = &quot;Hello&quot;;</code></td>
+<td>data</td>
+<td>栈</td>
+<td>对象实例中（C++11类内初始化）</td>
+</tr>
+<tr>
+<td><code>const char s[] = &quot;Hello&quot;;</code></td>
+<td>rodata</td>
+<td>栈</td>
+<td>对象实例中（需构造初始化）</td>
+</tr>
+<tr>
+<td><code>static constexpr char s[] = &quot;Hello&quot;;</code></td>
+<td>rodata</td>
+<td>rodata</td>
+<td>可类内初始化，rodata</td>
+</tr>
+<tr>
+<td><code>string s = &quot;Hello&quot;;</code></td>
+<td>data+堆</td>
+<td>栈+堆</td>
+<td>对象实例中（C++11类内初始化）</td>
+</tr>
+<tr>
+<td><code>const string s = &quot;Hello&quot;;</code></td>
+<td>data+堆</td>
+<td>栈+堆</td>
+<td>对象实例中（需构造初始化）</td>
+</tr>
+<tr>
+<td><code>constexpr int a = 0;</code></td>
+<td>rodata&#x2F;优化</td>
+<td>栈&#x2F;优化</td>
+<td>C++14起允许，对象实例中</td>
+</tr>
+<tr>
+<td><code>constexpr int a = 1;</code></td>
+<td>rodata&#x2F;优化</td>
+<td>栈&#x2F;优化</td>
+<td>C++14起允许，对象实例中</td>
+</tr>
+<tr>
+<td><code>static constexpr int a = 0;</code></td>
+<td>rodata</td>
+<td>rodata</td>
+<td>可类内初始化，rodata</td>
+</tr>
+<tr>
+<td><code>static constexpr int a = 1;</code></td>
+<td>rodata</td>
+<td>rodata</td>
+<td>可类内初始化，rodata</td>
+</tr>
+</tbody></table>
+<h4 id="堆与栈的区别是什么？"><a href="#堆与栈的区别是什么？" class="headerlink" title="堆与栈的区别是什么？"></a>堆与栈的区别是什么？</h4><ol>
+<li>关于栈（Stack）</li>
+</ol>
+<ul>
+<li>在绝大多数现代系统中（如x86, x86-64, ARM），栈是向下生长的，即从高地址向低地址扩展。当一个函数被调用时，它的局部变量等信息被“压栈”（push），栈指针（SP, Stack Pointer）的值会减小。</li>
+<li>栈通常被分配在进程虚拟地址空间的高位区域（虽然不是最高位），有一个固定的起始地址（栈底），随着压栈操作，栈顶向低地址方向移动。</li>
+<li>栈的大小是有限的。这个大小在线程创建时就被确定了。如果栈空间耗尽（比如过度递归或非常大的局部数组），会导致“栈溢出”（Stack Overflow）错误。</li>
+</ul>
+<ol start="2">
+<li>关于堆（Heap）</li>
+</ol>
+<ul>
+<li>堆总体上是从低地址向高地址扩展的。当你使用 new 或 malloc 申请内存时，堆管理器会在现有的堆空间中寻找空闲块来满足请求。如果空间不足，它会通过系统调用（如 sbrk 或 mmap）向操作系统申请扩大堆的大小，这个过程确实是向高地址发展的。</li>
+<li>堆的大小受限于系统的虚拟内存大小，通常远大于栈（可达GB甚至TB级别）。它的生命周期由程序员手动控制（new&#x2F;delete 或 malloc&#x2F;free），非常灵活，但也容易导致内存泄漏等问题。</li>
+<li>堆的“扩展”方向是宏观上的。在其内部，内存的分配和释放是不连续的。堆管理器维护一个“空闲链表”，分配内存时从链表中找到合适大小的块，释放时再将其回收到链表中。因此，堆的内部是碎片化的，程序员先后申请的两块内存的地址高低顺序没有必然关系，不一定是严格由低到高。</li>
+</ul>
+<h4 id="new-和-malloc-有什么区别？"><a href="#new-和-malloc-有什么区别？" class="headerlink" title="new 和 malloc 有什么区别？"></a>new 和 malloc 有什么区别？</h4><ul>
+<li><code>new</code> 是C++运算符，<code>malloc</code> 是C库函数</li>
+<li><code>new</code> 在堆上分配内存并调用构造函数，<code>malloc</code> 只在堆上分配内存</li>
+<li><code>new</code> 返回类型指针，<code>malloc</code> 返回 <code>void*</code></li>
+<li>失败时<code>new</code> 抛出 <code>std::bad_alloc</code>，<code>malloc</code> 返回 <code>NULL</code></li>
+<li><code>new/delete</code> 可重载，<code>malloc/free</code> 不可</li>
+<li><code>new</code> 自动计算大小，<code>malloc</code> 需手动指定大小</li>
+</ul>
+<h4 id="delete-和-free-有什么区别？"><a href="#delete-和-free-有什么区别？" class="headerlink" title="delete 和 free 有什么区别？"></a>delete 和 free 有什么区别？</h4><ul>
+<li><code>delete</code>是C++运算符，<code>free</code> 是C库函数</li>
+<li><code>delete</code> 调用析构函数并释放内存，<code>free</code> 只释放内存</li>
+<li><code>delete[]</code> 释放数组，<code>free</code> 不区分</li>
+<li>两者对空指针都安全（无操作）</li>
+</ul>
+<h4 id="C-内存管理常用方法有哪些？"><a href="#C-内存管理常用方法有哪些？" class="headerlink" title="C++内存管理常用方法有哪些？"></a>C++内存管理常用方法有哪些？</h4><ol>
+<li>静态内存分配： 在编译期确定大小和生命周期。例如全局变量、static变量，内存在程序启动时分配，结束时释放。</li>
+<li>栈内存分配： 函数内的局部变量、函数参数等。内存的分配和释放由编译器自动管理，遵循后进先出的原则，效率高，但容量有限。</li>
+<li>堆内存分配： 使用<code>new</code>&#x2F;<code>malloc</code>等操作符在运行时动态申请任意大小的内存，生命周期由程序员手动控制，使用 delete&#x2F;free释放，非常灵活，但管理不当易产生内存泄漏或野指针。</li>
+<li>智能指针： 这是现代 C++ 推荐的管理堆内存的方，它是类模板，通过 RAII 机制将堆内存封装在对象中，利用栈上对象的析构函数自动释放内存。主要类型有：<ol>
+<li>std::unique_ptr： 独占所有权，同一时间只能有一个 unique_ptr指向一个对象。</li>
+<li>std::shared_ptr： 共享所有权，通过引用计数管理多个指针指向同一个对象。</li>
+<li>std::weak_ptr： 配合 shared_ptr使用，解决循环引用问题，不增加引用计数。</li>
+</ol>
+</li>
+</ol>
+<h4 id="堆和栈了解吗？说一下它们的底层区别。"><a href="#堆和栈了解吗？说一下它们的底层区别。" class="headerlink" title="堆和栈了解吗？说一下它们的底层区别。"></a>堆和栈了解吗？说一下它们的底层区别。</h4><ul>
+<li>栈： 由操作系统自动管理，函数调用时的局部变量、参数都在栈上分配，函数结束自动释放。分配效率极高，但空间有限且大小编译时常确定。</li>
+<li>堆： 由程序员手动管理，通过malloc&#x2F;free或new&#x2F;delete申请和释放，空间很大，分配灵活，但容易产生内存碎片，分配速度也比栈慢在资源受限的嵌入式系统中，需要谨慎使用堆，避免内存泄漏。</li>
+</ul>
+<h4 id="如何避免内存碎片？"><a href="#如何避免内存碎片？" class="headerlink" title="如何避免内存碎片？"></a>如何避免内存碎片？</h4><p>内存碎片分为外部碎片（空闲内存分散在不连续的小块中，无法满足大分配请求）和内部碎片（分配的内存块内部未被使用的部分）。</p>
+<p>避免策略是一个系统工程，需要从代码习惯、库的使用到自定义分配器等多个层面考虑。</p>
+<ol>
+<li>减少动态内存分配：<ol>
+<li>根本法则：最好的避免就是不做，优先使用栈内存、静态存储期对象或成员变量，栈分配速度快且无碎片。</li>
+</ol>
+</li>
+<li>使用STL容器和智能指针：<ol>
+<li>std::vector, std::string, std::array：这些STL容器在内部管理一块连续的、动态增长的内存。虽然扩容时需要进行分配和拷贝，但保证了容器内元素的内存是连续的，极大地减少了外部碎片，这是最常用且有效的手段。</li>
+<li>智能指针 (std::unique_ptr, std::shared_ptr,std::shared_weaked)：它们通过RAII机制自动管理内存生命周期，避免了忘记释放导致的“内存泄漏”（一种严重的碎片来源）。但对于防止碎片本身，它们的作用是间接的。</li>
+</ol>
+</li>
+<li>预分配和资源预留 (Reservation)：<ol>
+<li>对于std::vector等容器，如果提前知道大致大小，使用reserve()方法预先分配足够的容量，这避免了多次重新分配、拷贝和释放原内存块，从而减少了碎片的产生。</li>
+</ol>
+</li>
+<li>使用自定义内存管理：<ol>
+<li>使用对象池 (Object Pool)：对于频繁申请释放的、固定大小的小对象（如链表节点、网络数据包），对象池是终极武器。它一次性分配一大块内存（chunk），并在其上构造一个空闲链表，每次分配和归还都是从空闲链表中取放，完全避免了外部碎片，只有极少的内部碎片。</li>
+<li>自定义分配器 (Custom Allocator)：STL容器允许你提供自定义分配器。你可以实现一个基于内存池的分配器，替换默认的new&#x2F;delete，为特定类型的对象提供高效的、无碎片的分配策略。</li>
+</ol>
+</li>
+</ol>
+<h4 id="什么是内存对齐？"><a href="#什么是内存对齐？" class="headerlink" title="什么是内存对齐？"></a>什么是内存对齐？</h4><p>内存对齐是指数据在内存中的存储地址按照特定倍数对齐（通常是数据类型大小的整数倍）。</p>
+<p>例如，4字节的<code>int</code>通常存储在4的倍数地址上，8字节的<code>double</code>通常存储在8的倍数地址上。</p>
+<h4 id="为什么要内存对齐？"><a href="#为什么要内存对齐？" class="headerlink" title="为什么要内存对齐？"></a>为什么要内存对齐？</h4><p>内存对齐的根本原因在于CPU访问数据的效率。现代计算机的硬件设计使得对齐的数据访问速度更快，有些架构甚至要求对齐访问，否则会引发硬件异常。对齐可以减少CPU访问内存的次数，因为某些处理器一次读取内存是一块一块地读取，如果数据跨越了块边界，则需要两次读取操作。</p>
+<h4 id="什么是RAII？请举例说明。"><a href="#什么是RAII？请举例说明。" class="headerlink" title="什么是RAII？请举例说明。"></a>什么是RAII？请举例说明。</h4><ul>
+<li>RAII（Resource Acquisition Is Initialization）是C++的一种管理资源、避免泄漏的惯用法。其核心思想是将资源的生命周期与对象的生命周期绑定，即在构造函数中获取资源，在析构函数中释放资源。这样可以确保资源在对象离开作用域时被正确释放，即使发生异常也是如此。</li>
+<li>举例：C++中的std::fstream、std::unique_ptr等。例如，使用std::unique_ptr管理动态分配的内存，当unique_ptr离开作用域时，其析构函数会自动释放所指向的内存。</li>
+</ul>
+<h4 id="指针和引用的区别？"><a href="#指针和引用的区别？" class="headerlink" title="指针和引用的区别？"></a>指针和引用的区别？</h4><ul>
+<li>指针是一个变量，存储的是另一个变量的地址；引用是一个别名，是另一个变量的同义词。</li>
+<li>指针可以被重新赋值指向不同的变量；引用一旦初始化后就不能再改变（始终指向初始化时引用的变量）。</li>
+<li>指针可以为空（nullptr）；引用必须绑定到一个已有的对象，不能为空（但可以有悬空引用，这是不安全的）。</li>
+<li>指针需要解引用（*）来访问所指向的对象；引用直接使用，无需解引用。</li>
+<li>指针有自己独立的内存地址；引用和它引用的对象共享同一个地址（即引用本身的地址就是原变量的地址，但实际上引用在底层通常通过指针实现，但这是编译器细节）。</li>
+<li>使用场景：指针常用于需要重新指向、可选参数（可为空）的情况；引用常用于函数参数传递（避免复制）和返回值，特别是用于实现运算符重载和函数链式调用。</li>
+</ul>
+<h4 id="野指针与悬空指针产生原因、危害、避免方法是什么？"><a href="#野指针与悬空指针产生原因、危害、避免方法是什么？" class="headerlink" title="野指针与悬空指针产生原因、危害、避免方法是什么？"></a>野指针与悬空指针产生原因、危害、避免方法是什么？</h4><ul>
+<li>野指针（Wild Pointer）：未初始化的指针，指向随机的内存地址。<ul>
+<li>产生原因：定义指针时未初始化。</li>
+<li>危害：对野指针解引用可能导致程序崩溃、数据损坏或安全漏洞。</li>
+<li>避免方法：总是初始化指针，可以初始化为nullptr。</li>
+</ul>
+</li>
+<li>悬空指针（Dangling Pointer）：指针指向的内存已经被释放，但指针仍然保留着原来的地址。<ul>
+<li>产生原因：内存被释放后，指针未置空。</li>
+<li>危害：访问已释放的内存，导致未定义行为，如数据损坏、程序崩溃。</li>
+<li>避免方法：释放内存后立即将指针置为nullptr；使用智能指针替代裸指针。</li>
+</ul>
+</li>
+</ul>
+<h4 id="深拷贝和浅拷贝的区别是什么？"><a href="#深拷贝和浅拷贝的区别是什么？" class="headerlink" title="深拷贝和浅拷贝的区别是什么？"></a>深拷贝和浅拷贝的区别是什么？</h4><ul>
+<li>浅拷贝（Shallow Copy）：只拷贝对象的值（包括指针成员变量的值，即地址），而不拷贝指针指向的数据。这样，两个对象的指针成员指向同一块内存。</li>
+<li>深拷贝（Deep Copy）：不仅拷贝对象的值，还拷贝指针成员指向的数据，为新对象分配新的内存，并复制内容。这样，两个对象的指针成员指向各自独立的内存块。<br>区别在于是否复制指针所指向的数据。深拷贝更安全，但开销更大。</li>
+</ul>
+<h4 id="什么是移动语义？它有什么好处？"><a href="#什么是移动语义？它有什么好处？" class="headerlink" title="什么是移动语义？它有什么好处？"></a>什么是移动语义？它有什么好处？</h4><ul>
+<li>移动语义是C++11引入的新特性，允许将资源（如动态分配的内存）从一个对象转移到另一个对象，而无需复制。通过右值引用（T&amp;&amp;）和移动构造函数、移动赋值运算符实现。</li>
+<li>好处：避免不必要的深拷贝，提高性能，特别是对于管理大量资源的对象（如std::vector、std::string）。移动语义使得临时对象的资源可以被重用，减少了动态内存分配和释放的开销。</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a target="_blank" rel="noopener" href="https://github.com/AillianYue">AillianYue</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a target="_blank" rel="noopener" href="https://www.yuque.com/aillian-yue/blog">https://www.yuque.com/aillian-yue/blog</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">此文章版归AillianYue所有，如需转载，请注明来自原作者</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/C/">C++</a></div><div class="post-share"><div class="social-share" data-image="/img/CPlusPlus.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2024/12/16/WSL%E5%9F%BA%E7%A1%80%EF%BC%9A%E5%BC%80%E5%A7%8B/" title="WSL基础：开始"><img class="cover" src="/img/Linux.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">WSL基础：开始</div></div><div class="info-2"><div class="info-item-1">介绍Windows10上如何开启和使用WSL</div></div></div></a><a class="pagination-related" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9ASTL/" title="C++八股：STL"><img class="cover" src="/img/CPlusPlus.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">C++八股：STL</div></div><div class="info-2"><div class="info-item-1">介绍C++的STL八股知识</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2023/12/03/C++%E5%9F%BA%E7%A1%80%EF%BC%9ASTL/" title="C++基础：STL"><img class="cover" src="/img/CPlusPlus.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-12-03</div><div class="info-item-2">C++基础：STL</div></div><div class="info-2"><div class="info-item-1">介绍STL的容器、迭代器、函数对象、算法</div></div></div></a><a class="pagination-related" href="/2023/12/03/C++%E5%9F%BA%E7%A1%80%EF%BC%9A%E6%8C%87%E9%92%88%E5%92%8C%E5%BC%95%E7%94%A8/" title="C++基础：指针和引用"><img class="cover" src="/img/CPlusPlus.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-12-03</div><div class="info-item-2">C++基础：指针和引用</div></div><div class="info-2"><div class="info-item-1">介绍指针和引用</div></div></div></a><a class="pagination-related" href="/2023/12/03/C++%E5%9F%BA%E7%A1%80%EF%BC%9A%E8%AF%AD%E5%8F%A5%E5%92%8C%E5%87%BD%E6%95%B0/" title="C++基础：语句和函数"><img class="cover" src="/img/CPlusPlus.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-12-03</div><div class="info-item-2">C++基础：语句和函数</div></div><div class="info-2"><div class="info-item-1">介绍基础、选择、迭代、跳转语句和函数基础、重载、可变参数、模板、函数指针、匿名函数、main函数</div></div></div></a><a class="pagination-related" href="/2023/12/03/C++%E5%9F%BA%E7%A1%80%EF%BC%9A%E6%B5%81%E4%B8%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/" title="C++基础：流与文件系统"><img class="cover" src="/img/CPlusPlus.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-12-03</div><div class="info-item-2">C++基础：流与文件系统</div></div><div class="info-2"><div class="info-item-1">介绍流和文件系统</div></div></div></a><a class="pagination-related" href="/2023/12/03/C++%E5%9F%BA%E7%A1%80%EF%BC%9A%E7%B1%BB%E5%92%8C%E5%AF%B9%E8%B1%A1/" title="C++基础：类和对象"><img class="cover" src="/img/CPlusPlus.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-12-03</div><div class="info-item-2">C++基础：类和对象</div></div><div class="info-2"><div class="info-item-1">介绍面向对象程序设计、类和对象基础、构造与析构、特殊成员、结构体、联合和枚举</div></div></div></a><a class="pagination-related" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E5%9F%BA%E7%A1%80/" title="C++八股：基础"><img class="cover" src="/img/CPlusPlus.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-03</div><div class="info-item-2">C++八股：基础</div></div><div class="info-2"><div class="info-item-1">介绍C++的基础八股知识</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">AillianYue</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">18</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">11</div></a></div><a id="card-info-btn" href="/about/"><i class="fas fa-user-graduate"></i><span>关于我</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/AillianYue" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="https://gitee.com/aillianyue" target="_blank" title="Gitee"><i class="fab fa-github-alt"></i></a><a class="social-icon" href="mailto:634558578@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="tencent://AddContact/?fromId=45&amp;fromSubId=1&amp;subcmd=all&amp;uin=634558578&amp;website=www.oicqzone.com" target="_blank" title="QQ"><i class="fab fa-qq"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站不定期更新，欢迎！</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%81%8A%E4%B8%80%E8%81%8AC-%E7%9A%84%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">聊一聊C++的智能指针？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%81%8A%E4%B8%80%E8%81%8AC-%E7%9A%84%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%EF%BC%9F"><span class="toc-number">2.</span> <span class="toc-text">聊一聊C++的内存管理？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A0%86%E4%B8%8E%E6%A0%88%E7%9A%84%E5%8C%BA%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">3.</span> <span class="toc-text">堆与栈的区别是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#new-%E5%92%8C-malloc-%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="toc-number">4.</span> <span class="toc-text">new 和 malloc 有什么区别？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#delete-%E5%92%8C-free-%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="toc-number">5.</span> <span class="toc-text">delete 和 free 有什么区别？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#C-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F"><span class="toc-number">6.</span> <span class="toc-text">C++内存管理常用方法有哪些？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A0%86%E5%92%8C%E6%A0%88%E4%BA%86%E8%A7%A3%E5%90%97%EF%BC%9F%E8%AF%B4%E4%B8%80%E4%B8%8B%E5%AE%83%E4%BB%AC%E7%9A%84%E5%BA%95%E5%B1%82%E5%8C%BA%E5%88%AB%E3%80%82"><span class="toc-number">7.</span> <span class="toc-text">堆和栈了解吗？说一下它们的底层区别。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E9%81%BF%E5%85%8D%E5%86%85%E5%AD%98%E7%A2%8E%E7%89%87%EF%BC%9F"><span class="toc-number">8.</span> <span class="toc-text">如何避免内存碎片？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%86%85%E5%AD%98%E5%AF%B9%E9%BD%90%EF%BC%9F"><span class="toc-number">9.</span> <span class="toc-text">什么是内存对齐？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%86%85%E5%AD%98%E5%AF%B9%E9%BD%90%EF%BC%9F"><span class="toc-number">10.</span> <span class="toc-text">为什么要内存对齐？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFRAII%EF%BC%9F%E8%AF%B7%E4%B8%BE%E4%BE%8B%E8%AF%B4%E6%98%8E%E3%80%82"><span class="toc-number">11.</span> <span class="toc-text">什么是RAII？请举例说明。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8C%87%E9%92%88%E5%92%8C%E5%BC%95%E7%94%A8%E7%9A%84%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="toc-number">12.</span> <span class="toc-text">指针和引用的区别？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%87%8E%E6%8C%87%E9%92%88%E4%B8%8E%E6%82%AC%E7%A9%BA%E6%8C%87%E9%92%88%E4%BA%A7%E7%94%9F%E5%8E%9F%E5%9B%A0%E3%80%81%E5%8D%B1%E5%AE%B3%E3%80%81%E9%81%BF%E5%85%8D%E6%96%B9%E6%B3%95%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">13.</span> <span class="toc-text">野指针与悬空指针产生原因、危害、避免方法是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B7%B1%E6%8B%B7%E8%B4%9D%E5%92%8C%E6%B5%85%E6%8B%B7%E8%B4%9D%E7%9A%84%E5%8C%BA%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">14.</span> <span class="toc-text">深拷贝和浅拷贝的区别是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E7%A7%BB%E5%8A%A8%E8%AF%AD%E4%B9%89%EF%BC%9F%E5%AE%83%E6%9C%89%E4%BB%80%E4%B9%88%E5%A5%BD%E5%A4%84%EF%BC%9F"><span class="toc-number">15.</span> <span class="toc-text">什么是移动语义？它有什么好处？</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" title="C++八股：内存管理"><img src="/img/CPlusPlus.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="C++八股：内存管理"/></a><div class="content"><a class="title" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" title="C++八股：内存管理">C++八股：内存管理</a><time datetime="2025-12-22T12:54:00.000Z" title="更新于 2025-12-22 20:54:00">2025-12-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9ASTL/" title="C++八股：STL"><img src="/img/CPlusPlus.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="C++八股：STL"/></a><div class="content"><a class="title" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9ASTL/" title="C++八股：STL">C++八股：STL</a><time datetime="2025-12-22T12:53:00.000Z" title="更新于 2025-12-22 20:53:00">2025-12-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E5%9F%BA%E7%A1%80/" title="C++八股：基础"><img src="/img/CPlusPlus.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="C++八股：基础"/></a><div class="content"><a class="title" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E5%9F%BA%E7%A1%80/" title="C++八股：基础">C++八股：基础</a><time datetime="2025-12-22T12:52:00.000Z" title="更新于 2025-12-22 20:52:00">2025-12-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/12/03/C++%E5%9F%BA%E7%A1%80%EF%BC%9A%E6%B5%81%E4%B8%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/" title="C++基础：流与文件系统"><img src="/img/CPlusPlus.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="C++基础：流与文件系统"/></a><div class="content"><a class="title" href="/2023/12/03/C++%E5%9F%BA%E7%A1%80%EF%BC%9A%E6%B5%81%E4%B8%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/" title="C++基础：流与文件系统">C++基础：流与文件系统</a><time datetime="2025-05-01T12:09:00.000Z" title="更新于 2025-05-01 20:09:00">2025-05-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/12/03/C++%E5%9F%BA%E7%A1%80%EF%BC%9A%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/" title="C++基础：异常处理"><img src="/img/CPlusPlus.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="C++基础：异常处理"/></a><div class="content"><a class="title" href="/2023/12/03/C++%E5%9F%BA%E7%A1%80%EF%BC%9A%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/" title="C++基础：异常处理">C++基础：异常处理</a><time datetime="2025-05-01T12:08:00.000Z" title="更新于 2025-05-01 20:08:00">2025-05-01</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2019 - 2025 By AillianYue</span></div><div class="footer_custom_text">Hi, welcome to <a target="_blank" rel="noopener" href="https://github.com/AillianYue">my blog</a>!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

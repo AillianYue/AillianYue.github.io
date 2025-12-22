@@ -1,0 +1,557 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>C++八股：基础 | AillianYue's Blog</title><meta name="author" content="AillianYue"><meta name="copyright" content="AillianYue"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="介绍C++的基础八股知识">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++八股：基础">
+<meta property="og:url" content="http://example.com/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E5%9F%BA%E7%A1%80/index.html">
+<meta property="og:site_name" content="AillianYue&#39;s Blog">
+<meta property="og:description" content="介绍C++的基础八股知识">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/CPlusPlus.webp">
+<meta property="article:published_time" content="2024-12-03T11:47:00.000Z">
+<meta property="article:modified_time" content="2025-12-22T12:52:00.000Z">
+<meta property="article:author" content="AillianYue">
+<meta property="article:tag" content="C++">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/CPlusPlus.webp"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "C++八股：基础",
+  "url": "http://example.com/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E5%9F%BA%E7%A1%80/",
+  "image": "http://example.com/img/CPlusPlus.webp",
+  "datePublished": "2024-12-03T11:47:00.000Z",
+  "dateModified": "2025-12-22T12:52:00.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "AillianYue",
+      "url": "https://github.com/AillianYue"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/avatar.png"><link rel="canonical" href="http://example.com/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E5%9F%BA%E7%A1%80/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'C++八股：基础',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">18</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">11</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 历程</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">AillianYue's Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">C++八股：基础</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 历程</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">C++八股：基础</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-12-03T11:47:00.000Z" title="发表于 2024-12-03 19:47:00">2024-12-03</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-12-22T12:52:00.000Z" title="更新于 2025-12-22 20:52:00">2025-12-22</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/C/">C++</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/C/C-%E5%85%AB%E8%82%A1/">C++八股</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">5.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>15分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><p>VERSION：1.0.0</p>
+<h3 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h3><h4 id="各种整型的大小？"><a href="#各种整型的大小？" class="headerlink" title="各种整型的大小？"></a>各种整型的大小？</h4><p>在使用8位字节的系统中，1 byte &#x3D; 8 bit</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th align="center">有无符号</th>
+<th align="center">字节</th>
+<th></th>
+<th></th>
+<th></th>
+<th align="center">printf<br/>格式指定符</th>
+</tr>
+</thead>
+<tbody><tr>
+<td></td>
+<td align="center"></td>
+<td align="center">32位OS</td>
+<td></td>
+<td>64位OS</td>
+<td></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td></td>
+<td align="center"></td>
+<td align="center">Windows</td>
+<td>Linux&#x2F;Mac</td>
+<td>Windows</td>
+<td>Linux&#x2F;Mac</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td>short</td>
+<td align="center">有</td>
+<td align="center">2</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td align="center">%hd</td>
+</tr>
+<tr>
+<td>unsigned short</td>
+<td align="center">无</td>
+<td align="center">2</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td align="center">%hu</td>
+</tr>
+<tr>
+<td>int</td>
+<td align="center">有</td>
+<td align="center">4</td>
+<td>4</td>
+<td>4</td>
+<td>4</td>
+<td align="center">%d</td>
+</tr>
+<tr>
+<td>unsigned int</td>
+<td align="center">无</td>
+<td align="center">4</td>
+<td>4</td>
+<td>4</td>
+<td>4</td>
+<td align="center">%u</td>
+</tr>
+<tr>
+<td>long</td>
+<td align="center">有</td>
+<td align="center">4</td>
+<td>4</td>
+<td>4</td>
+<td>8</td>
+<td align="center">%ld</td>
+</tr>
+<tr>
+<td>unsigned long</td>
+<td align="center">无</td>
+<td align="center">4</td>
+<td>4</td>
+<td>4</td>
+<td>8</td>
+<td align="center">%lu</td>
+</tr>
+<tr>
+<td>long long</td>
+<td align="center">有</td>
+<td align="center">8</td>
+<td>8</td>
+<td>8</td>
+<td>8</td>
+<td align="center">%lld</td>
+</tr>
+<tr>
+<td>unsigned long long</td>
+<td align="center">无</td>
+<td align="center">8</td>
+<td>8</td>
+<td>8</td>
+<td>8</td>
+<td align="center">%llu</td>
+</tr>
+</tbody></table>
+<p>可以通过运算符 sizeof 判断数据类型的长度。</p>
+<h4 id="C-中如何正确比较浮点数是否相等？"><a href="#C-中如何正确比较浮点数是否相等？" class="headerlink" title="C++中如何正确比较浮点数是否相等？"></a>C++中如何正确比较浮点数是否相等？</h4><p>正确比较方法：</p>
+<ul>
+<li>绝对误差比较：适用于数值范围已知的情况</li>
+<li>相对误差比较：适用于数值范围变化较大的情况</li>
+<li>ULP比较：基于浮点数表示的精度的比较方法</li>
+<li>结合绝对和相对误差：综合两种方法的优势</li>
+</ul>
+<p>浮点数在计算机中采用IEEE 754标准表示，存在以下问题：</p>
+<ul>
+<li>精度限制：浮点数有有限的精度位数，无法精确表示所有实数</li>
+<li>舍入误差：运算过程中会产生舍入误差，累积后可能显著</li>
+<li>表示误差：某些十进制数在二进制中无法精确表示（如0.1）</li>
+<li>不同运算顺序可能产生不同结果</li>
+</ul>
+<p>浮点数表示基础 IEEE 754单精度浮点数结构：</p>
+<p>1位符号位</p>
+<ul>
+<li>8位指数位</li>
+<li>23位尾数位</li>
+</ul>
+<p>常见浮点数陷阱</p>
+<ul>
+<li>累积误差：多次运算后误差累积</li>
+<li>吸收现象：大数加小数时小数被忽略</li>
+<li>抵消现象：相近数相减导致精度丢失</li>
+<li>非结合性：(a + b) + c ≠ a + (b + c)</li>
+</ul>
+<h4 id="你对C-中的新特性了解吗？比如说C11的新特性？"><a href="#你对C-中的新特性了解吗？比如说C11的新特性？" class="headerlink" title="你对C++中的新特性了解吗？比如说C11的新特性？"></a>你对C++中的新特性了解吗？比如说C11的新特性？</h4><ol>
+<li>自动类型推导（auto）： 让编译器自动推导变量类型，简化代码，特别是在迭代器和模板编程中。</li>
+<li>智能指针（unique_ptr, shared_ptr, weak_ptr）： 用于自动管理动态内存，有效防止内存泄漏。</li>
+<li>基于范围的for循环： 简化了对容器元素的遍历操作。</li>
+<li>右值引用和移动语义： 允许资源（如动态数组）的所有权转移，而非深拷贝，极大地提升了性能，特别是在返回容器对象或交换操作时。</li>
+<li>Lambda表达式： 可以定义匿名函数对象，与STL算法（如sort、find_if）配合使用非常方便，使代码更简洁清晰。</li>
+<li>nullptr： 替代NULL，提供了明确的空指针常量。</li>
+</ol>
+<h4 id="struct-与-union-的区别是什么？"><a href="#struct-与-union-的区别是什么？" class="headerlink" title="struct 与 union 的区别是什么？"></a>struct 与 union 的区别是什么？</h4><p>在C++中，结构体(struct)和联合体(union)都是*用户定义的类型，但结构体所有成员同时存在且占用独立内存空间</p>
+<p>而联合体所有成员共享同一内存空间，仅能存储一个成员的值。</p>
+<p>C++11后，联合体可以包含非POD类型成员，并支持成员函数和特殊成员函数。</p>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>结构体 (struct)</th>
+<th>联合体 (union)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>访问权限</td>
+<td>默认public</td>
+<td>总是public</td>
+</tr>
+<tr>
+<td>成员类型</td>
+<td>可包含任意类型的成员函数</td>
+<td>C++11起可包含成员函数，不能包含引用和虚函数</td>
+</tr>
+<tr>
+<td>面向对象特性</td>
+<td>支持继承和多态</td>
+<td>不支持继承</td>
+</tr>
+<tr>
+<td>内存分配</td>
+<td>各成员独立内存空间</td>
+<td>所有成员共享内存空间</td>
+</tr>
+<tr>
+<td>总大小</td>
+<td>各成员大小之和+对齐填充</td>
+<td>最大成员的大小+对其填充</td>
+</tr>
+<tr>
+<td>生命周期</td>
+<td>自动管理成员生命周期</td>
+<td>非POD成员需要手动管理</td>
+</tr>
+<tr>
+<td>数据安全</td>
+<td>高，成员互不影响</td>
+<td>低，修改一个成员会影响其他</td>
+</tr>
+</tbody></table>
+<h4 id="struct-和-class-有哪些区别？"><a href="#struct-和-class-有哪些区别？" class="headerlink" title="struct 和 class 有哪些区别？"></a>struct 和 class 有哪些区别？</h4><ul>
+<li>在C++中，struct和class的唯一区别是默认的访问控制权限：<ul>
+<li>struct默认的成员访问权限是public，默认的继承方式也是public。</li>
+<li>class默认的成员访问权限是private，默认的继承方式也是private。</li>
+</ul>
+</li>
+<li>除此之外，两者在功能上完全等价。但是，通常在代码中我们会有一些约定俗成的用法：<ul>
+<li>struct常用于表示简单的数据结构，例如只包含一些数据成员，或者只有少量的成员函数。</li>
+<li>class常用于表示具有复杂行为和封装性的类。</li>
+</ul>
+</li>
+</ul>
+<h4 id="静态局部变量，全局变量，局部变量的特点，以及使用场景？"><a href="#静态局部变量，全局变量，局部变量的特点，以及使用场景？" class="headerlink" title="静态局部变量，全局变量，局部变量的特点，以及使用场景？"></a>静态局部变量，全局变量，局部变量的特点，以及使用场景？</h4><ul>
+<li>局部变量：<ul>
+<li>定义在函数内部或代码块内部，生命周期从声明开始到所在作用域结束，存储在栈上</li>
+<li>使用场景：用于函数内部的临时计算，不需要在函数调用之间保持值的场景。</li>
+</ul>
+</li>
+<li>全局变量：<ul>
+<li>定义在函数外部，整个程序可见，生命周期为整个程序，存储在静态存储区。</li>
+<li>使用场景：当多个函数需要共享同一个数据，或者数据需要在整个程序运行期间存在时使用。但应谨慎使用，因为全局变量会破坏封装性，增加耦合度。</li>
+</ul>
+</li>
+<li>静态局部变量：<ul>
+<li>在函数内部用<code>static</code>修饰的局部变量，生命周期为整个程序，但作用域仍为函数内部。存储在数据段。</li>
+<li>使用场景：当需要在函数调用之间保持某个变量的值，但又不想使用全局变量时使用。例如，用于统计函数被调用的次数。</li>
+</ul>
+</li>
+</ul>
+<h4 id="指针和引用的区别？"><a href="#指针和引用的区别？" class="headerlink" title="指针和引用的区别？"></a>指针和引用的区别？</h4><ul>
+<li>指针是一个变量，存储的是另一个变量的地址；引用是一个别名，是另一个变量的同义词。</li>
+<li>指针可以被重新赋值指向不同的变量；引用一旦初始化后就不能再改变（始终指向初始化时引用的变量）。</li>
+<li>指针可以为空（nullptr）；引用必须绑定到一个已有的对象，不能为空（但可以有悬空引用，这是不安全的）。</li>
+<li>指针需要解引用（*）来访问所指向的对象；引用直接使用，无需解引用。</li>
+<li>指针有自己独立的内存地址；引用和它引用的对象共享同一个地址（即引用本身的地址就是原变量的地址，但实际上引用在底层通常通过指针实现，但这是编译器细节）。</li>
+<li>使用场景：指针常用于需要重新指向、可选参数（可为空）的情况；引用常用于函数参数传递（避免复制）和返回值，特别是用于实现运算符重载和函数链式调用。</li>
+</ul>
+<h4 id="函数指针如何定义？使用场景有哪些？"><a href="#函数指针如何定义？使用场景有哪些？" class="headerlink" title="函数指针如何定义？使用场景有哪些？"></a>函数指针如何定义？使用场景有哪些？</h4><ul>
+<li>定义：函数指针是指向函数的指针。定义时需要指定函数的返回类型和参数类型。<br>例如：<code>int (*funcPtr)(int, int);</code> 表示funcPtr是一个指向返回类型为int，参数为两个int的函数的指针。</li>
+<li>使用场景：<ul>
+<li>回调函数：将一个函数作为参数传递给另一个函数，在特定事件发生时调用。例如，在事件驱动编程、排序算法中传递比较函数。</li>
+<li>动态函数调用：根据运行时条件选择调用不同的函数。</li>
+<li>函数表（跳转表）：用一个函数指针数组来根据索引调用不同的函数，常用于状态机或解释器。</li>
+</ul>
+</li>
+</ul>
+<h3 id="关键字"><a href="#关键字" class="headerlink" title="关键字"></a>关键字</h3><h4 id="static-在不同场景下的作用？"><a href="#static-在不同场景下的作用？" class="headerlink" title="static 在不同场景下的作用？"></a>static 在不同场景下的作用？</h4><ul>
+<li>在全局变量或函数前：限制作用域为当前文件，避免命名冲突（文件作用域）。</li>
+<li>在局部变量前：延长生命周期至整个程序运行期，但作用域不变（函数内）。</li>
+<li>在类的成员变量前：该成员为所有类对象共享，属于类而非对象，需要在类外单独定义。</li>
+<li>在类的成员函数前：该函数属于类，不能访问非静态成员，只能访问静态成员。</li>
+</ul>
+<h4 id="const-关键字在不同场景下的作用？"><a href="#const-关键字在不同场景下的作用？" class="headerlink" title="const 关键字在不同场景下的作用？"></a>const 关键字在不同场景下的作用？</h4><ul>
+<li>修饰变量：表示常量，不可修改。</li>
+<li>修饰指针：<ul>
+<li>const在*左侧：指向的数据是常量，不可通过指针修改。</li>
+<li>const在*右侧：指针本身是常量，不可修改指针的指向。</li>
+</ul>
+</li>
+<li>修饰引用：常引用，不能通过引用修改原对象，常用于函数参数，避免拷贝且防止修改。</li>
+<li>修饰类成员函数：表示该函数不会修改类的成员变量（mutable修饰的除外）。</li>
+</ul>
+<h4 id="constexpr-和-const-的区别是什么？"><a href="#constexpr-和-const-的区别是什么？" class="headerlink" title="constexpr 和 const 的区别是什么？"></a>constexpr 和 const 的区别是什么？</h4><ul>
+<li>constexpr 是 C++11 引入的，用于声明常量表达式，要求编译时就能计算出值，可以用于变量、函数和构造函数。</li>
+<li>const 只表示运行时常量，不保证编译时就能确定值（但有时也可以，如用字面量初始化）。</li>
+<li>constexpr 函数在编译时执行，若参数是常量表达式，则返回常量表达式；否则，可作为普通函数运行。</li>
+<li>constexpr 变量必须由常量表达式初始化，而 const 变量可以由运行时表达式初始化。</li>
+</ul>
+<h4 id="const-和-define-的区别是什么？"><a href="#const-和-define-的区别是什么？" class="headerlink" title="const 和 define 的区别是什么？"></a>const 和 define 的区别是什么？</h4><ul>
+<li>const 是C++关键字，定义有类型的常量，编译器会进行类型检查，有作用域。</li>
+<li>define 是预处理指令，进行简单的文本替换，无类型检查，无作用域，容易出错。</li>
+<li>const 常量在编译时处理，define 在预处理阶段替换。</li>
+<li>const 定义的常量，在C语言中是存储在内存中、需要额外的内存空间的；define定义的常量，运行时是直接的操作数，并不会存放在内存中。</li>
+</ul>
+<h4 id="define-和-typedef-的区别是什么？"><a href="#define-和-typedef-的区别是什么？" class="headerlink" title="define 和 typedef 的区别是什么？"></a>define 和 typedef 的区别是什么？</h4><ul>
+<li>define 是预处理指令，用于定义宏，可以进行文本替换，包括类型、常量、代码片段等，无作用域，不进行类型检查。typedef 是C&#x2F;C++关键字，用于为已有类型定义别名，有作用域，编译器会进行类型检查。</li>
+<li>define 是在编译的预处理阶段起作用，typedef 是在编译、运行的时候起作用</li>
+<li>define 不分配内存，给出的是立即数，有多少次使用就进行多少次替换；typedef 在静态存储区中分配空间，在程序运行过程中内存中只有一个拷贝</li>
+</ul>
+<h4 id="using-和typedef-有哪些区别？"><a href="#using-和typedef-有哪些区别？" class="headerlink" title="using 和typedef 有哪些区别？"></a>using 和typedef 有哪些区别？</h4><p>using 是 C++11 特性，若需兼容 C++03&#x2F;98，需用 typedef；C++11 及以上的 typedef 使用场景都可以用using 替代，且 using 的语法更直观、功能更强大（是 typedef 的超集）</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">typedef</span> <span class="title">int</span> <span class="params">(*MathOperation)</span><span class="params">(<span class="type">int</span>, <span class="type">int</span>)</span></span>;</span><br><span class="line"><span class="keyword">using</span> MathOperation = <span class="built_in">int</span> (*)(<span class="type">int</span>, <span class="type">int</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="type">unsigned</span> <span class="type">int</span> UserID;</span><br><span class="line"><span class="keyword">using</span> UserID = <span class="type">unsigned</span> <span class="type">int</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> std::vector&lt;std::vector&lt;<span class="type">int</span>&gt;&gt; Matrix;</span><br><span class="line"><span class="keyword">using</span> Matrix = std::vector&lt;std::vector&lt;<span class="type">int</span>&gt;&gt;;</span><br></pre></td></tr></table></figure>
+
+<h4 id="define-和-inline-的区别是什么？"><a href="#define-和-inline-的区别是什么？" class="headerlink" title="define 和 inline 的区别是什么？"></a>define 和 inline 的区别是什么？</h4><ul>
+<li>define 定义预编译时处理的宏，只是简单的字符串替换，无类型检查，不安全。inline 先将内联函数编译完成生成了函数体直接插入被调用的地方，减少了压栈，跳转和返回的操作。没有普通函数调用时的额外开销</li>
+<li>内联函数是一种特殊的函数，会进行类型检查；</li>
+<li>inline只是给编译器的建议，最终是否内联由编译器决定。编译器可能因为函数体太大、包含循环、递归调用等原因拒绝内联。相反，没有inline标记的函数也可能被编译器自动内联。</li>
+<li>C++中inline编译限制：<ul>
+<li>不能存在任何形式的循环语句</li>
+<li>不能存在过多的条件判断语句</li>
+<li>函数体不能过于庞大</li>
+<li>内联函数声明必须在调用语句之前</li>
+</ul>
+</li>
+</ul>
+<h4 id="final-关键字的作用？"><a href="#final-关键字的作用？" class="headerlink" title="final 关键字的作用？"></a>final 关键字的作用？</h4><ul>
+<li>修饰类：final修饰的类不可被继承，是最终类</li>
+<li>修饰方法：final修饰的方法不能被重写</li>
+<li>修饰变量：<ul>
+<li>修饰基本数据类型的变量，其数值在初始化之后便不能修改，为常量。</li>
+<li>修饰引用类型的变量，在对其初始化之后便不能再让其指向另一个对象。虽然不能再指向其他对象，但是它指向的对象的内容是可变的。</li>
+</ul>
+</li>
+</ul>
+<h4 id="final-在性能上有什么好处？"><a href="#final-在性能上有什么好处？" class="headerlink" title="final 在性能上有什么好处？"></a>final 在性能上有什么好处？</h4><p>有。编译器如果知道一个类是 final 的，或者一个虚函数是 final 的，它就可以进行去虚拟化 (Devirtualization) 优化。</p>
+<p>这意味着编译器可以在编译时确定调用的是哪个具体函数，从而将虚函数调用（通过虚表指针间接调用）优化为普通的直接函数调用，甚至内联调用。</p>
+<p>这消除了间接跳转的开销，对性能关键代码非常有益。</p>
+<h4 id="extern-关键字有什么用？"><a href="#extern-关键字有什么用？" class="headerlink" title="extern 关键字有什么用？"></a>extern 关键字有什么用？</h4><ul>
+<li>声明外部变量&#x2F;函数：表示定义在其他文件中，当前文件只是引用</li>
+<li>C++调用C代码：extern “C” 按C语言规则编译函数（避免名称修饰）</li>
+<li>模板显式实例化声明：extern template 告诉编译器实例化在其他文件</li>
+</ul>
+<h4 id="extern-“C”的作用是什么？"><a href="#extern-“C”的作用是什么？" class="headerlink" title="extern “C”的作用是什么？"></a>extern “C”的作用是什么？</h4><p>extern “C” 是 C++ 编译器提供的一个链接规范（Linkage Specification），其主要作用是指示编译器按照 C 语言的规则来编译和链接其修饰的代码。</p>
+<p>这主要体现在函数名修饰（Name Mangling）和调用约定（Calling Convention）上，目的是为了解决 C++ 与 C 以及其他语言在混合编程时的链接兼容性问题。</p>
+<p>简单点说： extern “C” 用于告诉 C++ 编译器，被它修饰的函数或变量应使用 C 语言的编译和链接规则，即不进行名称修饰（Name Mangling），从而确保 C++ 代码可以正确链接到用 C 语言编译的库或目标代码。</p>
+<h4 id="volatile-的作用是什么？"><a href="#volatile-的作用是什么？" class="headerlink" title="volatile 的作用是什么？"></a>volatile 的作用是什么？</h4><p>volatile是一个类型修饰符，用于告知编译器该变量的值可能会被程序之外的、编译器无法感知的因素（如硬件、中断服务程序、其他线程等）意外修改。它主要作用是：禁止编译器对该变量进行优化（如缓存到寄存器、消除“冗余”读写操作），确保每次访问变量时都直接从其内存地址中读取或写入。用了volatile，编译器就会老老实实地每次去读它的真实值，而不会用之前缓存的旧值来替代。</p>
+<h4 id="sizeof-和-strlen-的区别是什么？"><a href="#sizeof-和-strlen-的区别是什么？" class="headerlink" title="sizeof 和 strlen 的区别是什么？"></a>sizeof 和 strlen 的区别是什么？</h4><ul>
+<li><code>sizeof</code> 是 C++ 中的一个编译时一元运算符，用于计算一个类型或对象在内存中所占的字节数，其结果在编译期就已确定。</li>
+<li><code>strlen</code>  是 C 标准库中的一个运行时函数，它接收一个以空字符 \0 结尾的字符串的起始地址，遍历内存直到遇到 \0，返回其间的字符个数（不包括 \0）。</li>
+</ul>
+<p>核心区别：sizeof关心的是内存布局和占用，它是一个静态的、编译期的概念。而strlen关心的是字符串的内容和逻辑长度，它是一个动态的、运行时的概念。</p>
+<p>一个常见的误区是认为sizeof(数组)可以得到数组的元素个数。这只对在作用域内定义的原始数组有效，对于已退化为指针的数组形参，sizeof得到的是指针的大小。</p>
+<h4 id="sizeof-如何获取变量或类型的大小？"><a href="#sizeof-如何获取变量或类型的大小？" class="headerlink" title="sizeof 如何获取变量或类型的大小？"></a>sizeof 如何获取变量或类型的大小？</h4><p>编译期运算符：返回类型或对象的内存字节数<br>使用方式：</p>
+<ul>
+<li><code>sizeof(type)</code>：获取类型大小</li>
+<li><code>sizeof expr</code>：获取表达式结果类型大小（不计算表达式）<ul>
+<li>特点：在编译期确定，可用于数组大小计算等</li>
+</ul>
+</li>
+</ul>
+<h4 id="new-和-malloc-有什么区别？"><a href="#new-和-malloc-有什么区别？" class="headerlink" title="new 和 malloc 有什么区别？"></a>new 和 malloc 有什么区别？</h4><ul>
+<li><code>new</code> 是C++运算符，<code>malloc</code> 是C库函数</li>
+<li><code>new</code> 在堆上分配内存并调用构造函数，<code>malloc</code> 只在堆上分配内存</li>
+<li><code>new</code> 返回类型指针，<code>malloc</code> 返回 <code>void*</code></li>
+<li>失败时<code>new</code> 抛出 <code>std::bad_alloc</code>，<code>malloc</code> 返回 <code>NULL</code></li>
+<li><code>new/delete</code> 可重载，<code>malloc/free</code> 不可</li>
+<li><code>new</code> 自动计算大小，<code>malloc</code> 需手动指定大小</li>
+</ul>
+<h4 id="delete-和-free-有什么区别？"><a href="#delete-和-free-有什么区别？" class="headerlink" title="delete 和 free 有什么区别？"></a>delete 和 free 有什么区别？</h4><ul>
+<li><code>delete</code>是C++运算符，<code>free</code> 是C库函数</li>
+<li><code>delete</code> 调用析构函数并释放内存，<code>free</code> 只释放内存</li>
+<li><code>delete[]</code> 释放数组，<code>free</code> 不区分</li>
+<li>两者对空指针都安全（无操作）</li>
+</ul>
+<h4 id="nullptr-和-NULL-有什么区别？"><a href="#nullptr-和-NULL-有什么区别？" class="headerlink" title="nullptr 和 NULL 有什么区别？"></a>nullptr 和 NULL 有什么区别？</h4><ul>
+<li><code>nullptr</code> 是 <code>std::nullptr_t</code> 类型，<code>NULL</code> 通常是整数0或 (void*)0</li>
+<li><code>nullptr</code> 可精确匹配指针类型，<code>NULL</code> 可能匹配整型</li>
+<li><code>nullptr</code> 避免误用为整数，更安全</li>
+</ul>
+<h4 id="介绍一下四种强制类型转换？"><a href="#介绍一下四种强制类型转换？" class="headerlink" title="介绍一下四种强制类型转换？"></a>介绍一下四种强制类型转换？</h4><ul>
+<li><code>static_cast</code>：相关类型转换（基本类型、父子类指针、void*）<ul>
+<li>进行上行转换（子转父）是安全的，进行下行转换（父转子）是不安全的</li>
+</ul>
+</li>
+<li><code>dynamic_cast</code>：带类型检查的 多态父 转子（需多态，失败返回nullptr）<ul>
+<li>一般用于安全向下转换（多态基类转化为派生类）</li>
+<li>仅适用于包含虚函数的类（多态类）</li>
+</ul>
+</li>
+<li><code>const_cast</code>：去掉或加上<code>const</code>&#x2F;<code>volatile</code>属性</li>
+<li><code>reinterpret_cast</code>：底层二进制重解释操作<ul>
+<li>仅在编译期对二进制位做 “暴力重解释”</li>
+<li>不做任何类型检查、内存布局调整或数据转换，完全依赖程序员保证类型的二进制兼容性</li>
+<li>我没用过，也没见人用过，也不建议用</li>
+</ul>
+</li>
+</ul>
+<h4 id="i-与-i-有什么区别？"><a href="#i-与-i-有什么区别？" class="headerlink" title="i++ 与 ++i 有什么区别？"></a>i++ 与 ++i 有什么区别？</h4><ul>
+<li><code>i++</code> 返回旧值，<code>++i</code> 返回新值</li>
+<li><code>++i</code> 通常更高效（不需保存临时值）</li>
+<li>重载时，前缀++返回引用，后缀++返回副本</li>
+</ul>
+<h3 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h3><h4 id="介绍一下C-中的异常处理机制？"><a href="#介绍一下C-中的异常处理机制？" class="headerlink" title="介绍一下C++中的异常处理机制？"></a>介绍一下C++中的异常处理机制？</h4><p>C++异常处理基于try-throw-catch机制，提供结构化的错误处理方式。try块定义监控范围，throw抛出异常对象，catch捕获并处理异常。支持异常类型匹配、栈展开和资源自动清理，通过RAII保证异常安全。</p>
+<p>C++异常处理核心组件：</p>
+<ol>
+<li>异常抛出（throw），使用throw表达式抛出异常对象），可以抛出任意类型的对象（内置类型、自定义类、标准异常等），抛出异常会立即终止当前函数执行</li>
+<li>异常捕获（catch），catch块按顺序匹配异常类型，支持异常类型继承层次中的多态捕获，可以使用catch(…)捕获所有异常</li>
+<li>栈展开（Stack Unwinding），从抛出点开始向上查找匹配的catch块，自动调用局部对象的析构函数，保证资源正确释放</li>
+<li>异常规格（Exception Specifications），C++11引入noexcept说明符，替代旧的动态异常规格，提供编译期异常保证</li>
+</ol>
+<h4 id="异常处理相比返回错误码有什么优势？"><a href="#异常处理相比返回错误码有什么优势？" class="headerlink" title="异常处理相比返回错误码有什么优势？"></a>异常处理相比返回错误码有什么优势？</h4><ol>
+<li>分离错误处理：正常逻辑和错误处理代码分离，提高可读性</li>
+<li>自动传播：异常自动向上传播，无需每层检查错误码</li>
+<li>类型安全：异常是类型安全的，编译器可以检查类型匹配</li>
+<li>无法忽略：未处理的异常会导致程序终止，错误不会被静默忽略</li>
+<li>构造函数支持：构造函数无法返回错误码，只能使用异常报告失败</li>
+</ol>
+<h4 id="什么是栈展开？在异常处理中起什么作用？"><a href="#什么是栈展开？在异常处理中起什么作用？" class="headerlink" title="什么是栈展开？在异常处理中起什么作用？"></a>什么是栈展开？在异常处理中起什么作用？</h4><p>栈展开是从异常抛出点开始，沿着调用链向上查找匹配catch块的过程。在这个过程中：</p>
+<ul>
+<li>自动调用局部对象的析构函数</li>
+<li>释放自动存储期的资源</li>
+<li>维护调用栈的完整性</li>
+<li>保证资源不泄漏（结合RAII） 栈展开确保了即使发生异常，程序也能正确地清理资源。</li>
+</ul>
+<h4 id="为什么应该按引用捕获异常？"><a href="#为什么应该按引用捕获异常？" class="headerlink" title="为什么应该按引用捕获异常？"></a>为什么应该按引用捕获异常？</h4><p>按引用捕获异常有多个优势：</p>
+<ul>
+<li>避免切片：捕获派生类异常时保持多态性</li>
+<li>避免拷贝：不需要复制异常对象，提高性能</li>
+<li>保持原始异常：能够重新抛出原始异常对象</li>
+<li>一致性：与标准库异常处理方式一致</li>
+</ul>
+<h4 id="在析构函数中抛出异常会怎么样？"><a href="#在析构函数中抛出异常会怎么样？" class="headerlink" title="在析构函数中抛出异常会怎么样？"></a>在析构函数中抛出异常会怎么样？</h4><p>在析构函数中抛出异常是危险的，因为：</p>
+<ul>
+<li>双重异常：如果栈展开过程中析构函数抛出异常，会立即调用terminate</li>
+<li>资源泄漏：可能中断其他资源的清理过程</li>
+<li>未定义行为：C++标准规定这种情况会导致程序终止</li>
+<li>最佳实践：析构函数应该用noexcept声明，并吞掉所有异常</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a target="_blank" rel="noopener" href="https://github.com/AillianYue">AillianYue</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a target="_blank" rel="noopener" href="https://www.yuque.com/aillian-yue/blog">https://www.yuque.com/aillian-yue/blog</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">此文章版归AillianYue所有，如需转载，请注明来自原作者</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/C/">C++</a></div><div class="post-share"><div class="social-share" data-image="/img/CPlusPlus.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9ASTL/" title="C++八股：STL"><img class="cover" src="/img/CPlusPlus.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">C++八股：STL</div></div><div class="info-2"><div class="info-item-1">介绍C++的STL八股知识</div></div></div></a><a class="pagination-related" href="/2023/12/13/%E7%BA%B9%E7%90%86%E5%8E%8B%E7%BC%A9%E5%AD%A6%E4%B9%A0%E4%B8%8EASTC%E5%8A%A0%E8%BD%BD/" title="纹理压缩学习与ASTC加载"><img class="cover" src="/img/OpenGL.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">纹理压缩学习与ASTC加载</div></div><div class="info-2"><div class="info-item-1">加载ASTC_4x4文件以供OpenGL渲染使用</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9ASTL/" title="C++八股：STL"><img class="cover" src="/img/CPlusPlus.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-03</div><div class="info-item-2">C++八股：STL</div></div><div class="info-2"><div class="info-item-1">介绍C++的STL八股知识</div></div></div></a><a class="pagination-related" href="/2023/12/03/C++%E5%9F%BA%E7%A1%80%EF%BC%9A%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/" title="C++基础：异常处理"><img class="cover" src="/img/CPlusPlus.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-12-03</div><div class="info-item-2">C++基础：异常处理</div></div><div class="info-2"><div class="info-item-1">介绍异常处理基础、主要用法示例以及GDB调试</div></div></div></a><a class="pagination-related" href="/2023/12/03/C++%E5%9F%BA%E7%A1%80%EF%BC%9A%E5%AD%97%E7%AC%A6%E4%B8%B2/" title="C++基础：字符串"><img class="cover" src="/img/CPlusPlus.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-12-03</div><div class="info-item-2">C++基础：字符串</div></div><div class="info-2"><div class="info-item-1">介绍C风格字符串、字符串基本操作、特殊字符串处理以及性能优化</div></div></div></a><a class="pagination-related" href="/2023/12/03/C++%E5%9F%BA%E7%A1%80%EF%BC%9A%E7%B1%BB%E5%92%8C%E5%AF%B9%E8%B1%A1/" title="C++基础：类和对象"><img class="cover" src="/img/CPlusPlus.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-12-03</div><div class="info-item-2">C++基础：类和对象</div></div><div class="info-2"><div class="info-item-1">介绍面向对象程序设计、类和对象基础、构造与析构、特殊成员、结构体、联合和枚举</div></div></div></a><a class="pagination-related" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" title="C++八股：内存管理"><img class="cover" src="/img/CPlusPlus.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-03</div><div class="info-item-2">C++八股：内存管理</div></div><div class="info-2"><div class="info-item-1">介绍C++的内存管理八股知识</div></div></div></a><a class="pagination-related" href="/2023/12/03/C++%E5%9F%BA%E7%A1%80%EF%BC%9ASTL/" title="C++基础：STL"><img class="cover" src="/img/CPlusPlus.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-12-03</div><div class="info-item-2">C++基础：STL</div></div><div class="info-2"><div class="info-item-1">介绍STL的容器、迭代器、函数对象、算法</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">AillianYue</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">18</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">11</div></a></div><a id="card-info-btn" href="/about/"><i class="fas fa-user-graduate"></i><span>关于我</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/AillianYue" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="https://gitee.com/aillianyue" target="_blank" title="Gitee"><i class="fab fa-github-alt"></i></a><a class="social-icon" href="mailto:634558578@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="tencent://AddContact/?fromId=45&amp;fromSubId=1&amp;subcmd=all&amp;uin=634558578&amp;website=www.oicqzone.com" target="_blank" title="QQ"><i class="fab fa-qq"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站不定期更新，欢迎！</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80"><span class="toc-number">1.</span> <span class="toc-text">基础</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%84%E7%A7%8D%E6%95%B4%E5%9E%8B%E7%9A%84%E5%A4%A7%E5%B0%8F%EF%BC%9F"><span class="toc-number">1.1.</span> <span class="toc-text">各种整型的大小？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#C-%E4%B8%AD%E5%A6%82%E4%BD%95%E6%AD%A3%E7%A1%AE%E6%AF%94%E8%BE%83%E6%B5%AE%E7%82%B9%E6%95%B0%E6%98%AF%E5%90%A6%E7%9B%B8%E7%AD%89%EF%BC%9F"><span class="toc-number">1.2.</span> <span class="toc-text">C++中如何正确比较浮点数是否相等？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%A0%E5%AF%B9C-%E4%B8%AD%E7%9A%84%E6%96%B0%E7%89%B9%E6%80%A7%E4%BA%86%E8%A7%A3%E5%90%97%EF%BC%9F%E6%AF%94%E5%A6%82%E8%AF%B4C11%E7%9A%84%E6%96%B0%E7%89%B9%E6%80%A7%EF%BC%9F"><span class="toc-number">1.3.</span> <span class="toc-text">你对C++中的新特性了解吗？比如说C11的新特性？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#struct-%E4%B8%8E-union-%E7%9A%84%E5%8C%BA%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">1.4.</span> <span class="toc-text">struct 与 union 的区别是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#struct-%E5%92%8C-class-%E6%9C%89%E5%93%AA%E4%BA%9B%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="toc-number">1.5.</span> <span class="toc-text">struct 和 class 有哪些区别？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9D%99%E6%80%81%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F%EF%BC%8C%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F%EF%BC%8C%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F%E7%9A%84%E7%89%B9%E7%82%B9%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF%EF%BC%9F"><span class="toc-number">1.6.</span> <span class="toc-text">静态局部变量，全局变量，局部变量的特点，以及使用场景？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8C%87%E9%92%88%E5%92%8C%E5%BC%95%E7%94%A8%E7%9A%84%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="toc-number">1.7.</span> <span class="toc-text">指针和引用的区别？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E5%A6%82%E4%BD%95%E5%AE%9A%E4%B9%89%EF%BC%9F%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F"><span class="toc-number">1.8.</span> <span class="toc-text">函数指针如何定义？使用场景有哪些？</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E5%AD%97"><span class="toc-number">2.</span> <span class="toc-text">关键字</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#static-%E5%9C%A8%E4%B8%8D%E5%90%8C%E5%9C%BA%E6%99%AF%E4%B8%8B%E7%9A%84%E4%BD%9C%E7%94%A8%EF%BC%9F"><span class="toc-number">2.1.</span> <span class="toc-text">static 在不同场景下的作用？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#const-%E5%85%B3%E9%94%AE%E5%AD%97%E5%9C%A8%E4%B8%8D%E5%90%8C%E5%9C%BA%E6%99%AF%E4%B8%8B%E7%9A%84%E4%BD%9C%E7%94%A8%EF%BC%9F"><span class="toc-number">2.2.</span> <span class="toc-text">const 关键字在不同场景下的作用？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#constexpr-%E5%92%8C-const-%E7%9A%84%E5%8C%BA%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">2.3.</span> <span class="toc-text">constexpr 和 const 的区别是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#const-%E5%92%8C-define-%E7%9A%84%E5%8C%BA%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">2.4.</span> <span class="toc-text">const 和 define 的区别是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#define-%E5%92%8C-typedef-%E7%9A%84%E5%8C%BA%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">2.5.</span> <span class="toc-text">define 和 typedef 的区别是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#using-%E5%92%8Ctypedef-%E6%9C%89%E5%93%AA%E4%BA%9B%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="toc-number">2.6.</span> <span class="toc-text">using 和typedef 有哪些区别？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#define-%E5%92%8C-inline-%E7%9A%84%E5%8C%BA%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">2.7.</span> <span class="toc-text">define 和 inline 的区别是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#final-%E5%85%B3%E9%94%AE%E5%AD%97%E7%9A%84%E4%BD%9C%E7%94%A8%EF%BC%9F"><span class="toc-number">2.8.</span> <span class="toc-text">final 关键字的作用？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#final-%E5%9C%A8%E6%80%A7%E8%83%BD%E4%B8%8A%E6%9C%89%E4%BB%80%E4%B9%88%E5%A5%BD%E5%A4%84%EF%BC%9F"><span class="toc-number">2.9.</span> <span class="toc-text">final 在性能上有什么好处？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#extern-%E5%85%B3%E9%94%AE%E5%AD%97%E6%9C%89%E4%BB%80%E4%B9%88%E7%94%A8%EF%BC%9F"><span class="toc-number">2.10.</span> <span class="toc-text">extern 关键字有什么用？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#extern-%E2%80%9CC%E2%80%9D%E7%9A%84%E4%BD%9C%E7%94%A8%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">2.11.</span> <span class="toc-text">extern “C”的作用是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#volatile-%E7%9A%84%E4%BD%9C%E7%94%A8%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">2.12.</span> <span class="toc-text">volatile 的作用是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#sizeof-%E5%92%8C-strlen-%E7%9A%84%E5%8C%BA%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">2.13.</span> <span class="toc-text">sizeof 和 strlen 的区别是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#sizeof-%E5%A6%82%E4%BD%95%E8%8E%B7%E5%8F%96%E5%8F%98%E9%87%8F%E6%88%96%E7%B1%BB%E5%9E%8B%E7%9A%84%E5%A4%A7%E5%B0%8F%EF%BC%9F"><span class="toc-number">2.14.</span> <span class="toc-text">sizeof 如何获取变量或类型的大小？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#new-%E5%92%8C-malloc-%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="toc-number">2.15.</span> <span class="toc-text">new 和 malloc 有什么区别？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#delete-%E5%92%8C-free-%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="toc-number">2.16.</span> <span class="toc-text">delete 和 free 有什么区别？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#nullptr-%E5%92%8C-NULL-%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="toc-number">2.17.</span> <span class="toc-text">nullptr 和 NULL 有什么区别？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D%E4%B8%80%E4%B8%8B%E5%9B%9B%E7%A7%8D%E5%BC%BA%E5%88%B6%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2%EF%BC%9F"><span class="toc-number">2.18.</span> <span class="toc-text">介绍一下四种强制类型转换？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#i-%E4%B8%8E-i-%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="toc-number">2.19.</span> <span class="toc-text">i++ 与 ++i 有什么区别？</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86"><span class="toc-number">3.</span> <span class="toc-text">异常处理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D%E4%B8%80%E4%B8%8BC-%E4%B8%AD%E7%9A%84%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E6%9C%BA%E5%88%B6%EF%BC%9F"><span class="toc-number">3.1.</span> <span class="toc-text">介绍一下C++中的异常处理机制？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E7%9B%B8%E6%AF%94%E8%BF%94%E5%9B%9E%E9%94%99%E8%AF%AF%E7%A0%81%E6%9C%89%E4%BB%80%E4%B9%88%E4%BC%98%E5%8A%BF%EF%BC%9F"><span class="toc-number">3.2.</span> <span class="toc-text">异常处理相比返回错误码有什么优势？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%A0%88%E5%B1%95%E5%BC%80%EF%BC%9F%E5%9C%A8%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E4%B8%AD%E8%B5%B7%E4%BB%80%E4%B9%88%E4%BD%9C%E7%94%A8%EF%BC%9F"><span class="toc-number">3.3.</span> <span class="toc-text">什么是栈展开？在异常处理中起什么作用？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E5%BA%94%E8%AF%A5%E6%8C%89%E5%BC%95%E7%94%A8%E6%8D%95%E8%8E%B7%E5%BC%82%E5%B8%B8%EF%BC%9F"><span class="toc-number">3.4.</span> <span class="toc-text">为什么应该按引用捕获异常？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9C%A8%E6%9E%90%E6%9E%84%E5%87%BD%E6%95%B0%E4%B8%AD%E6%8A%9B%E5%87%BA%E5%BC%82%E5%B8%B8%E4%BC%9A%E6%80%8E%E4%B9%88%E6%A0%B7%EF%BC%9F"><span class="toc-number">3.5.</span> <span class="toc-text">在析构函数中抛出异常会怎么样？</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" title="C++八股：内存管理"><img src="/img/CPlusPlus.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="C++八股：内存管理"/></a><div class="content"><a class="title" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" title="C++八股：内存管理">C++八股：内存管理</a><time datetime="2025-12-22T12:54:00.000Z" title="更新于 2025-12-22 20:54:00">2025-12-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9ASTL/" title="C++八股：STL"><img src="/img/CPlusPlus.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="C++八股：STL"/></a><div class="content"><a class="title" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9ASTL/" title="C++八股：STL">C++八股：STL</a><time datetime="2025-12-22T12:53:00.000Z" title="更新于 2025-12-22 20:53:00">2025-12-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E5%9F%BA%E7%A1%80/" title="C++八股：基础"><img src="/img/CPlusPlus.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="C++八股：基础"/></a><div class="content"><a class="title" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E5%9F%BA%E7%A1%80/" title="C++八股：基础">C++八股：基础</a><time datetime="2025-12-22T12:52:00.000Z" title="更新于 2025-12-22 20:52:00">2025-12-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/12/03/C++%E5%9F%BA%E7%A1%80%EF%BC%9A%E6%B5%81%E4%B8%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/" title="C++基础：流与文件系统"><img src="/img/CPlusPlus.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="C++基础：流与文件系统"/></a><div class="content"><a class="title" href="/2023/12/03/C++%E5%9F%BA%E7%A1%80%EF%BC%9A%E6%B5%81%E4%B8%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/" title="C++基础：流与文件系统">C++基础：流与文件系统</a><time datetime="2025-05-01T12:09:00.000Z" title="更新于 2025-05-01 20:09:00">2025-05-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/12/03/C++%E5%9F%BA%E7%A1%80%EF%BC%9A%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/" title="C++基础：异常处理"><img src="/img/CPlusPlus.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="C++基础：异常处理"/></a><div class="content"><a class="title" href="/2023/12/03/C++%E5%9F%BA%E7%A1%80%EF%BC%9A%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/" title="C++基础：异常处理">C++基础：异常处理</a><time datetime="2025-05-01T12:08:00.000Z" title="更新于 2025-05-01 20:08:00">2025-05-01</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2019 - 2025 By AillianYue</span></div><div class="footer_custom_text">Hi, welcome to <a target="_blank" rel="noopener" href="https://github.com/AillianYue">my blog</a>!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
