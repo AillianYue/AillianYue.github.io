@@ -1,0 +1,347 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>C++八股：面向对象 | AillianYue's Blog</title><meta name="author" content="AillianYue"><meta name="copyright" content="AillianYue"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="介绍C++的面向对象八股知识">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++八股：面向对象">
+<meta property="og:url" content="http://example.com/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/index.html">
+<meta property="og:site_name" content="AillianYue&#39;s Blog">
+<meta property="og:description" content="介绍C++的面向对象八股知识">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/CPlusPlus.webp">
+<meta property="article:published_time" content="2024-12-03T11:50:00.000Z">
+<meta property="article:modified_time" content="2025-12-22T12:55:00.000Z">
+<meta property="article:author" content="AillianYue">
+<meta property="article:tag" content="C++">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/CPlusPlus.webp"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "C++八股：面向对象",
+  "url": "http://example.com/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/",
+  "image": "http://example.com/img/CPlusPlus.webp",
+  "datePublished": "2024-12-03T11:50:00.000Z",
+  "dateModified": "2025-12-22T12:55:00.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "AillianYue",
+      "url": "https://github.com/AillianYue"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/avatar.png"><link rel="canonical" href="http://example.com/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'C++八股：面向对象',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">21</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">11</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 历程</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">AillianYue's Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">C++八股：面向对象</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 历程</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">C++八股：面向对象</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-12-03T11:50:00.000Z" title="发表于 2024-12-03 19:50:00">2024-12-03</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-12-22T12:55:00.000Z" title="更新于 2025-12-22 20:55:00">2025-12-22</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/C/">C++</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/C/C-%E5%85%AB%E8%82%A1/">C++八股</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">3.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>9分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><p>VERSION：1.0.0</p>
+<h4 id="你对面向对象了解吗？介绍一下你对它的认识"><a href="#你对面向对象了解吗？介绍一下你对它的认识" class="headerlink" title="你对面向对象了解吗？介绍一下你对它的认识"></a>你对面向对象了解吗？介绍一下你对它的认识</h4><p>面向对象编程是一种以对象为中心的编程范式，其核心思想是封装、继承、多态。</p>
+<ul>
+<li>封装：将数据（属性）和操作数据的方法（函数）捆绑在一起，并对外隐藏内部实现细节，只提供可控的接口。通过class关键字定义类，使用private、protected、public访问说明符来控制成员的可见性。</li>
+<li>继承：允许基于已有类创建新类，新类继承父类的特性和行为，并可以添加自己的新特性,实现了代码的复用和层次化分类。使用: public&#x2F;protected&#x2F;private BaseClass语法。</li>
+<li>多态：允许不同类的对象对同一消息做出不同的响应,提高了代码的抽象性和可扩展性。通过虚函数机制实现。在基类中将函数声明为virtual，在派生类中进行override。程序运行时，通过基类指针或引用调用虚函数，会根据指针实际指向的对象类型来调用相应的函数。</li>
+</ul>
+<h4 id="为什么要封装、多态、继承？"><a href="#为什么要封装、多态、继承？" class="headerlink" title="为什么要封装、多态、继承？"></a>为什么要封装、多态、继承？</h4><ul>
+<li>为什么要封装？<ul>
+<li>隐藏实现细节，降低复杂度：使用者只需关注接口，无需关心内部实现，使得代码更易理解和维护。</li>
+<li>提高安全性：通过将数据设置为私有，可以防止外部代码随意修改内部数据，只能通过受控的方法进行访问和修改，保证了数据的一致性和有效性。</li>
+<li>降低耦合度：只要公开的接口不变，内部实现的修改不会影响使用该对象的其他代码。</li>
+</ul>
+</li>
+<li>为什么要继承？<ul>
+<li>代码复用：这是最直接的目的。子类可以复用父类已经定义好的属性和方法，避免了重复编写相同的代码。</li>
+<li>建立类之间的层次关系：通过继承，可以清晰地表示现实世界中“是一类”的关系，使代码结构更符合逻辑，更易于扩展。</li>
+</ul>
+</li>
+<li>为什么要多态？<ul>
+<li>增强程序的可扩展性：这是多态最重要的价值。</li>
+<li>接口统一：允许用父类的指针或引用来操作子类对象，使代码更通用、更简洁。</li>
+</ul>
+</li>
+</ul>
+<p>总结： 封装是基础，用于隐藏细节，保证安全；继承是扩展，用于代码复用，建立层次；多态是目标，基于继承实现，用于提高代码的灵活性和可扩展性。三者共同构成了面向对象编程的强大能力。</p>
+<h4 id="聊一聊C-中的多态？"><a href="#聊一聊C-中的多态？" class="headerlink" title="聊一聊C++中的多态？"></a>聊一聊C++中的多态？</h4><p>在C++中，多态是面向对象编程（OOP）的三大核心特性之一（另外两个是封装和继承），其核心思想是：同一操作作用于不同对象时，可产生不同的行为效果。</p>
+<p>C++中的多态分为两类：静态多态（编译时多态）和动态多态（运行时多态）</p>
+<ul>
+<li>静态多态是在编译阶段就确定具体行为的多态，主要通过函数重载和运算符重载实现。</li>
+<li>动态多态是在程序运行阶段才确定具体行为的多态，其核心是虚函数（Virtual Function），通过基类指针或引用调用派生类的重写函数实现。</li>
+</ul>
+<h4 id="静态绑定和动态绑定是什么？"><a href="#静态绑定和动态绑定是什么？" class="headerlink" title="静态绑定和动态绑定是什么？"></a>静态绑定和动态绑定是什么？</h4><p>在C++中，绑定(Binding)是将函数调用与函数实现关联起来的过程。根据绑定发生的时机，可以分为静态绑定和动态绑定。</p>
+<p>静态绑定 (Static Binding)</p>
+<p>静态绑定也称为早期绑定(Early Binding)，发生在编译阶段。编译器在编译时根据调用函数的对象类型或指针类型来确定调用哪个函数。</p>
+<p>特点：</p>
+<ul>
+<li>在编译时解析函数调用</li>
+<li>基于对象或指针的声明类型</li>
+<li>效率更高，没有运行时开销</li>
+<li>适用于非虚函数、重载函数和模板函数</li>
+</ul>
+<p>动态绑定 (Dynamic Binding)</p>
+<p>动态绑定也称为晚期绑定(Late Binding)，发生在运行时。通过虚函数(virtual functions)和继承实现，允许程序根据实际对象类型调用相应的函数。</p>
+<p>特点：</p>
+<ul>
+<li>在运行时解析函数调用</li>
+<li>基于对象的实际类型</li>
+<li>通过虚函数表(vtable)实现</li>
+<li>是实现多态性的关键机制</li>
+</ul>
+<h4 id="什么是构造函数和析构函数？"><a href="#什么是构造函数和析构函数？" class="headerlink" title="什么是构造函数和析构函数？"></a>什么是构造函数和析构函数？</h4><p>构造函数：与类同名、无返回类型的特殊成员函数，在创建对象时自动调用，用于初始化对象状态。</p>
+<p>析构函数：类名前加<code>~</code>的特殊成员函数，在对象销毁时自动调用，用于清理资源。</p>
+<h4 id="什么是虚函数和虚函数表？"><a href="#什么是虚函数和虚函数表？" class="headerlink" title="什么是虚函数和虚函数表？"></a>什么是虚函数和虚函数表？</h4><p>虚函数：使用<code>virtual</code>关键字声明的成员函数，支持动态绑定（运行时多态）。</p>
+<p>虚函数表：每个多态类都有一个虚函数表，是函数指针的静态数组，存储该类所有虚函数的地址。</p>
+<h4 id="虚函数表的机制是什么？"><a href="#虚函数表的机制是什么？" class="headerlink" title="虚函数表的机制是什么？"></a>虚函数表的机制是什么？</h4><p>虚函数表是 C++ 实现运行时多态（动态绑定）的核心机制。</p>
+<p>当一个类中含有<code>virtual</code>关键字声明的虚函数时，编译器会为该类生成一个虚函数表，这是一个函数指针数组，数组中的每个元素指向一个虚函数的实际代码地址。同时，编译器会隐式地在类的每个对象实例中添加一个指针，称为虚函数表指针，它指向该类的虚函数表。</p>
+<p>当发生继承时，子类会继承父类的虚函数表，如果子类重写了父类的虚函数，那么子类虚函数表中对应的函数指针会被更新为指向子类自己的函数实现。</p>
+<p>详细版：</p>
+<p>虚函数的机制（实现）依赖两个关键结构：</p>
+<ol>
+<li>虚函数表（vtable）</li>
+</ol>
+<ul>
+<li>本质：每个包含虚函数（或继承自含虚函数的类）的类，都会在编译时被编译器分配一个静态数组，即虚函数表。</li>
+<li>内容：存储该类所有虚函数的函数地址（函数指针）。</li>
+<li>特点：<ul>
+<li>每个类只有一个虚函数表（全局唯一，属于类级别的资源）。</li>
+<li>派生类会继承基类的虚函数表：<ul>
+<li>若派生类重写了基类的虚函数，派生类虚函数表中对应位置会被替换为派生类自己的函数地址。</li>
+<li>若派生类新增虚函数，这些函数地址会被追加到派生类虚函数表的末尾。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ol start="2">
+<li>虚函数指针（vptr）</li>
+</ol>
+<ul>
+<li>本质：每个包含虚函数的类的对象，都会隐含一个指向该类虚函数表的指针成员（通常是对象的第一个成员）。</li>
+<li>初始化：对象在构造时，编译器会自动将<code>vptr</code>初始化，使其指向所属类的虚函数表。</li>
+<li>特点：<ul>
+<li>每个对象都有一个<code>vptr</code>，因此会增加对象的内存开销（一个指针的大小：32位系统4字节，64位系统8字节）。</li>
+<li><code>vptr</code>是编译器自动添加的，用户无法直接访问（但可通过指针操作间接获取）。</li>
+</ul>
+</li>
+</ul>
+<h4 id="虚函数调用的完整流程是什么？举例说明"><a href="#虚函数调用的完整流程是什么？举例说明" class="headerlink" title="虚函数调用的完整流程是什么？举例说明"></a>虚函数调用的完整流程是什么？举例说明</h4><p>当通过基类指针&#x2F;引用调用虚函数时，底层执行步骤如下：</p>
+<ol>
+<li>通过对象的<code>vptr</code>找到其所属类的<code>vtable</code>。</li>
+<li>在<code>vtable</code>中根据函数的索引（编译时确定）找到目标虚函数的地址。</li>
+<li>调用该地址对应的函数。</li>
+</ol>
+<p>以上过程在运行时完成，因此实现了“根据对象实际类型调用函数”的动态绑定。</p>
+<p>举例：以<code>Base</code>和<code>Derived</code>为例，其虚函数表结构如下：</p>
+<ul>
+<li>Base类：<ul>
+<li>虚函数表（<code>Base::vtable</code>）中存储 <code>&amp;Base::func</code>。</li>
+<li><code>Base</code>对象的<code>vptr</code>指向 <code>Base::vtable</code>。</li>
+</ul>
+</li>
+<li>Derived类：<ul>
+<li>继承<code>Base</code>的虚函数表，但由于<code>Derived</code>重写了<code>func</code>，因此<code>Derived::vtable</code>中存储 <code>&amp;Derived::func</code>（替换了基类的函数地址）。</li>
+<li><code>Derived</code>对象的<code>vptr</code>指向 <code>Derived::vtable</code>。</li>
+</ul>
+</li>
+</ul>
+<p>当执行<code>ptr-&gt;func()</code>时：</p>
+<ul>
+<li><code>ptr</code>指向<code>Derived</code>对象，因此通过<code>ptr</code>访问到的<code>vptr</code>指向<code>Derived::vtable</code>。</li>
+<li>从<code>Derived::vtable</code>中找到<code>func</code>的地址（<code>&amp;Derived::func</code>），最终调用<code>Derived::func</code>。</li>
+</ul>
+<h4 id="为什么构造函数不能是虚函数？"><a href="#为什么构造函数不能是虚函数？" class="headerlink" title="为什么构造函数不能是虚函数？"></a>为什么构造函数不能是虚函数？</h4><p>虚函数调用依赖于对象的虚表指针（vptr），而虚表指针是在构造函数中初始化的。在构造函数执行期间，对象类型还不完整，无法确定调用哪个虚函数实现。</p>
+<h4 id="为什么要使用虚析构函数？"><a href="#为什么要使用虚析构函数？" class="headerlink" title="为什么要使用虚析构函数？"></a>为什么要使用虚析构函数？</h4><p>为了确保通过基类指针删除派生类对象时，能够正确调用派生类的析构函数，从而避免资源泄漏。</p>
+<h4 id="哪些函数不能被声明为虚函数？"><a href="#哪些函数不能被声明为虚函数？" class="headerlink" title="哪些函数不能被声明为虚函数？"></a>哪些函数不能被声明为虚函数？</h4><ol>
+<li>构造函数。</li>
+<li>静态成员函数：静态函数属于类本身，而不是类的对象，因此没有this指针，也无法访问虚表。</li>
+<li>内联函数（通常）：内联函数在编译时展开，而虚函数的行为是在运行时确定的。但是，如果虚函数在类内定义，编译器可能会忽略inline请求，将其视为普通的虚函数。</li>
+<li>友元函数：友元函数不是类的成员函数，因此不能声明为虚函数。</li>
+<li>普通函数（非成员函数）：虚函数必须是类的成员函数。</li>
+</ol>
+<h4 id="使用虚函数时应该注意什么？"><a href="#使用虚函数时应该注意什么？" class="headerlink" title="使用虚函数时应该注意什么？"></a>使用虚函数时应该注意什么？</h4><ol>
+<li>一个类被设计为基类（即可能被继承）时，应该将析构函数声明为虚函数。这是为了确保当通过基类指针删除派生类对象时，能够正确调用派生类的析构函数，从而避免资源泄漏。</li>
+<li>构造函数不能是虚函数：对象构造时<code>vptr</code>尚未初始化，无法动态绑定。</li>
+<li>静态成员函数不能是虚函数：静态函数属于类，不依赖对象，没有<code>this</code>指针，无法通过<code>vptr</code>调用。</li>
+<li>内联函数不能是虚函数：内联函数在编译时展开，而虚函数需要运行时绑定，两者冲突（编译器会忽略<code>inline</code>关键字）。</li>
+<li>含有纯虚函数的类（抽象类）不能实例化对象（无法创建抽象类的实例），只能作为基类被继承，派生类必须重写所有纯虚函数才能实例化（否则派生类仍是抽象类）。</li>
+<li>派生类重写虚函数时，必须保证函数名、参数列表、返回值完全一致。</li>
+</ol>
+<h4 id="什么是抽象类和纯虚函数？"><a href="#什么是抽象类和纯虚函数？" class="headerlink" title="什么是抽象类和纯虚函数？"></a>什么是抽象类和纯虚函数？</h4><ul>
+<li>纯虚函数：在基类中声明但没有定义的虚函数，其声明方式为在函数声明后加上<code>= 0</code>。</li>
+<li>抽象类：包含至少一个纯虚函数的类。抽象类不能实例化，只能作为基类使用。派生类必须实现所有纯虚函数，否则派生类也会成为抽象类。</li>
+</ul>
+<h4 id="虚函数和纯虚函数有什么区别？"><a href="#虚函数和纯虚函数有什么区别？" class="headerlink" title="虚函数和纯虚函数有什么区别？"></a>虚函数和纯虚函数有什么区别？</h4><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>虚函数</th>
+<th>纯虚函数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>语法</td>
+<td><code>virtual void func();</code></td>
+<td><code>virtual void func() = 0;</code></td>
+</tr>
+<tr>
+<td>实现</td>
+<td>基类必须提供实现</td>
+<td>基类可以不提供实现（C++11后可提供）</td>
+</tr>
+<tr>
+<td>抽象类</td>
+<td>不强制类为抽象类</td>
+<td>强制类为抽象类（不能实例化）</td>
+</tr>
+<tr>
+<td>派生类要求</td>
+<td>可重写，也可不重写</td>
+<td>必须重写（除非派生类也是抽象类）</td>
+</tr>
+<tr>
+<td>接口定义</td>
+<td>提供默认实现</td>
+<td>定义接口规范</td>
+</tr>
+<tr>
+<td>设计意图</td>
+<td>可选的多态行为</td>
+<td>强制接口实现</td>
+</tr>
+</tbody></table>
+<h4 id="C-中-this-指针的原理及存储位置是什么？"><a href="#C-中-this-指针的原理及存储位置是什么？" class="headerlink" title="C++ 中 this 指针的原理及存储位置是什么？"></a>C++ 中 this 指针的原理及存储位置是什么？</h4><p>在C++中，<code>this</code>指针是一个隐含的指针，它指向调用该成员函数的那个对象的地址。它用于在成员函数内部访问对象自身的成员。</p>
+<ul>
+<li>存储位置：<code>this</code> 指针本身是一个函数形参，因此，它和其他函数参数一样，存储在栈区（对于x86&#x2F;ARM等常见架构）。</li>
+<li>生命周期：<code>this</code> 指针的生命周期与任何其他函数参数的生命周期相同，即在函数被调用时创建，在函数返回时销毁。</li>
+<li>类型：在非 <code>const</code> 成员函数中是 <code>ClassName* const</code>，在 const 成员函数中是 <code>const ClassName* const</code></li>
+<li>用途：主要用于解决成员变量与函数参数同名时的歧义，以及在成员函数中返回对象自身的引用（<code>return *this;</code>），这在链式调用中非常常见。</li>
+</ul>
+<h4 id="重载、重写和重定义的区别是什么？"><a href="#重载、重写和重定义的区别是什么？" class="headerlink" title="重载、重写和重定义的区别是什么？"></a>重载、重写和重定义的区别是什么？</h4><ul>
+<li>重载：同一作用域，函数名相同，参数不同，编译时多态。</li>
+<li>重写：派生类重写基类中的虚函数，具有相同的函数名、参数列表和返回类型，运行时多态。使用<code>virtual</code> 和 <code>override</code> 关键字。</li>
+<li>重定义：派生类重定义基类中的非虚函数。这会隐藏基类同名函数。可通过作用域解析运算符来访问基类的同名函数。</li>
+</ul>
+<h4 id=""><a href="#" class="headerlink" title=""></a></h4></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a target="_blank" rel="noopener" href="https://github.com/AillianYue">AillianYue</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a target="_blank" rel="noopener" href="https://www.yuque.com/aillian-yue/blog">https://www.yuque.com/aillian-yue/blog</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">此文章版归AillianYue所有，如需转载，请注明来自原作者</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/C/">C++</a></div><div class="post-share"><div class="social-share" data-image="/img/CPlusPlus.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" title="C++八股：并发编程"><img class="cover" src="/img/CPlusPlus.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">C++八股：并发编程</div></div><div class="info-2"><div class="info-item-1">介绍C++的并发编程八股知识</div></div></div></a><a class="pagination-related" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" title="C++八股：内存管理"><img class="cover" src="/img/CPlusPlus.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">C++八股：内存管理</div></div><div class="info-2"><div class="info-item-1">介绍C++的内存管理八股知识</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E9%AB%98%E7%BA%A7%E7%89%B9%E6%80%A7/" title="C++八股：高级特性"><img class="cover" src="/img/CPlusPlus.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-03</div><div class="info-item-2">C++八股：高级特性</div></div><div class="info-2"><div class="info-item-1">介绍C++的高级特性八股知识</div></div></div></a><a class="pagination-related" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E5%9F%BA%E7%A1%80/" title="C++八股：基础"><img class="cover" src="/img/CPlusPlus.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-03</div><div class="info-item-2">C++八股：基础</div></div><div class="info-2"><div class="info-item-1">介绍C++的基础八股知识</div></div></div></a><a class="pagination-related" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9ASTL/" title="C++八股：STL"><img class="cover" src="/img/CPlusPlus.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-03</div><div class="info-item-2">C++八股：STL</div></div><div class="info-2"><div class="info-item-1">介绍C++的STL八股知识</div></div></div></a><a class="pagination-related" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" title="C++八股：内存管理"><img class="cover" src="/img/CPlusPlus.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-03</div><div class="info-item-2">C++八股：内存管理</div></div><div class="info-2"><div class="info-item-1">介绍C++的内存管理八股知识</div></div></div></a><a class="pagination-related" href="/2025/06/03/C++%E5%9F%BA%E7%A1%80%EF%BC%9A%E7%BB%A7%E6%89%BF%E5%92%8C%E5%A4%9A%E6%80%81/" title="C++基础：继承和多态"><img class="cover" src="/img/CPlusPlus.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-06-03</div><div class="info-item-2">C++基础：继承和多态</div></div><div class="info-2"><div class="info-item-1">介绍继承、派生、虚函数、抽象类、绑定</div></div></div></a><a class="pagination-related" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" title="C++八股：并发编程"><img class="cover" src="/img/CPlusPlus.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-03</div><div class="info-item-2">C++八股：并发编程</div></div><div class="info-2"><div class="info-item-1">介绍C++的并发编程八股知识</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">AillianYue</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">21</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">11</div></a></div><a id="card-info-btn" href="/about/"><i class="fas fa-user-graduate"></i><span>关于我</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/AillianYue" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="https://gitee.com/aillianyue" target="_blank" title="Gitee"><i class="fab fa-github-alt"></i></a><a class="social-icon" href="mailto:634558578@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="tencent://AddContact/?fromId=45&amp;fromSubId=1&amp;subcmd=all&amp;uin=634558578&amp;website=www.oicqzone.com" target="_blank" title="QQ"><i class="fab fa-qq"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站不定期更新，欢迎！</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%A0%E5%AF%B9%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E4%BA%86%E8%A7%A3%E5%90%97%EF%BC%9F%E4%BB%8B%E7%BB%8D%E4%B8%80%E4%B8%8B%E4%BD%A0%E5%AF%B9%E5%AE%83%E7%9A%84%E8%AE%A4%E8%AF%86"><span class="toc-number">1.</span> <span class="toc-text">你对面向对象了解吗？介绍一下你对它的认识</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%B0%81%E8%A3%85%E3%80%81%E5%A4%9A%E6%80%81%E3%80%81%E7%BB%A7%E6%89%BF%EF%BC%9F"><span class="toc-number">2.</span> <span class="toc-text">为什么要封装、多态、继承？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%81%8A%E4%B8%80%E8%81%8AC-%E4%B8%AD%E7%9A%84%E5%A4%9A%E6%80%81%EF%BC%9F"><span class="toc-number">3.</span> <span class="toc-text">聊一聊C++中的多态？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9D%99%E6%80%81%E7%BB%91%E5%AE%9A%E5%92%8C%E5%8A%A8%E6%80%81%E7%BB%91%E5%AE%9A%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">4.</span> <span class="toc-text">静态绑定和动态绑定是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%E5%92%8C%E6%9E%90%E6%9E%84%E5%87%BD%E6%95%B0%EF%BC%9F"><span class="toc-number">5.</span> <span class="toc-text">什么是构造函数和析构函数？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E8%99%9A%E5%87%BD%E6%95%B0%E5%92%8C%E8%99%9A%E5%87%BD%E6%95%B0%E8%A1%A8%EF%BC%9F"><span class="toc-number">6.</span> <span class="toc-text">什么是虚函数和虚函数表？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%99%9A%E5%87%BD%E6%95%B0%E8%A1%A8%E7%9A%84%E6%9C%BA%E5%88%B6%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">7.</span> <span class="toc-text">虚函数表的机制是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%99%9A%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E7%9A%84%E5%AE%8C%E6%95%B4%E6%B5%81%E7%A8%8B%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F%E4%B8%BE%E4%BE%8B%E8%AF%B4%E6%98%8E"><span class="toc-number">8.</span> <span class="toc-text">虚函数调用的完整流程是什么？举例说明</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%E4%B8%8D%E8%83%BD%E6%98%AF%E8%99%9A%E5%87%BD%E6%95%B0%EF%BC%9F"><span class="toc-number">9.</span> <span class="toc-text">为什么构造函数不能是虚函数？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E4%BD%BF%E7%94%A8%E8%99%9A%E6%9E%90%E6%9E%84%E5%87%BD%E6%95%B0%EF%BC%9F"><span class="toc-number">10.</span> <span class="toc-text">为什么要使用虚析构函数？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%93%AA%E4%BA%9B%E5%87%BD%E6%95%B0%E4%B8%8D%E8%83%BD%E8%A2%AB%E5%A3%B0%E6%98%8E%E4%B8%BA%E8%99%9A%E5%87%BD%E6%95%B0%EF%BC%9F"><span class="toc-number">11.</span> <span class="toc-text">哪些函数不能被声明为虚函数？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E8%99%9A%E5%87%BD%E6%95%B0%E6%97%B6%E5%BA%94%E8%AF%A5%E6%B3%A8%E6%84%8F%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">12.</span> <span class="toc-text">使用虚函数时应该注意什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%8A%BD%E8%B1%A1%E7%B1%BB%E5%92%8C%E7%BA%AF%E8%99%9A%E5%87%BD%E6%95%B0%EF%BC%9F"><span class="toc-number">13.</span> <span class="toc-text">什么是抽象类和纯虚函数？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%99%9A%E5%87%BD%E6%95%B0%E5%92%8C%E7%BA%AF%E8%99%9A%E5%87%BD%E6%95%B0%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="toc-number">14.</span> <span class="toc-text">虚函数和纯虚函数有什么区别？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#C-%E4%B8%AD-this-%E6%8C%87%E9%92%88%E7%9A%84%E5%8E%9F%E7%90%86%E5%8F%8A%E5%AD%98%E5%82%A8%E4%BD%8D%E7%BD%AE%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">15.</span> <span class="toc-text">C++ 中 this 指针的原理及存储位置是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%87%8D%E8%BD%BD%E3%80%81%E9%87%8D%E5%86%99%E5%92%8C%E9%87%8D%E5%AE%9A%E4%B9%89%E7%9A%84%E5%8C%BA%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">16.</span> <span class="toc-text">重载、重写和重定义的区别是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">17.</span> <span class="toc-text"></span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E9%AB%98%E7%BA%A7%E7%89%B9%E6%80%A7/" title="C++八股：高级特性"><img src="/img/CPlusPlus.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="C++八股：高级特性"/></a><div class="content"><a class="title" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E9%AB%98%E7%BA%A7%E7%89%B9%E6%80%A7/" title="C++八股：高级特性">C++八股：高级特性</a><time datetime="2025-12-22T12:57:00.000Z" title="更新于 2025-12-22 20:57:00">2025-12-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" title="C++八股：并发编程"><img src="/img/CPlusPlus.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="C++八股：并发编程"/></a><div class="content"><a class="title" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" title="C++八股：并发编程">C++八股：并发编程</a><time datetime="2025-12-22T12:56:00.000Z" title="更新于 2025-12-22 20:56:00">2025-12-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" title="C++八股：面向对象"><img src="/img/CPlusPlus.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="C++八股：面向对象"/></a><div class="content"><a class="title" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" title="C++八股：面向对象">C++八股：面向对象</a><time datetime="2025-12-22T12:55:00.000Z" title="更新于 2025-12-22 20:55:00">2025-12-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" title="C++八股：内存管理"><img src="/img/CPlusPlus.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="C++八股：内存管理"/></a><div class="content"><a class="title" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" title="C++八股：内存管理">C++八股：内存管理</a><time datetime="2025-12-22T12:54:00.000Z" title="更新于 2025-12-22 20:54:00">2025-12-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9ASTL/" title="C++八股：STL"><img src="/img/CPlusPlus.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="C++八股：STL"/></a><div class="content"><a class="title" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9ASTL/" title="C++八股：STL">C++八股：STL</a><time datetime="2025-12-22T12:53:00.000Z" title="更新于 2025-12-22 20:53:00">2025-12-22</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2019 - 2025 By AillianYue</span></div><div class="footer_custom_text">Hi, welcome to <a target="_blank" rel="noopener" href="https://github.com/AillianYue">my blog</a>!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

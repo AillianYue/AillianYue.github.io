@@ -1,0 +1,728 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>C++基础：类型 | AillianYue's Blog</title><meta name="author" content="AillianYue"><meta name="copyright" content="AillianYue"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="介绍基本类型、数组、用户自定义类型、大括号初始化以及printf">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++基础：类型">
+<meta property="og:url" content="http://example.com/2025/01/03/C++%E5%9F%BA%E7%A1%80%EF%BC%9A%E7%B1%BB%E5%9E%8B/index.html">
+<meta property="og:site_name" content="AillianYue&#39;s Blog">
+<meta property="og:description" content="介绍基本类型、数组、用户自定义类型、大括号初始化以及printf">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/CPlusPlus.webp">
+<meta property="article:published_time" content="2025-01-03T11:41:00.000Z">
+<meta property="article:modified_time" content="2025-05-01T12:00:00.000Z">
+<meta property="article:author" content="AillianYue">
+<meta property="article:tag" content="C++">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/CPlusPlus.webp"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "C++基础：类型",
+  "url": "http://example.com/2025/01/03/C++%E5%9F%BA%E7%A1%80%EF%BC%9A%E7%B1%BB%E5%9E%8B/",
+  "image": "http://example.com/img/CPlusPlus.webp",
+  "datePublished": "2025-01-03T11:41:00.000Z",
+  "dateModified": "2025-05-01T12:00:00.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "AillianYue",
+      "url": "https://github.com/AillianYue"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/avatar.png"><link rel="canonical" href="http://example.com/2025/01/03/C++%E5%9F%BA%E7%A1%80%EF%BC%9A%E7%B1%BB%E5%9E%8B/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'C++基础：类型',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">21</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">11</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 历程</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">AillianYue's Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">C++基础：类型</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 历程</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">C++基础：类型</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-01-03T11:41:00.000Z" title="发表于 2025-01-03 19:41:00">2025-01-03</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-05-01T12:00:00.000Z" title="更新于 2025-05-01 20:00:00">2025-05-01</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/C/">C++</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/C/C-%E5%9F%BA%E7%A1%80/">C++基础</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">2.7k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>10分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><p>VERSION：3.0.0</p>
+<h1 id="基本类型"><a href="#基本类型" class="headerlink" title="基本类型"></a>基本类型</h1><h2 id="整数类型"><a href="#整数类型" class="headerlink" title="整数类型"></a>整数类型</h2><table>
+<thead>
+<tr>
+<th>类型</th>
+<th align="center">有无符号</th>
+<th align="center">字节</th>
+<th></th>
+<th></th>
+<th></th>
+<th align="center">printf<br/>格式指定符</th>
+</tr>
+</thead>
+<tbody><tr>
+<td></td>
+<td align="center"></td>
+<td align="center">32位OS</td>
+<td></td>
+<td>64位OS</td>
+<td></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td></td>
+<td align="center"></td>
+<td align="center">Windows</td>
+<td>Linux&#x2F;Mac</td>
+<td>Windows</td>
+<td>Linux&#x2F;Mac</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td>short</td>
+<td align="center">有</td>
+<td align="center">2</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td align="center">%hd</td>
+</tr>
+<tr>
+<td>unsigned short</td>
+<td align="center">无</td>
+<td align="center">2</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td align="center">%hu</td>
+</tr>
+<tr>
+<td>int</td>
+<td align="center">有</td>
+<td align="center">4</td>
+<td>4</td>
+<td>4</td>
+<td>4</td>
+<td align="center">%d</td>
+</tr>
+<tr>
+<td>unsigned int</td>
+<td align="center">无</td>
+<td align="center">4</td>
+<td>4</td>
+<td>4</td>
+<td>4</td>
+<td align="center">%u</td>
+</tr>
+<tr>
+<td>long</td>
+<td align="center">有</td>
+<td align="center">4</td>
+<td>4</td>
+<td>4</td>
+<td>8</td>
+<td align="center">%ld</td>
+</tr>
+<tr>
+<td>unsigned long</td>
+<td align="center">无</td>
+<td align="center">4</td>
+<td>4</td>
+<td>4</td>
+<td>8</td>
+<td align="center">%lu</td>
+</tr>
+<tr>
+<td>long long</td>
+<td align="center">有</td>
+<td align="center">8</td>
+<td>8</td>
+<td>8</td>
+<td>8</td>
+<td align="center">%lld</td>
+</tr>
+<tr>
+<td>unsigned long long</td>
+<td align="center">无</td>
+<td align="center">8</td>
+<td>8</td>
+<td>8</td>
+<td>8</td>
+<td align="center">%llu</td>
+</tr>
+</tbody></table>
+<h3 id="整数字面量规则"><a href="#整数字面量规则" class="headerlink" title="整数字面量规则"></a>整数字面量规则</h3><p>字面量是直接写在代码中的整数，需通过前缀指定进制、后缀指定类型，支持单引号分隔提升可读性：</p>
+<ul>
+<li>进制前缀：<ul>
+<li>二进制：<code>0b</code>（例：<code>0b1010</code> → 十进制 10，C++14 及以后支持）</li>
+<li>八进制：<code>0</code>（例：<code>012</code> → 十进制 10）</li>
+<li>十进制：默认（例：<code>10</code>）</li>
+<li>十六进制：<code>0x</code>（例：<code>0xA</code> → 十进制 10，字母大小写均可）</li>
+</ul>
+</li>
+<li>类型后缀：<ul>
+<li>unsigned：<code>u</code> 或 <code>U</code>（例：<code>100u</code> → unsigned int）</li>
+<li>long：<code>l</code> 或 <code>L</code>（例：<code>100L</code> → long）</li>
+<li>long long：<code>ll</code> 或 <code>LL</code>（例：<code>100LL</code> → long long）</li>
+</ul>
+</li>
+</ul>
+<h3 id="明确大小的整数类型（库）"><a href="#明确大小的整数类型（库）" class="headerlink" title="明确大小的整数类型（库）"></a>明确大小的整数类型（<cstdint>库）</h3><p>上述类型（如 long）的字节数随平台变化，若需固定位数的整数（如 8 位、16 位），需包含头文件 <code>&lt;cstdint&gt;</code>，使用以下类型：</p>
+<ul>
+<li>有符号：<code>int8_t</code>（8 位）、<code>int16_t</code>（16 位）、<code>int32_t</code>（32 位）、<code>int64_t</code>（64 位）</li>
+<li>无符号：<code>uint8_t</code>、<code>uint16_t</code>、<code>uint32_t</code>、<code>uint64_t</code></li>
+</ul>
+<h2 id="浮点类型"><a href="#浮点类型" class="headerlink" title="浮点类型"></a>浮点类型</h2><table>
+<thead>
+<tr>
+<th>float</th>
+<th align="center">有</th>
+<th align="center">4</th>
+<th align="center">4</th>
+<th align="center">4</th>
+<th align="center">4</th>
+<th align="center">%g</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>double</td>
+<td align="center">有</td>
+<td align="center">8</td>
+<td align="center">8</td>
+<td align="center">8</td>
+<td align="center">8</td>
+<td align="center">%lg</td>
+</tr>
+<tr>
+<td>long double</td>
+<td align="center">有</td>
+<td align="center">8</td>
+<td align="center">8</td>
+<td align="center">8</td>
+<td align="center">16</td>
+<td align="center">%Lg</td>
+</tr>
+</tbody></table>
+<ul>
+<li>float：单精度</li>
+<li>double：双精度</li>
+<li>long double：扩展精度</li>
+</ul>
+<h3 id="浮点字面量规则"><a href="#浮点字面量规则" class="headerlink" title="浮点字面量规则"></a>浮点字面量规则</h3><ul>
+<li>类型后缀：<ul>
+<li>float：<code>f</code> 或 <code>F</code>（例：<code>3.14f</code> → 否则默认是 double）</li>
+<li>long double：<code>l</code> 或 <code>L</code>（例：<code>3.14L</code>）</li>
+<li>double：默认（例：<code>3.14</code>）</li>
+</ul>
+</li>
+<li>科学计数法：支持 <code>e</code> 或 <code>E</code> 表示指数（例：<code>1.23e4</code> → 12300，<code>1.23e-4</code> → 0.000123）</li>
+</ul>
+<h2 id="字符类型"><a href="#字符类型" class="headerlink" title="字符类型"></a>字符类型</h2><p>用于存储单个字符（如 ‘a’、’1’），分为窄字符（1 字节）和宽字符（2&#x2F;4 字节，支持 Unicode）。</p>
+<h3 id="窄字符"><a href="#窄字符" class="headerlink" title="窄字符"></a>窄字符</h3><p>（1 字节）</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>特性说明</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>char</td>
+<td>默认字符类型，可能有符号也可能无符号（取决于编译器）</td>
+<td>存储 ASCII 字符（如 ‘a’）</td>
+</tr>
+<tr>
+<td>signed char</td>
+<td>明确为有符号（范围：-128 ~ 127）</td>
+<td>存储带符号的 8 位数据</td>
+</tr>
+<tr>
+<td>unsigned char</td>
+<td>明确为无符号（范围：0 ~ 255）</td>
+<td>存储无符号的 8 位数据</td>
+</tr>
+</tbody></table>
+<h3 id="宽字符"><a href="#宽字符" class="headerlink" title="宽字符"></a>宽字符</h3><p>（2&#x2F;4 字节，支持 Unicode）</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>字节数</th>
+<th>对应字符集</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>char16_t</td>
+<td>2</td>
+<td>UTF-16</td>
+<td>存储 2 字节 Unicode 字符</td>
+</tr>
+<tr>
+<td>char32_t</td>
+<td>4</td>
+<td>UTF-32</td>
+<td>存储 4 字节 Unicode 字符</td>
+</tr>
+<tr>
+<td>wchar_t</td>
+<td>2（Windows）&#x2F;4（Linux&#x2F;Mac）</td>
+<td>平台依赖的宽字符集</td>
+<td>适配平台最大字符（如 Unicode）</td>
+</tr>
+</tbody></table>
+<h3 id="字符字面量规则"><a href="#字符字面量规则" class="headerlink" title="字符字面量规则"></a>字符字面量规则</h3><p>字符字面量需用单引号（<code>&#39;&#39;</code>）包裹，通过前缀指定字符类型：</p>
+<table>
+<thead>
+<tr>
+<th>字符类型</th>
+<th>前缀</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>char</td>
+<td>无</td>
+<td><code>&#39;a&#39;</code>、<code>&#39;1&#39;</code></td>
+</tr>
+<tr>
+<td>wchar_t</td>
+<td><code>L</code></td>
+<td><code>L&#39;a&#39;</code>、<code>L&#39;中&#39;</code></td>
+</tr>
+<tr>
+<td>char16_t</td>
+<td><code>u</code></td>
+<td><code>u&#39;a&#39;</code>、<code>u&#39;\u0041&#39;</code></td>
+</tr>
+<tr>
+<td>char32_t</td>
+<td><code>U</code></td>
+<td><code>U&#39;a&#39;</code>、<code>U&#39;\U0001F37A&#39;</code></td>
+</tr>
+</tbody></table>
+<h3 id="转义序列"><a href="#转义序列" class="headerlink" title="转义序列"></a>转义序列</h3><p>用于表示 “不可见字符” 或 “特殊字符”（如换行、单引号），常见转义序列：</p>
+<ul>
+<li><code>\n</code>：换行</li>
+<li><code>\t</code>：制表符（Tab）</li>
+<li><code>\&#39;</code>：单引号（避免与字面量分隔符冲突）</li>
+<li><code>\&quot;</code>：双引号（用于字符串中）</li>
+<li><code>\\</code>：反斜杠本身</li>
+</ul>
+<h3 id="Unicode-转义字符"><a href="#Unicode-转义字符" class="headerlink" title="Unicode 转义字符"></a>Unicode 转义字符</h3><p>（通用字符名）</p>
+<p>通过 “前缀 + 码位” 表示 Unicode 字符，支持两种格式：</p>
+<ol>
+<li><code>\u</code> + 4 位十六进制码位（例：<code>u&#39;\u0041&#39;</code> → 对应字符 ‘A’）</li>
+<li><code>\U</code> + 8 位十六进制码位（例：<code>U&#39;\U0001F37A&#39;</code> → 对应啤酒杯字符🍺）</li>
+</ol>
+<h3 id="ASCII"><a href="#ASCII" class="headerlink" title="ASCII"></a>ASCII</h3><p>美国信息交换标准代码(American Standard Code for Information Interchange，ASCII)表</p>
+<p>ASCII 码是 “字符与整数的映射表”，仅覆盖英文字符，常用对应关系：</p>
+<table>
+<thead>
+<tr>
+<th>十进制值</th>
+<th>字符</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>32</td>
+<td>(空格)</td>
+<td>空格字符</td>
+</tr>
+<tr>
+<td>48</td>
+<td>0</td>
+<td>数字 0</td>
+</tr>
+<tr>
+<td>65</td>
+<td>A</td>
+<td>大写字母 A</td>
+</tr>
+<tr>
+<td>97</td>
+<td>a</td>
+<td>小写字母 a</td>
+</tr>
+<tr>
+<td>127</td>
+<td>DEL</td>
+<td>删除字符</td>
+</tr>
+</tbody></table>
+<h2 id="布尔类型"><a href="#布尔类型" class="headerlink" title="布尔类型"></a>布尔类型</h2><p>用途：表示 “真” 或 “假”，仅两个取值：true（本质是 1）、false（本质是 0）。</p>
+<p>占用字节：通常 1 字节（编译器可能优化，但至少 1 位）。</p>
+<p>注意：整数可隐式转换为 bool（0→false，非 0→true），反之 bool 转换为整数（false→0，true→1）。</p>
+<h2 id="std-byte类型"><a href="#std-byte类型" class="headerlink" title="std::byte类型"></a>std::byte类型</h2><ul>
+<li>头文件：需包含 <code>&lt;cstddef&gt;</code>。</li>
+<li>特性：仅用于存储原始字节数据，支持按位运算（&amp;、|、^、~），但不支持算术运算（如 +、-，避免误操作）。</li>
+<li>优势：比<code>char</code>或<code>int</code>更安全 —— 用<code>std::byte</code>处理二进制数据时，编译器会禁止无效运算（如<code>byte + 1</code>报错），减少调试错误。</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstddef&gt;</span></span></span><br><span class="line">std::byte b1&#123;<span class="number">0x01</span>&#125;;</span><br><span class="line">std::byte b2&#123;<span class="number">0x02</span>&#125;;</span><br><span class="line">std::byte b3 = b1 | b2; <span class="comment">// 合法（按位或）</span></span><br><span class="line"><span class="comment">// std::byte b4 = b1 + b2; // 非法（算术运算）</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="size-t类型"><a href="#size-t类型" class="headerlink" title="size_t类型"></a>size_t类型</h2><ul>
+<li>头文件：需包含 <code>&lt;cstddef&gt;</code>（C++ 中位于<code>std</code>命名空间，可写<code>std::size_t</code>）。</li>
+<li>用途：表示 “对象大小” 或 “索引值”（如数组索引、<code>sizeof</code>返回值），是无符号类型。</li>
+<li>大小：平台依赖，保证能存储 “当前系统最大对象的字节数”——64 位系统通常等同于<code>unsigned long long</code>（8 字节），32 位系统通常等同于<code>unsigned int</code>（4 字节）。</li>
+<li>格式符：<code>printf</code>输出时，用<code>%zd</code>（十进制）或<code>%zx</code>（十六进制）。</li>
+<li>与<code>sizeof</code>的关系：<code>sizeof(类型/变量)</code>返回值的类型是<code>size_t</code></li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstddef&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> a;</span><br><span class="line">    std::<span class="type">size_t</span> size = <span class="built_in">sizeof</span>(a); <span class="comment">// sizeof返回size_t</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;int大小：%zd 字节\n&quot;</span>, size); <span class="comment">// 用%zd输出</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h1><p>数组是 “相同类型数据的连续存储”，C 风格字符串是 “以<code>\0</code>（null 字符）结尾的 char 数组”。</p>
+<h2 id="C-风格字符串"><a href="#C-风格字符串" class="headerlink" title="C 风格字符串"></a>C 风格字符串</h2><ul>
+<li>本质：<code>char</code>数组，必须在末尾附加<code>\0</code>（值为 0）表示字符串结束，否则会导致 “越界访问”。</li>
+<li>示例：<code>char str[] = &quot;hello&quot;;</code> → 实际存储为 <code>h e l l o \0</code>（共 6 个字节，含<code>\0</code>）。</li>
+</ul>
+<h2 id="字符串字面量"><a href="#字符串字面量" class="headerlink" title="字符串字面量"></a>字符串字面量</h2><ul>
+<li>定义：用双引号（<code>&quot;&quot;</code>）包裹的文本，支持 Unicode 前缀（与宽字符对应）。</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// char数组（ASCII字符串）</span></span><br><span class="line"><span class="type">char</span> english[] = <span class="string">&quot;A book holds a house of gold.&quot;</span>; </span><br><span class="line"><span class="comment">// char16_t数组（UTF-16字符串）</span></span><br><span class="line"><span class="type">char16_t</span> chinese[] = <span class="string">u&quot;\u4e66\u4e2d\u81ea\u6709\u9ec4\u91d1\u5c4b&quot;</span>; </span><br><span class="line"><span class="comment">// wchar_t数组（平台宽字符字符串）</span></span><br><span class="line"><span class="type">wchar_t</span> jap[] = <span class="string">L&quot;你好啊&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>注意：Unicode 字符串打印需用 <code>&lt;cwchar&gt;</code> 头文件的<code>wprintf</code>（直接用<code>printf</code>可能乱码）。</li>
+</ul>
+<h2 id="数组初始化"><a href="#数组初始化" class="headerlink" title="数组初始化"></a>数组初始化</h2><p>数组初始化支持 “长度指定” 或 “长度推断”，未显式初始化的元素默认置 0（仅大括号初始化时）。</p>
+<table>
+<thead>
+<tr>
+<th>初始化方式</th>
+<th>示例</th>
+<th>结果（元素值）</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>长度推断 + 全初始化</td>
+<td><code>int arr1[]&#123;1, 2, 3&#125;;</code></td>
+<td>[1, 2, 3]</td>
+<td>长度由初始化元素个数决定</td>
+</tr>
+<tr>
+<td>指定长度 + 零初始化</td>
+<td><code>int arr2[5]&#123;&#125;;</code></td>
+<td>[0, 0, 0, 0, 0]</td>
+<td>大括号空表示所有元素置 0</td>
+</tr>
+<tr>
+<td>指定长度 + 部分初始化</td>
+<td><code>int arr3[5]&#123;1, 2, 3&#125;;</code></td>
+<td>[1, 2, 3, 0, 0]</td>
+<td>未显式初始化的元素置 0</td>
+</tr>
+<tr>
+<td>仅指定长度（无初始化）</td>
+<td><code>int arr4[5];</code></td>
+<td>随机值（未定义）</td>
+<td>栈上数组未初始化，值不确定</td>
+</tr>
+</tbody></table>
+<h1 id="用户自定义类型"><a href="#用户自定义类型" class="headerlink" title="用户自定义类型"></a>用户自定义类型</h1><h2 id="枚举类型"><a href="#枚举类型" class="headerlink" title="枚举类型"></a>枚举类型</h2><p>enum比enum class使用起来更不安全，如无必要，请不要使用enum，请使用enum class。C++支持enum主要是出于历史原因，特别是基于与C代码的互操作。</p>
+<h2 id="普通数据（POD）类"><a href="#普通数据（POD）类" class="headerlink" title="普通数据（POD）类"></a>普通数据（POD）类</h2><p>POD（Plain-Old-Data）即 “简单数据容器”，用<code>struct</code>关键字定义，仅包含数据成员（无成员函数、继承等），本质是 “C 风格结构体”。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdint&gt;</span></span></span><br><span class="line"><span class="comment">// POD结构体：仅包含数据成员</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">MyStruct</span> &#123;</span><br><span class="line">    <span class="type">uint64_t</span> id;    <span class="comment">// 64位无符号整数</span></span><br><span class="line">    <span class="type">char</span> name[<span class="number">256</span>]; <span class="comment">// 字符数组（存储名字）</span></span><br><span class="line">    <span class="type">bool</span> is_valid;  <span class="comment">// 布尔值（是否有效）</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p><font style="color:rgba(0, 0, 0, 0.85) !important;">特性：内存布局连续，可直接按字节拷贝（如</font><code>&lt;font style=&quot;color:rgb(0, 0, 0);&quot;&gt;memcpy&lt;/font&gt;</code><font style="color:rgba(0, 0, 0, 0.85) !important;">），初始化规则与基本类型类似。</font></p>
+<h1 id="大括号初始化"><a href="#大括号初始化" class="headerlink" title="大括号初始化"></a>大括号初始化</h1><ul>
+<li>优势：无论对象的作用域或类型如何，大括号初始化总是适用，其他方法则不总适用</li>
+<li>背景：解决C++初始化语法混乱问题，平滑过渡不同对象生命周期的初始化需求</li>
+</ul>
+<h2 id="初始化基本类型为0"><a href="#初始化基本类型为0" class="headerlink" title="初始化基本类型为0"></a>初始化基本类型为0</h2><p><font style="color:rgba(0, 0, 0, 0.85) !important;">基本类型（int、float 等）的初始化分为 “初始化为 0” 和 “初始化为特定值” 两类。</font></p>
+<table>
+<thead>
+<tr>
+<th align="left"><strong><font style="color:rgb(0, 0, 0) !important;">方式</font></strong></th>
+<th align="left"><strong><font style="color:rgb(0, 0, 0) !important;">示例</font></strong></th>
+<th align="left"><strong><font style="color:rgb(0, 0, 0) !important;">说明</font></strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><font style="color:rgba(0, 0, 0, 0.85) !important;">等号赋值</font></td>
+<td align="left"><code>&lt;font style=&quot;color:rgb(0, 0, 0);&quot;&gt;int a = 0;&lt;/font&gt;</code></td>
+<td align="left"><font style="color:rgba(0, 0, 0, 0.85) !important;">传统方式，直观</font></td>
+</tr>
+<tr>
+<td align="left"><font style="color:rgba(0, 0, 0, 0.85) !important;">大括号初始化</font></td>
+<td align="left"><code>&lt;font style=&quot;color:rgb(0, 0, 0);&quot;&gt;int a&#123;&#125;;&lt;/font&gt;</code></td>
+<td align="left"><font style="color:rgba(0, 0, 0, 0.85) !important;">现代方式，无窄化转换风险</font></td>
+</tr>
+<tr>
+<td align="left"><font style="color:rgba(0, 0, 0, 0.85) !important;">等号 + 大括号初始化</font></td>
+<td align="left"><code>&lt;font style=&quot;color:rgb(0, 0, 0);&quot;&gt;int a = &#123;&#125;;&lt;/font&gt;</code></td>
+<td align="left"><font style="color:rgba(0, 0, 0, 0.85) !important;">兼容传统习惯，效果同</font><code>&lt;font style=&quot;color:rgb(0, 0, 0);&quot;&gt;a&#123;&#125;&lt;/font&gt;</code></td>
+</tr>
+</tbody></table>
+<h2 id="初始化基本类型为某值"><a href="#初始化基本类型为某值" class="headerlink" title="初始化基本类型为某值"></a>初始化基本类型为某值</h2><table>
+<thead>
+<tr>
+<th>方式</th>
+<th>示例</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>等号赋值</td>
+<td><code>int b = 6;</code></td>
+<td>传统方式</td>
+</tr>
+<tr>
+<td>大括号初始化</td>
+<td><code>int b&#123;6&#125;;</code></td>
+<td>现代推荐，防止窄化（如<code>int&#123;3.14&#125;</code>报错）</td>
+</tr>
+<tr>
+<td>等号 + 大括号初始化</td>
+<td><code>int b = &#123;6&#125;;</code></td>
+<td>兼容传统，效果同<code>b&#123;6&#125;</code></td>
+</tr>
+<tr>
+<td>圆括号初始化</td>
+<td><code>int b(6);</code></td>
+<td>类构造函数风格，基本类型也支持</td>
+</tr>
+</tbody></table>
+<h2 id="初始化POD"><a href="#初始化POD" class="headerlink" title="初始化POD"></a>初始化POD</h2><p>初始化POD的语法大多遵循基本类型的初始化语法。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">MyStruct</span> &#123;</span><br><span class="line">    <span class="type">uint64_t</span> a;</span><br><span class="line">    <span class="type">char</span> b[<span class="number">256</span>];</span><br><span class="line">    <span class="type">bool</span> c;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    MyStruct init_pod1&#123;&#125;; <span class="comment">// All fields zeroed</span></span><br><span class="line">    MyStruct init_pod2 = &#123;&#125;; <span class="comment">// All fields zeroed</span></span><br><span class="line"></span><br><span class="line">    MyStruct init_pod3&#123; <span class="number">6</span>, <span class="string">&quot;Hello&quot;</span> &#125;; <span class="comment">// Fields a &amp; b set; c = 0</span></span><br><span class="line">    MyStruct init_pod4&#123; <span class="number">6</span>, <span class="string">&quot;Hello&quot;</span>, <span class="literal">true</span> &#125;; <span class="comment">// All fields set</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>将POD对象初始化为零与将基本类型的对象初始化为零类似。大括号初始化和等号加大括号的初始化产生相同的代码：字段初始化为零。</p>
+<p>不能对POD使用“&#x3D; 0”的初始化方法</p>
+<h2 id="初始化数组"><a href="#初始化数组" class="headerlink" title="初始化数组"></a>初始化数组</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> array_1[]&#123; <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span> &#125;;  <span class="comment">// Array of length 3; 1, 2, 3</span></span><br><span class="line"><span class="type">int</span> array_2[<span class="number">5</span>]&#123;&#125;; 		   <span class="comment">// Array of length 5; 0, 0, 0, 0, 0</span></span><br><span class="line"><span class="type">int</span> array_3[<span class="number">5</span>]&#123; <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span> &#125;; <span class="comment">// Array of length 5; 1, 2, 3, 0, 0</span></span><br><span class="line"><span class="type">int</span> array_4[<span class="number">5</span>]; 		   <span class="comment">// Array of length 5; uninitialized values</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="printf"><a href="#printf" class="headerlink" title="printf"></a>printf</h1><p>printf 是 C 语言标准库中的一个函数，来自于 &lt;stdio.h&gt; 头文件，虽然 C++ 更倾向于使用 cout，但 printf 在某些情况下仍然非常有用。</p>
+<h2 id="printf格式指定符"><a href="#printf格式指定符" class="headerlink" title="printf格式指定符"></a>printf格式指定符</h2><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>printf 格式指定符</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>short</td>
+<td>%hd</td>
+</tr>
+<tr>
+<td>unsigned short</td>
+<td>%hu</td>
+</tr>
+<tr>
+<td>int</td>
+<td>%d</td>
+</tr>
+<tr>
+<td>unsigned int</td>
+<td>%u</td>
+</tr>
+<tr>
+<td>long</td>
+<td>%ld</td>
+</tr>
+<tr>
+<td>unsigned long</td>
+<td>%lu</td>
+</tr>
+<tr>
+<td>long long</td>
+<td>%lld</td>
+</tr>
+<tr>
+<td>unsigned long long</td>
+<td>%llu</td>
+</tr>
+<tr>
+<td>无符号整数（16进制）</td>
+<td>%x</td>
+</tr>
+<tr>
+<td>无符号整数（8进制）</td>
+<td>%o</td>
+</tr>
+<tr>
+<td>float</td>
+<td>%f</td>
+</tr>
+<tr>
+<td>float（科学计数法）</td>
+<td>%e</td>
+</tr>
+<tr>
+<td>float（自动选择%f或%e）</td>
+<td>%g</td>
+</tr>
+<tr>
+<td>double</td>
+<td>%lf</td>
+</tr>
+<tr>
+<td>double（科学计数法）</td>
+<td>%le</td>
+</tr>
+<tr>
+<td>double（自动选择%f或%e）</td>
+<td>%lg</td>
+</tr>
+<tr>
+<td>long double</td>
+<td>%Lf</td>
+</tr>
+<tr>
+<td>long double（科学计数法）</td>
+<td>%Le</td>
+</tr>
+<tr>
+<td>long double（自动选择%f或%e）</td>
+<td>%Lg</td>
+</tr>
+<tr>
+<td>char（窄字符）</td>
+<td>%c</td>
+</tr>
+<tr>
+<td>wchar_t（宽字符）</td>
+<td>%lc</td>
+</tr>
+<tr>
+<td>bool</td>
+<td>%d</td>
+</tr>
+<tr>
+<td>size_t</td>
+<td>%zd</td>
+</tr>
+<tr>
+<td>size_t（十六进制）</td>
+<td>%zx</td>
+</tr>
+<tr>
+<td>char*</td>
+<td>%s</td>
+</tr>
+<tr>
+<td>指针</td>
+<td>%p</td>
+</tr>
+<tr>
+<td>百分号</td>
+<td>%%</td>
+</tr>
+</tbody></table>
+<h2 id="printf格式修饰符"><a href="#printf格式修饰符" class="headerlink" title="printf格式修饰符"></a>printf格式修饰符</h2><p>格式说明符可以包含额外的标志+宽度+精度来控制输出格式：</p>
+<ul>
+<li>标志：- 表示左对齐，+ 在正数前加加号。</li>
+<li>宽度：指定输出字段的最小宽度。</li>
+<li>精度：用于浮点数和字符串的显示精度。</li>
+</ul>
+<p>举例：<code>%-8.3e</code>表示打印一个浮点数，左对齐，占位宽度为8，有效数字为3</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a target="_blank" rel="noopener" href="https://github.com/AillianYue">AillianYue</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a target="_blank" rel="noopener" href="https://www.yuque.com/aillian-yue/blog">https://www.yuque.com/aillian-yue/blog</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">此文章版归AillianYue所有，如需转载，请注明来自原作者</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/C/">C++</a></div><div class="post-share"><div class="social-share" data-image="/img/CPlusPlus.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/02/03/C++%E5%9F%BA%E7%A1%80%EF%BC%9A%E8%BF%90%E7%AE%97%E7%AC%A6%E5%92%8C%E8%A1%A8%E8%BE%BE%E5%BC%8F/" title="C++基础：运算符和表达式"><img class="cover" src="/img/CPlusPlus.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">C++基础：运算符和表达式</div></div><div class="info-2"><div class="info-item-1">介绍运算符、运算符重载、类型转换、关键修饰符和表达式特性、运算符优先级与结合性、求值顺序以及未定义行为</div></div></div></a><a class="pagination-related" href="/2025/01/02/Android%E5%9F%BA%E7%A1%80%EF%BC%9AAndroid%20Studio/" title="Android基础：Android Studio"><img class="cover" src="/img/AndroidStudio.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Android基础：Android Studio</div></div><div class="info-2"><div class="info-item-1">Android 系统架构 Android 四大组件 活动（Activity） 服务（Service） 广播接收器（Broadcast Receiver） 内容提供器（Content Provider）  Project 目录结构123456789101112Projecct├── .gradle├── .idea├── .gitignore├── app├── gradle├── build.gradle├── gradle.properties├── gradlew├── gradlew.bat├── local.properties└── settings.gradle   .gradle：Android Studio自动生成的一些文件，无须关心，无须手动编辑 .idea：Android Studio自动生成的一些文件，无须关心，无须手动编辑 .gitignore：Git 版本控制系统中使用的配置文件，暂无须关心，无须手动编辑 app：项目中的代码、资源等内容几乎都是放置在这个目录下的，开发工作也基本都是在这个目录下进行 gradle：这个目录下包含了gradle wrapp...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/09/03/C++%E5%9F%BA%E7%A1%80%EF%BC%9A%E6%B5%81%E4%B8%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/" title="C++基础：流与文件系统"><img class="cover" src="/img/CPlusPlus.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-09-03</div><div class="info-item-2">C++基础：流与文件系统</div></div><div class="info-2"><div class="info-item-1">介绍流和文件系统</div></div></div></a><a class="pagination-related" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9ASTL/" title="C++八股：STL"><img class="cover" src="/img/CPlusPlus.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-03</div><div class="info-item-2">C++八股：STL</div></div><div class="info-2"><div class="info-item-1">介绍C++的STL八股知识</div></div></div></a><a class="pagination-related" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E5%9F%BA%E7%A1%80/" title="C++八股：基础"><img class="cover" src="/img/CPlusPlus.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-03</div><div class="info-item-2">C++八股：基础</div></div><div class="info-2"><div class="info-item-1">介绍C++的基础八股知识</div></div></div></a><a class="pagination-related" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" title="C++八股：面向对象"><img class="cover" src="/img/CPlusPlus.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-03</div><div class="info-item-2">C++八股：面向对象</div></div><div class="info-2"><div class="info-item-1">介绍C++的面向对象八股知识</div></div></div></a><a class="pagination-related" href="/2025/07/03/C++%E5%9F%BA%E7%A1%80%EF%BC%9ASTL/" title="C++基础：STL"><img class="cover" src="/img/CPlusPlus.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-07-03</div><div class="info-item-2">C++基础：STL</div></div><div class="info-2"><div class="info-item-1">介绍STL的容器、迭代器、函数对象、算法</div></div></div></a><a class="pagination-related" href="/2025/09/03/C++%E5%9F%BA%E7%A1%80%EF%BC%9A%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/" title="C++基础：异常处理"><img class="cover" src="/img/CPlusPlus.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-09-03</div><div class="info-item-2">C++基础：异常处理</div></div><div class="info-2"><div class="info-item-1">介绍异常处理基础、主要用法示例以及GDB调试</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">AillianYue</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">21</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">11</div></a></div><a id="card-info-btn" href="/about/"><i class="fas fa-user-graduate"></i><span>关于我</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/AillianYue" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="https://gitee.com/aillianyue" target="_blank" title="Gitee"><i class="fab fa-github-alt"></i></a><a class="social-icon" href="mailto:634558578@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="tencent://AddContact/?fromId=45&amp;fromSubId=1&amp;subcmd=all&amp;uin=634558578&amp;website=www.oicqzone.com" target="_blank" title="QQ"><i class="fab fa-qq"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站不定期更新，欢迎！</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.</span> <span class="toc-text">基本类型</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B4%E6%95%B0%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.1.</span> <span class="toc-text">整数类型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B4%E6%95%B0%E5%AD%97%E9%9D%A2%E9%87%8F%E8%A7%84%E5%88%99"><span class="toc-number">1.1.1.</span> <span class="toc-text">整数字面量规则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%98%8E%E7%A1%AE%E5%A4%A7%E5%B0%8F%E7%9A%84%E6%95%B4%E6%95%B0%E7%B1%BB%E5%9E%8B%EF%BC%88%E5%BA%93%EF%BC%89"><span class="toc-number">1.1.2.</span> <span class="toc-text">明确大小的整数类型（库）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%AE%E7%82%B9%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.2.</span> <span class="toc-text">浮点类型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%AE%E7%82%B9%E5%AD%97%E9%9D%A2%E9%87%8F%E8%A7%84%E5%88%99"><span class="toc-number">1.2.1.</span> <span class="toc-text">浮点字面量规则</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.3.</span> <span class="toc-text">字符类型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AA%84%E5%AD%97%E7%AC%A6"><span class="toc-number">1.3.1.</span> <span class="toc-text">窄字符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%BD%E5%AD%97%E7%AC%A6"><span class="toc-number">1.3.2.</span> <span class="toc-text">宽字符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E5%AD%97%E9%9D%A2%E9%87%8F%E8%A7%84%E5%88%99"><span class="toc-number">1.3.3.</span> <span class="toc-text">字符字面量规则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BD%AC%E4%B9%89%E5%BA%8F%E5%88%97"><span class="toc-number">1.3.4.</span> <span class="toc-text">转义序列</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Unicode-%E8%BD%AC%E4%B9%89%E5%AD%97%E7%AC%A6"><span class="toc-number">1.3.5.</span> <span class="toc-text">Unicode 转义字符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ASCII"><span class="toc-number">1.3.6.</span> <span class="toc-text">ASCII</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%83%E5%B0%94%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.4.</span> <span class="toc-text">布尔类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#std-byte%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.5.</span> <span class="toc-text">std::byte类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#size-t%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.6.</span> <span class="toc-text">size_t类型</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%95%B0%E7%BB%84"><span class="toc-number">2.</span> <span class="toc-text">数组</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#C-%E9%A3%8E%E6%A0%BC%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-number">2.1.</span> <span class="toc-text">C 风格字符串</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%AD%97%E9%9D%A2%E9%87%8F"><span class="toc-number">2.2.</span> <span class="toc-text">字符串字面量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E7%BB%84%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-number">2.3.</span> <span class="toc-text">数组初始化</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%94%A8%E6%88%B7%E8%87%AA%E5%AE%9A%E4%B9%89%E7%B1%BB%E5%9E%8B"><span class="toc-number">3.</span> <span class="toc-text">用户自定义类型</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9E%9A%E4%B8%BE%E7%B1%BB%E5%9E%8B"><span class="toc-number">3.1.</span> <span class="toc-text">枚举类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%99%AE%E9%80%9A%E6%95%B0%E6%8D%AE%EF%BC%88POD%EF%BC%89%E7%B1%BB"><span class="toc-number">3.2.</span> <span class="toc-text">普通数据（POD）类</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A4%A7%E6%8B%AC%E5%8F%B7%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-number">4.</span> <span class="toc-text">大括号初始化</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B%E4%B8%BA0"><span class="toc-number">4.1.</span> <span class="toc-text">初始化基本类型为0</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B%E4%B8%BA%E6%9F%90%E5%80%BC"><span class="toc-number">4.2.</span> <span class="toc-text">初始化基本类型为某值</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96POD"><span class="toc-number">4.3.</span> <span class="toc-text">初始化POD</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E6%95%B0%E7%BB%84"><span class="toc-number">4.4.</span> <span class="toc-text">初始化数组</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#printf"><span class="toc-number">5.</span> <span class="toc-text">printf</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#printf%E6%A0%BC%E5%BC%8F%E6%8C%87%E5%AE%9A%E7%AC%A6"><span class="toc-number">5.1.</span> <span class="toc-text">printf格式指定符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#printf%E6%A0%BC%E5%BC%8F%E4%BF%AE%E9%A5%B0%E7%AC%A6"><span class="toc-number">5.2.</span> <span class="toc-text">printf格式修饰符</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E9%AB%98%E7%BA%A7%E7%89%B9%E6%80%A7/" title="C++八股：高级特性"><img src="/img/CPlusPlus.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="C++八股：高级特性"/></a><div class="content"><a class="title" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E9%AB%98%E7%BA%A7%E7%89%B9%E6%80%A7/" title="C++八股：高级特性">C++八股：高级特性</a><time datetime="2025-12-22T12:57:00.000Z" title="更新于 2025-12-22 20:57:00">2025-12-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" title="C++八股：并发编程"><img src="/img/CPlusPlus.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="C++八股：并发编程"/></a><div class="content"><a class="title" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" title="C++八股：并发编程">C++八股：并发编程</a><time datetime="2025-12-22T12:56:00.000Z" title="更新于 2025-12-22 20:56:00">2025-12-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" title="C++八股：面向对象"><img src="/img/CPlusPlus.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="C++八股：面向对象"/></a><div class="content"><a class="title" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" title="C++八股：面向对象">C++八股：面向对象</a><time datetime="2025-12-22T12:55:00.000Z" title="更新于 2025-12-22 20:55:00">2025-12-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" title="C++八股：内存管理"><img src="/img/CPlusPlus.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="C++八股：内存管理"/></a><div class="content"><a class="title" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" title="C++八股：内存管理">C++八股：内存管理</a><time datetime="2025-12-22T12:54:00.000Z" title="更新于 2025-12-22 20:54:00">2025-12-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9ASTL/" title="C++八股：STL"><img src="/img/CPlusPlus.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="C++八股：STL"/></a><div class="content"><a class="title" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9ASTL/" title="C++八股：STL">C++八股：STL</a><time datetime="2025-12-22T12:53:00.000Z" title="更新于 2025-12-22 20:53:00">2025-12-22</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2019 - 2025 By AillianYue</span></div><div class="footer_custom_text">Hi, welcome to <a target="_blank" rel="noopener" href="https://github.com/AillianYue">my blog</a>!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

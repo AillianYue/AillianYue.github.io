@@ -1,0 +1,366 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>C++八股：高级特性 | AillianYue's Blog</title><meta name="author" content="AillianYue"><meta name="copyright" content="AillianYue"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="介绍C++的高级特性八股知识">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++八股：高级特性">
+<meta property="og:url" content="http://example.com/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E9%AB%98%E7%BA%A7%E7%89%B9%E6%80%A7/index.html">
+<meta property="og:site_name" content="AillianYue&#39;s Blog">
+<meta property="og:description" content="介绍C++的高级特性八股知识">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/CPlusPlus.webp">
+<meta property="article:published_time" content="2024-12-03T11:52:00.000Z">
+<meta property="article:modified_time" content="2025-12-22T12:57:00.000Z">
+<meta property="article:author" content="AillianYue">
+<meta property="article:tag" content="C++">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/CPlusPlus.webp"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "C++八股：高级特性",
+  "url": "http://example.com/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E9%AB%98%E7%BA%A7%E7%89%B9%E6%80%A7/",
+  "image": "http://example.com/img/CPlusPlus.webp",
+  "datePublished": "2024-12-03T11:52:00.000Z",
+  "dateModified": "2025-12-22T12:57:00.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "AillianYue",
+      "url": "https://github.com/AillianYue"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/avatar.png"><link rel="canonical" href="http://example.com/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E9%AB%98%E7%BA%A7%E7%89%B9%E6%80%A7/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'C++八股：高级特性',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">21</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">11</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 历程</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">AillianYue's Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">C++八股：高级特性</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 历程</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">C++八股：高级特性</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-12-03T11:52:00.000Z" title="发表于 2024-12-03 19:52:00">2024-12-03</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-12-22T12:57:00.000Z" title="更新于 2025-12-22 20:57:00">2025-12-22</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/C/">C++</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/C/C-%E5%85%AB%E8%82%A1/">C++八股</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">3.6k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>11分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><p>VERSION：1.0.0</p>
+<h4 id="C-11的新特性有哪些？"><a href="#C-11的新特性有哪些？" class="headerlink" title="C++11的新特性有哪些？"></a>C++11的新特性有哪些？</h4><ol>
+<li>自动类型推导 (<code>auto</code>)</li>
+<li>范围for循环 (<code>for (auto x : range)</code>)</li>
+<li>右值引用和移动语义 (<code>&amp;&amp;</code>, <code>std::move</code>)</li>
+<li>Lambda表达式 (<code>[capture](args) -&gt; ret &#123; body &#125;</code>)</li>
+<li>智能指针 (<code>std::unique_ptr</code>, <code>std::shared_ptr</code>, <code>std::weak_ptr</code>)</li>
+<li><code>nullptr</code></li>
+<li>枚举类 (<code>enum class</code>)</li>
+<li>委托构造函数</li>
+<li><code>override</code> 和 <code>final</code> 关键字</li>
+<li><code>constexpr</code> 函数</li>
+<li>统一的初始化列表 (<code>std::initializer_list</code> 和 <code>&#123;&#125;</code> 语法)</li>
+<li><code>default</code> 和 <code>delete</code> 函数控制</li>
+<li>静态断言 (<code>static_assert</code>)</li>
+<li>元组 (<code>std::tuple</code>)</li>
+<li>新的容器： <code>std::array</code>（固定大小数组），<code>std::forward_list</code>（单链表），<code>std::unordered_map</code>, <code>std::unordered_set</code>（哈希表）。</li>
+<li>正则表达式： <code>std::regex</code>库，原生支持文本模式匹配。</li>
+<li>线程库： <code>std::thread</code>, <code>std::mutex</code>, <code>std::async</code>, <code>std::future</code>等，标准化的多线程支持，不再依赖平台特定API。</li>
+<li>新的算法： <code>std::all_of</code>, <code>std::any_of</code>, <code>std::none_of</code>等。</li>
+</ol>
+<h4 id="智能指针的线程安全性如何？多个线程同时操作同一个std-shared-ptr对象是否安全？"><a href="#智能指针的线程安全性如何？多个线程同时操作同一个std-shared-ptr对象是否安全？" class="headerlink" title="智能指针的线程安全性如何？多个线程同时操作同一个std::shared_ptr对象是否安全？"></a>智能指针的线程安全性如何？多个线程同时操作同一个std::shared_ptr对象是否安全？</h4><ol>
+<li>控制块（引用计数）是线程安全的：<code>std::shared_ptr</code> 内部的引用计数增减操作是原子的，保证多个线程同时拷贝&#x2F;析构指向同一对象的多个 <code>shared_ptr</code> 实例时，引用计数正确无误，不会导致资源多次释放。</li>
+<li>指向的共享对象本身线程不安全：智能指针不保证其管理的<code>T</code>对象的读写安全。你需要额外的同步机制（如互斥锁）来保护<code>*ptr</code>的操作。</li>
+<li>同一个 <code>shared_ptr</code> 实例的写操作非线程安全：多个线程同时读写（如reset、赋值）同一个 <code>shared_ptr</code> 实例（注意，是实例本身，不是副本）是不安全的，需要外部同步。</li>
+</ol>
+<h4 id="std-shared-ptr的内部引用计数是如何实现的？它为什么是线程安全的？"><a href="#std-shared-ptr的内部引用计数是如何实现的？它为什么是线程安全的？" class="headerlink" title="std::shared_ptr的内部引用计数是如何实现的？它为什么是线程安全的？"></a>std::shared_ptr的内部引用计数是如何实现的？它为什么是线程安全的？</h4><ul>
+<li>实现：<code>shared_ptr</code> 内部包含一个指向堆对象的原始指针和一个指向控制块的指针。控制块中至少包含两个原子操作的引用计数器：<code>use_count</code>（共享所有权计数）和 <code>weak_count</code>（弱引用计数）。</li>
+<li>线程安全原因：对引用计数的增减操作（如拷贝构造、赋值、析构）使用原子操作（如 <code>std::atomic::fetch_add</code> 配合 <code>std::memory_order_relaxed</code> 等内存序），确保计数的修改是原子的、不可中断的，从而防止竞态条件导致计数错误。</li>
+</ul>
+<h4 id="std-make-shared和直接使用std-shared-ptr构造函数有什么区别？为什么推荐使用std-make-shared？"><a href="#std-make-shared和直接使用std-shared-ptr构造函数有什么区别？为什么推荐使用std-make-shared？" class="headerlink" title="std::make_shared和直接使用std::shared_ptr构造函数有什么区别？为什么推荐使用std::make_shared？"></a>std::make_shared和直接使用std::shared_ptr构造函数有什么区别？为什么推荐使用std::make_shared？</h4><ul>
+<li>主要区别：<ol>
+<li>内存分配次数：<code>make_shared</code> 会单次分配一块连续内存，同时容纳托管对象和控制块。而 <code>new</code> + <code>shared_ptr</code> 构造函数通常需要两次分配（一次<code>new T</code>，一次分配控制块）。</li>
+<li>异常安全：<code>make_shared</code> 是一个整体操作，能提供更强的异常安全性。例如 <code>f(std::shared_ptr&lt;T&gt;(new T), g())</code>，若<code>g()</code>抛出异常，可能导致<code>new T</code>的内存泄漏。而 <code>f(std::make_shared&lt;T&gt;(), g())</code> 则避免了此问题。</li>
+<li>内存布局与释放时机：<code>make_shared</code> 对象和控制块内存绑定，即使 <code>use_count</code> 为0，只要 <code>weak_count</code> 不为0（有<code>weak_ptr</code>存在），整个内存块（含对象占用的部分）仍会保留，直到所有<code>weak_ptr</code>也消亡。</li>
+</ol>
+</li>
+<li>推荐原因：更高效（减少一次分配）、更安全（异常安全）、代码更简洁。除非你需要定制删除器或使用分离的原始指针，否则应优先使用<code>make_shared</code>。</li>
+</ul>
+<h4 id="智能指针与RAII有什么关系？为什么说智能指针是RAII的典型应用？"><a href="#智能指针与RAII有什么关系？为什么说智能指针是RAII的典型应用？" class="headerlink" title="智能指针与RAII有什么关系？为什么说智能指针是RAII的典型应用？"></a>智能指针与RAII有什么关系？为什么说智能指针是RAII的典型应用？</h4><ul>
+<li>关系：智能指针是 RAII（资源获取即初始化） 思想在动态内存管理领域的具体实现。</li>
+<li>原因：RAII的核心是将资源的生命周期与对象的生命周期绑定。智能指针（如 <code>unique_ptr</code>, <code>shared_ptr</code>）在构造时获取资源（内存），在析构时自动释放资源（调用<code>delete</code>或自定义删除器）。这种方式确保了即使发生异常、提前返回等，资源也能被正确释放，杜绝了内存泄漏。</li>
+</ul>
+<h4 id="介绍一下-C-中的RAII机制？RAII的典型应用有哪些？"><a href="#介绍一下-C-中的RAII机制？RAII的典型应用有哪些？" class="headerlink" title="介绍一下 C++中的RAII机制？RAII的典型应用有哪些？"></a>介绍一下 C++中的RAII机制？RAII的典型应用有哪些？</h4><ul>
+<li>RAII机制：资源获取即初始化。核心是将必须手动申请&#x2F;释放的资源（如堆内存、文件句柄、互斥锁、网络连接）的生命周期，托管给一个具有自动生命周期的栈对象。该对象在构造函数中获取资源，在析构函数中释放资源。</li>
+<li>典型应用：<ol>
+<li>智能指针（<code>unique_ptr</code>, <code>shared_ptr</code>）：管理动态内存。</li>
+<li>锁守卫（<code>std::lock_guard</code>, <code>std::unique_lock</code>）：管理互斥锁，确保退出作用域时解锁。</li>
+<li>容器（<code>std::vector</code>, <code>std::string</code>）：内部管理动态数组内存。</li>
+<li>文件流（<code>std::fstream</code>）：打开文件，析构时自动关闭。</li>
+</ol>
+</li>
+</ul>
+<h4 id="讲一下lambda函数？"><a href="#讲一下lambda函数？" class="headerlink" title="讲一下lambda函数？"></a>讲一下lambda函数？</h4><ul>
+<li>概念：Lambda表达式是C++11引入的一种匿名函数对象，用于在调用处就地定义简短的函数逻辑。它简化了代码，特别适合作为回调传递给STL算法。</li>
+<li>基本语法：<code>[capture-list] (parameters) -&gt; return-type &#123; body &#125;</code>，其中捕获列表和返回类型（可推导时）可省略。</li>
+</ul>
+<h4 id="Lambda表达式的捕获列表有几种方式？值捕获和引用捕获有什么区别？"><a href="#Lambda表达式的捕获列表有几种方式？值捕获和引用捕获有什么区别？" class="headerlink" title="Lambda表达式的捕获列表有几种方式？值捕获和引用捕获有什么区别？"></a>Lambda表达式的捕获列表有几种方式？值捕获和引用捕获有什么区别？</h4><ul>
+<li>捕获方式：<ol>
+<li>值捕获 <code>[x]</code>：创建时拷贝外部变量<code>x</code>的值，lambda内修改的是副本，不影响外部变量。</li>
+<li>引用捕获 <code>[&amp;x]</code>：捕获外部变量<code>x</code>的引用，lambda内修改直接影响外部变量。</li>
+<li>隐式捕获：<code>[=]</code>（隐式值捕获所有）、<code>[&amp;]</code>（隐式引用捕获所有）。</li>
+<li>混合捕获：<code>[=, &amp;x]</code>（除<code>x</code>引用捕获外，其余值捕获）。</li>
+<li>移动捕获 <code>[x = std::move(y)]</code>（C++14）：将变量<code>y</code>移动进lambda。</li>
+</ol>
+</li>
+<li>核心区别：<ul>
+<li>值捕获：安全，但可能拷贝开销大；lambda创建时的值快照，后续外部变量变化不影响它。</li>
+<li>引用捕获：需注意悬空引用风险（确保lambda执行时被引用的对象仍存活）；能反映外部变量的最新状态。</li>
+</ul>
+</li>
+</ul>
+<h4 id="什么是闭包（Closure）？Lambda表达式和闭包有什么关系？"><a href="#什么是闭包（Closure）？Lambda表达式和闭包有什么关系？" class="headerlink" title="什么是闭包（Closure）？Lambda表达式和闭包有什么关系？"></a>什么是闭包（Closure）？Lambda表达式和闭包有什么关系？</h4><ul>
+<li>闭包：是一个函数与其相关的引用环境（即其捕获的外部变量）组合而成的实体。</li>
+<li>关系：Lambda表达式是定义闭包的语法糖。当我们编写一个lambda时，编译器会生成一个匿名类（闭包类型）。该lambda的每次实例化都会产生这个类的一个对象，称为闭包对象。捕获列表中的变量会成为该匿名类的成员，从而构成了“闭包”。</li>
+</ul>
+<h4 id="Lambda-表达式在STL算法中有什么应用？请举例说明。"><a href="#Lambda-表达式在STL算法中有什么应用？请举例说明。" class="headerlink" title="Lambda 表达式在STL算法中有什么应用？请举例说明。"></a>Lambda 表达式在STL算法中有什么应用？请举例说明。</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">std::vector&lt;<span class="type">int</span>&gt; v = &#123;<span class="number">1</span>, <span class="number">5</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">4</span>&#125;;</span><br><span class="line"><span class="comment">// 1. 作为比较准则排序</span></span><br><span class="line">std::<span class="built_in">sort</span>(v.<span class="built_in">begin</span>(), v.<span class="built_in">end</span>(), [](<span class="type">int</span> a, <span class="type">int</span> b) &#123; <span class="keyword">return</span> a &gt; b; &#125;); <span class="comment">// 降序</span></span><br><span class="line"><span class="comment">// 2. 配合算法进行条件操作</span></span><br><span class="line"><span class="type">int</span> count = std::<span class="built_in">count_if</span>(v.<span class="built_in">begin</span>(), v.<span class="built_in">end</span>(), [](<span class="type">int</span> x) &#123; <span class="keyword">return</span> x % <span class="number">2</span> == <span class="number">0</span>; &#125;);</span><br><span class="line"><span class="comment">// 3. 修改元素</span></span><br><span class="line">std::for_each(v.<span class="built_in">begin</span>(), v.<span class="built_in">end</span>(), [](<span class="type">int</span> &amp;n) &#123; n *= <span class="number">2</span>; &#125;);</span><br></pre></td></tr></table></figure>
+
+<h4 id="std-function是什么？"><a href="#std-function是什么？" class="headerlink" title="std::function是什么？"></a><code>std::function</code>是什么？</h4><ul>
+<li><code>std::function</code>：是一个通用的多态函数包装器。它可以存储、拷贝、调用任何可调用对象，只要其调用签名与 <code>std::function</code> 的模板参数匹配（例如 <code>std::function&lt;void(int)&gt;</code>）。</li>
+</ul>
+<h4 id="左值引用和右值引用的区别是什么？"><a href="#左值引用和右值引用的区别是什么？" class="headerlink" title="左值引用和右值引用的区别是什么？"></a>左值引用和右值引用的区别是什么？</h4><ul>
+<li>左值引用（<code>T&amp;</code>）：绑定到左值（有名称、有地址、持久存在的对象）。主要用于：<ul>
+<li>函数参数传递，避免拷贝</li>
+<li>创建别名</li>
+</ul>
+</li>
+<li>右值引用（<code>T&amp;&amp;</code>）：绑定到右值（临时对象、字面量、即将销毁的对象）。主要用于：<ul>
+<li>移动语义：高效转移资源所有权</li>
+<li>完美转发：保持值类别转发参数</li>
+</ul>
+</li>
+<li>核心区别：左值引用用于避免拷贝，右值引用用于移动和转发</li>
+</ul>
+<h4 id="auto-和-decltype-有何区别？"><a href="#auto-和-decltype-有何区别？" class="headerlink" title="auto 和 decltype 有何区别？"></a>auto 和 decltype 有何区别？</h4><ul>
+<li>auto：<ul>
+<li>用于变量声明，根据初始化表达式推导类型</li>
+<li>忽略引用<code>&amp;</code>和顶层<code>const</code>（除非显式指定）</li>
+<li>示例：<code>auto x = expr;</code> &#x2F;&#x2F; x的类型是expr值类型</li>
+</ul>
+</li>
+<li>decltype：<ul>
+<li>用于查询表达式类型，不计算表达式</li>
+<li>保留引用<code>&amp;</code>和<code>const</code>限定符</li>
+<li>示例：<code>decltype(expr) x = expr;</code> &#x2F;&#x2F; x的类型与expr完全相同</li>
+</ul>
+</li>
+</ul>
+<h4 id="什么是完美转发？其作用及实现方式是什么？"><a href="#什么是完美转发？其作用及实现方式是什么？" class="headerlink" title="什么是完美转发？其作用及实现方式是什么？"></a>什么是完美转发？其作用及实现方式是什么？</h4><ul>
+<li>完美转发：函数模板将其参数原封不动（保持值类别、const&#x2F;volatile属性）转发给其他函数。</li>
+<li>作用：<ol>
+<li>避免不必要的拷贝</li>
+<li>保持参数的左值&#x2F;右值特性</li>
+<li>实现通用包装器、工厂函数</li>
+</ol>
+</li>
+</ul>
+<p>实现方式：</p>
+<pre><code>1. 通用引用（`T&amp;&amp;`配合引用折叠）
+2. std::forward&lt;T&gt; 有条件转换
+</code></pre>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">wrapper</span><span class="params">(T&amp;&amp; arg)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 保持arg的原始值类别转发</span></span><br><span class="line">    <span class="built_in">target</span>(std::forward&lt;T&gt;(arg));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="std-move-与-std-forward-有何区别？"><a href="#std-move-与-std-forward-有何区别？" class="headerlink" title="std::move 与 std::forward 有何区别？"></a>std::move 与 std::forward 有何区别？</h4><ul>
+<li>std::move：<ul>
+<li>无条件将参数转为右值引用</li>
+<li>实质：<code>static_cast&lt;T&amp;&amp;&gt;(t)</code></li>
+<li>用于启用移动语义，表示资源可被转移</li>
+</ul>
+</li>
+<li>std::forward：<ul>
+<li>有条件转发，保持参数原始值类别</li>
+<li>根据模板参数<code>T</code>决定转发为左值还是右值</li>
+<li>用于完美转发</li>
+</ul>
+</li>
+</ul>
+<h4 id="使用std-move后原对象会怎样？"><a href="#使用std-move后原对象会怎样？" class="headerlink" title="使用std::move后原对象会怎样？"></a>使用std::move后原对象会怎样？</h4><p>原对象处于有效但未指定状态，通常应为空或默认状态，不应再使用除非重新赋值。</p>
+<h4 id="移动语义有什么作用，原理是什么？"><a href="#移动语义有什么作用，原理是什么？" class="headerlink" title="移动语义有什么作用，原理是什么？"></a>移动语义有什么作用，原理是什么？</h4><ul>
+<li><code>std::move</code>的作用：<ol>
+<li>性能优化：避免深拷贝大对象（如vector、string）</li>
+<li>资源转移：实现只能移动不能拷贝的类型（如unique_ptr、thread）</li>
+<li>实现高效容器操作：如vector的resize、push_back等</li>
+</ol>
+</li>
+<li><code>std::move</code>的本质：<ul>
+<li>强制类型转换：<code>static_cast&lt;T&amp;&amp;&gt;(x)</code></li>
+<li>作用：将左值转换为右值引用，使其可被移动</li>
+<li>注意：<code>std::move</code>本身不移动任何东西，只是标记对象为”可移动”</li>
+</ul>
+</li>
+<li><code>std::move</code>的实现机制：<ul>
+<li>右值引用（T&amp;&amp;）作为触发器，再通过移动构造函数和移动赋值运算符进行资源转移</li>
+</ul>
+</li>
+</ul>
+<h4 id="介绍一下C-中的异常处理机制？"><a href="#介绍一下C-中的异常处理机制？" class="headerlink" title="介绍一下C++中的异常处理机制？"></a>介绍一下C++中的异常处理机制？</h4><p>C++异常处理基于try-throw-catch机制，提供结构化的错误处理方式。try块定义监控范围，throw抛出异常对象，catch捕获并处理异常。支持异常类型匹配、栈展开和资源自动清理，通过RAII保证异常安全。</p>
+<p>C++异常处理核心组件：</p>
+<ol>
+<li>异常抛出（throw），使用throw表达式抛出异常对象），可以抛出任意类型的对象（内置类型、自定义类、标准异常等），抛出异常会立即终止当前函数执行</li>
+<li>异常捕获（catch），catch块按顺序匹配异常类型，支持异常类型继承层次中的多态捕获，可以使用catch(…)捕获所有异常</li>
+<li>栈展开（Stack Unwinding），从抛出点开始向上查找匹配的catch块，自动调用局部对象的析构函数，保证资源正确释放</li>
+<li>异常规格（Exception Specifications），C++11引入noexcept说明符，替代旧的动态异常规格，提供编译期异常保证</li>
+</ol>
+<h4 id="异常处理相比返回错误码有什么优势？"><a href="#异常处理相比返回错误码有什么优势？" class="headerlink" title="异常处理相比返回错误码有什么优势？"></a>异常处理相比返回错误码有什么优势？</h4><ol>
+<li>分离错误处理：正常逻辑和错误处理代码分离，提高可读性</li>
+<li>自动传播：异常自动向上传播，无需每层检查错误码</li>
+<li>类型安全：异常是类型安全的，编译器可以检查类型匹配</li>
+<li>无法忽略：未处理的异常会导致程序终止，错误不会被静默忽略</li>
+<li>构造函数支持：构造函数无法返回错误码，只能使用异常报告失败</li>
+</ol>
+<h4 id="什么是栈展开？在异常处理中起什么作用？"><a href="#什么是栈展开？在异常处理中起什么作用？" class="headerlink" title="什么是栈展开？在异常处理中起什么作用？"></a>什么是栈展开？在异常处理中起什么作用？</h4><p>栈展开是从异常抛出点开始，沿着调用链向上查找匹配catch块的过程。在这个过程中：</p>
+<ul>
+<li>自动调用局部对象的析构函数</li>
+<li>释放自动存储期的资源</li>
+<li>维护调用栈的完整性</li>
+<li>保证资源不泄漏（结合RAII） 栈展开确保了即使发生异常，程序也能正确地清理资源。</li>
+</ul>
+<h4 id="为什么应该按引用捕获异常？"><a href="#为什么应该按引用捕获异常？" class="headerlink" title="为什么应该按引用捕获异常？"></a>为什么应该按引用捕获异常？</h4><p>按引用捕获异常有多个优势：</p>
+<ul>
+<li>避免切片：捕获派生类异常时保持多态性</li>
+<li>避免拷贝：不需要复制异常对象，提高性能</li>
+<li>保持原始异常：能够重新抛出原始异常对象</li>
+<li>一致性：与标准库异常处理方式一致</li>
+</ul>
+<h4 id="在析构函数中抛出异常会怎么样？"><a href="#在析构函数中抛出异常会怎么样？" class="headerlink" title="在析构函数中抛出异常会怎么样？"></a>在析构函数中抛出异常会怎么样？</h4><p>在析构函数中抛出异常是危险的，因为：</p>
+<ul>
+<li>双重异常：如果栈展开过程中析构函数抛出异常，会立即调用terminate</li>
+<li>资源泄漏：可能中断其他资源的清理过程</li>
+<li>未定义行为：C++标准规定这种情况会导致程序终止</li>
+<li>所以析构函数应该用<code>noexcept</code>声明，并吞掉所有异常</li>
+</ul>
+<h4 id="在构造函数中抛出异常会导致什么问题？如何正确处理？"><a href="#在构造函数中抛出异常会导致什么问题？如何正确处理？" class="headerlink" title="在构造函数中抛出异常会导致什么问题？如何正确处理？"></a>在构造函数中抛出异常会导致什么问题？如何正确处理？</h4><p>问题：</p>
+<ol>
+<li>如果构造函数中抛出异常，那么对象的析构函数将不会被调用（因为对象构造不完整，C++不会调用析构函数）。</li>
+<li>但是，在构造函数中，如果成员变量是带有析构函数的类类型，那么这些成员变量（它们已经被构造）的析构函数会被调用。</li>
+<li>如果在构造函数中分配了动态内存或打开了文件等资源，并且构造函数在之后抛出异常，那么这些资源需要被清理，否则会导致资源泄漏。</li>
+</ol>
+<p>避免措施：</p>
+<ol>
+<li>使用智能指针管理动态内存：如果构造函数中分配内存，可以使用智能指针（如std::unique_ptr）来管理。这样，当构造函数抛出异常时，已经构造的成员变量（包括智能指针）会被销毁，智能指针的析构函数会自动释放内存。</li>
+<li>使用RAII类管理资源：对于其他资源（如文件句柄、锁等），也应该使用RAII类来管理。这样，当构造函数抛出异常时，这些RAII类的析构函数会负责释放资源。</li>
+<li>避免在构造函数中做可能抛出异常的操作，如果不可避免，则确保在异常抛出前已经分配的资源能够被正确释放。</li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a target="_blank" rel="noopener" href="https://github.com/AillianYue">AillianYue</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a target="_blank" rel="noopener" href="https://www.yuque.com/aillian-yue/blog">https://www.yuque.com/aillian-yue/blog</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">此文章版归AillianYue所有，如需转载，请注明来自原作者</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/C/">C++</a></div><div class="post-share"><div class="social-share" data-image="/img/CPlusPlus.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2024/12/16/WSL%E5%9F%BA%E7%A1%80%EF%BC%9A%E5%BC%80%E5%A7%8B/" title="WSL基础：开始"><img class="cover" src="/img/Linux.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">WSL基础：开始</div></div><div class="info-2"><div class="info-item-1">介绍Windows10上如何开启和使用WSL</div></div></div></a><a class="pagination-related" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" title="C++八股：并发编程"><img class="cover" src="/img/CPlusPlus.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">C++八股：并发编程</div></div><div class="info-2"><div class="info-item-1">介绍C++的并发编程八股知识</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E5%9F%BA%E7%A1%80/" title="C++八股：基础"><img class="cover" src="/img/CPlusPlus.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-03</div><div class="info-item-2">C++八股：基础</div></div><div class="info-2"><div class="info-item-1">介绍C++的基础八股知识</div></div></div></a><a class="pagination-related" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" title="C++八股：内存管理"><img class="cover" src="/img/CPlusPlus.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-03</div><div class="info-item-2">C++八股：内存管理</div></div><div class="info-2"><div class="info-item-1">介绍C++的内存管理八股知识</div></div></div></a><a class="pagination-related" href="/2025/06/03/C++%E5%9F%BA%E7%A1%80%EF%BC%9A%E7%BB%A7%E6%89%BF%E5%92%8C%E5%A4%9A%E6%80%81/" title="C++基础：继承和多态"><img class="cover" src="/img/CPlusPlus.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-06-03</div><div class="info-item-2">C++基础：继承和多态</div></div><div class="info-2"><div class="info-item-1">介绍继承、派生、虚函数、抽象类、绑定</div></div></div></a><a class="pagination-related" href="/2025/08/03/C++%E5%9F%BA%E7%A1%80%EF%BC%9A%E5%AD%97%E7%AC%A6%E4%B8%B2/" title="C++基础：字符串"><img class="cover" src="/img/CPlusPlus.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-08-03</div><div class="info-item-2">C++基础：字符串</div></div><div class="info-2"><div class="info-item-1">介绍C风格字符串、字符串基本操作、特殊字符串处理以及性能优化</div></div></div></a><a class="pagination-related" href="/2025/09/03/C++%E5%9F%BA%E7%A1%80%EF%BC%9A%E6%B5%81%E4%B8%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/" title="C++基础：流与文件系统"><img class="cover" src="/img/CPlusPlus.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-09-03</div><div class="info-item-2">C++基础：流与文件系统</div></div><div class="info-2"><div class="info-item-1">介绍流和文件系统</div></div></div></a><a class="pagination-related" href="/2025/05/03/C++%E5%9F%BA%E7%A1%80%EF%BC%9A%E7%B1%BB%E5%92%8C%E5%AF%B9%E8%B1%A1/" title="C++基础：类和对象"><img class="cover" src="/img/CPlusPlus.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-05-03</div><div class="info-item-2">C++基础：类和对象</div></div><div class="info-2"><div class="info-item-1">介绍面向对象程序设计、类和对象基础、构造与析构、特殊成员、结构体、联合和枚举</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">AillianYue</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">21</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">11</div></a></div><a id="card-info-btn" href="/about/"><i class="fas fa-user-graduate"></i><span>关于我</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/AillianYue" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="https://gitee.com/aillianyue" target="_blank" title="Gitee"><i class="fab fa-github-alt"></i></a><a class="social-icon" href="mailto:634558578@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="tencent://AddContact/?fromId=45&amp;fromSubId=1&amp;subcmd=all&amp;uin=634558578&amp;website=www.oicqzone.com" target="_blank" title="QQ"><i class="fab fa-qq"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站不定期更新，欢迎！</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#C-11%E7%9A%84%E6%96%B0%E7%89%B9%E6%80%A7%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">C++11的新特性有哪些？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88%E7%9A%84%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E6%80%A7%E5%A6%82%E4%BD%95%EF%BC%9F%E5%A4%9A%E4%B8%AA%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%97%B6%E6%93%8D%E4%BD%9C%E5%90%8C%E4%B8%80%E4%B8%AAstd-shared-ptr%E5%AF%B9%E8%B1%A1%E6%98%AF%E5%90%A6%E5%AE%89%E5%85%A8%EF%BC%9F"><span class="toc-number">2.</span> <span class="toc-text">智能指针的线程安全性如何？多个线程同时操作同一个std::shared_ptr对象是否安全？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#std-shared-ptr%E7%9A%84%E5%86%85%E9%83%A8%E5%BC%95%E7%94%A8%E8%AE%A1%E6%95%B0%E6%98%AF%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E7%9A%84%EF%BC%9F%E5%AE%83%E4%B8%BA%E4%BB%80%E4%B9%88%E6%98%AF%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84%EF%BC%9F"><span class="toc-number">3.</span> <span class="toc-text">std::shared_ptr的内部引用计数是如何实现的？它为什么是线程安全的？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#std-make-shared%E5%92%8C%E7%9B%B4%E6%8E%A5%E4%BD%BF%E7%94%A8std-shared-ptr%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F%E4%B8%BA%E4%BB%80%E4%B9%88%E6%8E%A8%E8%8D%90%E4%BD%BF%E7%94%A8std-make-shared%EF%BC%9F"><span class="toc-number">4.</span> <span class="toc-text">std::make_shared和直接使用std::shared_ptr构造函数有什么区别？为什么推荐使用std::make_shared？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88%E4%B8%8ERAII%E6%9C%89%E4%BB%80%E4%B9%88%E5%85%B3%E7%B3%BB%EF%BC%9F%E4%B8%BA%E4%BB%80%E4%B9%88%E8%AF%B4%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88%E6%98%AFRAII%E7%9A%84%E5%85%B8%E5%9E%8B%E5%BA%94%E7%94%A8%EF%BC%9F"><span class="toc-number">5.</span> <span class="toc-text">智能指针与RAII有什么关系？为什么说智能指针是RAII的典型应用？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D%E4%B8%80%E4%B8%8B-C-%E4%B8%AD%E7%9A%84RAII%E6%9C%BA%E5%88%B6%EF%BC%9FRAII%E7%9A%84%E5%85%B8%E5%9E%8B%E5%BA%94%E7%94%A8%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F"><span class="toc-number">6.</span> <span class="toc-text">介绍一下 C++中的RAII机制？RAII的典型应用有哪些？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AE%B2%E4%B8%80%E4%B8%8Blambda%E5%87%BD%E6%95%B0%EF%BC%9F"><span class="toc-number">7.</span> <span class="toc-text">讲一下lambda函数？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F%E7%9A%84%E6%8D%95%E8%8E%B7%E5%88%97%E8%A1%A8%E6%9C%89%E5%87%A0%E7%A7%8D%E6%96%B9%E5%BC%8F%EF%BC%9F%E5%80%BC%E6%8D%95%E8%8E%B7%E5%92%8C%E5%BC%95%E7%94%A8%E6%8D%95%E8%8E%B7%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="toc-number">8.</span> <span class="toc-text">Lambda表达式的捕获列表有几种方式？值捕获和引用捕获有什么区别？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E9%97%AD%E5%8C%85%EF%BC%88Closure%EF%BC%89%EF%BC%9FLambda%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%92%8C%E9%97%AD%E5%8C%85%E6%9C%89%E4%BB%80%E4%B9%88%E5%85%B3%E7%B3%BB%EF%BC%9F"><span class="toc-number">9.</span> <span class="toc-text">什么是闭包（Closure）？Lambda表达式和闭包有什么关系？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Lambda-%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%9C%A8STL%E7%AE%97%E6%B3%95%E4%B8%AD%E6%9C%89%E4%BB%80%E4%B9%88%E5%BA%94%E7%94%A8%EF%BC%9F%E8%AF%B7%E4%B8%BE%E4%BE%8B%E8%AF%B4%E6%98%8E%E3%80%82"><span class="toc-number">10.</span> <span class="toc-text">Lambda 表达式在STL算法中有什么应用？请举例说明。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#std-function%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">11.</span> <span class="toc-text">std::function是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B7%A6%E5%80%BC%E5%BC%95%E7%94%A8%E5%92%8C%E5%8F%B3%E5%80%BC%E5%BC%95%E7%94%A8%E7%9A%84%E5%8C%BA%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">12.</span> <span class="toc-text">左值引用和右值引用的区别是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#auto-%E5%92%8C-decltype-%E6%9C%89%E4%BD%95%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="toc-number">13.</span> <span class="toc-text">auto 和 decltype 有何区别？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%AE%8C%E7%BE%8E%E8%BD%AC%E5%8F%91%EF%BC%9F%E5%85%B6%E4%BD%9C%E7%94%A8%E5%8F%8A%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">14.</span> <span class="toc-text">什么是完美转发？其作用及实现方式是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#std-move-%E4%B8%8E-std-forward-%E6%9C%89%E4%BD%95%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="toc-number">15.</span> <span class="toc-text">std::move 与 std::forward 有何区别？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8std-move%E5%90%8E%E5%8E%9F%E5%AF%B9%E8%B1%A1%E4%BC%9A%E6%80%8E%E6%A0%B7%EF%BC%9F"><span class="toc-number">16.</span> <span class="toc-text">使用std::move后原对象会怎样？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A7%BB%E5%8A%A8%E8%AF%AD%E4%B9%89%E6%9C%89%E4%BB%80%E4%B9%88%E4%BD%9C%E7%94%A8%EF%BC%8C%E5%8E%9F%E7%90%86%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">17.</span> <span class="toc-text">移动语义有什么作用，原理是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D%E4%B8%80%E4%B8%8BC-%E4%B8%AD%E7%9A%84%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E6%9C%BA%E5%88%B6%EF%BC%9F"><span class="toc-number">18.</span> <span class="toc-text">介绍一下C++中的异常处理机制？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E7%9B%B8%E6%AF%94%E8%BF%94%E5%9B%9E%E9%94%99%E8%AF%AF%E7%A0%81%E6%9C%89%E4%BB%80%E4%B9%88%E4%BC%98%E5%8A%BF%EF%BC%9F"><span class="toc-number">19.</span> <span class="toc-text">异常处理相比返回错误码有什么优势？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%A0%88%E5%B1%95%E5%BC%80%EF%BC%9F%E5%9C%A8%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E4%B8%AD%E8%B5%B7%E4%BB%80%E4%B9%88%E4%BD%9C%E7%94%A8%EF%BC%9F"><span class="toc-number">20.</span> <span class="toc-text">什么是栈展开？在异常处理中起什么作用？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E5%BA%94%E8%AF%A5%E6%8C%89%E5%BC%95%E7%94%A8%E6%8D%95%E8%8E%B7%E5%BC%82%E5%B8%B8%EF%BC%9F"><span class="toc-number">21.</span> <span class="toc-text">为什么应该按引用捕获异常？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9C%A8%E6%9E%90%E6%9E%84%E5%87%BD%E6%95%B0%E4%B8%AD%E6%8A%9B%E5%87%BA%E5%BC%82%E5%B8%B8%E4%BC%9A%E6%80%8E%E4%B9%88%E6%A0%B7%EF%BC%9F"><span class="toc-number">22.</span> <span class="toc-text">在析构函数中抛出异常会怎么样？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9C%A8%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%E4%B8%AD%E6%8A%9B%E5%87%BA%E5%BC%82%E5%B8%B8%E4%BC%9A%E5%AF%BC%E8%87%B4%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F%E5%A6%82%E4%BD%95%E6%AD%A3%E7%A1%AE%E5%A4%84%E7%90%86%EF%BC%9F"><span class="toc-number">23.</span> <span class="toc-text">在构造函数中抛出异常会导致什么问题？如何正确处理？</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E9%AB%98%E7%BA%A7%E7%89%B9%E6%80%A7/" title="C++八股：高级特性"><img src="/img/CPlusPlus.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="C++八股：高级特性"/></a><div class="content"><a class="title" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E9%AB%98%E7%BA%A7%E7%89%B9%E6%80%A7/" title="C++八股：高级特性">C++八股：高级特性</a><time datetime="2025-12-22T12:57:00.000Z" title="更新于 2025-12-22 20:57:00">2025-12-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" title="C++八股：并发编程"><img src="/img/CPlusPlus.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="C++八股：并发编程"/></a><div class="content"><a class="title" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" title="C++八股：并发编程">C++八股：并发编程</a><time datetime="2025-12-22T12:56:00.000Z" title="更新于 2025-12-22 20:56:00">2025-12-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" title="C++八股：面向对象"><img src="/img/CPlusPlus.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="C++八股：面向对象"/></a><div class="content"><a class="title" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" title="C++八股：面向对象">C++八股：面向对象</a><time datetime="2025-12-22T12:55:00.000Z" title="更新于 2025-12-22 20:55:00">2025-12-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" title="C++八股：内存管理"><img src="/img/CPlusPlus.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="C++八股：内存管理"/></a><div class="content"><a class="title" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9A%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" title="C++八股：内存管理">C++八股：内存管理</a><time datetime="2025-12-22T12:54:00.000Z" title="更新于 2025-12-22 20:54:00">2025-12-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9ASTL/" title="C++八股：STL"><img src="/img/CPlusPlus.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="C++八股：STL"/></a><div class="content"><a class="title" href="/2024/12/03/C++%E5%85%AB%E8%82%A1%EF%BC%9ASTL/" title="C++八股：STL">C++八股：STL</a><time datetime="2025-12-22T12:53:00.000Z" title="更新于 2025-12-22 20:53:00">2025-12-22</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2019 - 2025 By AillianYue</span></div><div class="footer_custom_text">Hi, welcome to <a target="_blank" rel="noopener" href="https://github.com/AillianYue">my blog</a>!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
