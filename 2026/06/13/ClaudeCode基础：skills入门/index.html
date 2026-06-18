@@ -1,0 +1,335 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>ClaudeCode基础：skills入门 | AillianYue's Blog</title><meta name="author" content="AillianYue"><meta name="copyright" content="AillianYue"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="ClaudeCode Skills入门教程与完整实例，涵盖自定义斜杠命令的创建方法、SKILL.md配置及自动化工作流编写">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ClaudeCode基础：skills入门">
+<meta property="og:url" content="http://example.com/2026/06/13/ClaudeCode%E5%9F%BA%E7%A1%80%EF%BC%9Askills%E5%85%A5%E9%97%A8/index.html">
+<meta property="og:site_name" content="AillianYue&#39;s Blog">
+<meta property="og:description" content="ClaudeCode Skills入门教程与完整实例，涵盖自定义斜杠命令的创建方法、SKILL.md配置及自动化工作流编写">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/Claude.webp">
+<meta property="article:published_time" content="2026-06-13T06:03:00.000Z">
+<meta property="article:modified_time" content="2026-06-13T06:03:00.000Z">
+<meta property="article:author" content="AillianYue">
+<meta property="article:tag" content="ClaudeCode">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/Claude.webp"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "ClaudeCode基础：skills入门",
+  "url": "http://example.com/2026/06/13/ClaudeCode%E5%9F%BA%E7%A1%80%EF%BC%9Askills%E5%85%A5%E9%97%A8/",
+  "image": "http://example.com/img/Claude.webp",
+  "datePublished": "2026-06-13T06:03:00.000Z",
+  "dateModified": "2026-06-13T06:03:00.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "AillianYue",
+      "url": "https://github.com/AillianYue"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/avatar.png"><link rel="canonical" href="http://example.com/2026/06/13/ClaudeCode%E5%9F%BA%E7%A1%80%EF%BC%9Askills%E5%85%A5%E9%97%A8/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'ClaudeCode基础：skills入门',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">51</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">9</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">17</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 历程</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">AillianYue's Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">ClaudeCode基础：skills入门</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 历程</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">ClaudeCode基础：skills入门</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-06-13T06:03:00.000Z" title="发表于 2026-06-13 14:03:00">2026-06-13</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-06-13T06:03:00.000Z" title="更新于 2026-06-13 14:03:00">2026-06-13</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/ClaudeCode/">ClaudeCode</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/ClaudeCode/%E5%9F%BA%E7%A1%80/">基础</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">2.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>8分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><p>VERSION：1.0.0</p>
+<blockquote>
+<p>commands 已合并到 skills 中。 <code>.claude/commands/deploy.md</code> 中的文件和 <code>.claude/skills/deploy/SKILL.md</code> 中的 skill 都会创建 <code>/deploy</code> 并以相同的方式工作。</p>
+</blockquote>
+<h1 id="需求场景"><a href="#需求场景" class="headerlink" title="需求场景"></a>需求场景</h1><ul>
+<li>如果一件事你每天做超过一次，就应该把它变成 skill</li>
+<li>当你不断将相同的说明、检查清单或多步骤程序粘贴到聊天时，创建一个 skill</li>
+<li>当 CLAUDE.md 的部分内容已经演变成程序时，创建一个 skill</li>
+</ul>
+<h1 id="入门-skills"><a href="#入门-skills" class="headerlink" title="入门 skills"></a>入门 skills</h1><h2 id="创建一个-skill"><a href="#创建一个-skill" class="headerlink" title="创建一个 skill"></a>创建一个 skill</h2><h3 id="明确-skill-的功能"><a href="#明确-skill-的功能" class="headerlink" title="明确 skill 的功能"></a>明确 skill 的功能</h3><p>创建一个 skill 用于总结 git 仓库中未提交的更改，并标记任何风险的内容。</p>
+<h3 id="创建-skill-的目录"><a href="#创建-skill-的目录" class="headerlink" title="创建 skill 的目录"></a>创建 skill 的目录</h3><p>创建个全局的 skill，名字叫<code>summarize-changes</code>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p ~/.claude/skills/summarize-changes</span><br></pre></td></tr></table></figure>
+
+<h3 id="编写-SKILL-md"><a href="#编写-SKILL-md" class="headerlink" title="编写 SKILL.md"></a>编写 SKILL.md</h3><ul>
+<li>项目根目录：<code>.claude/skills/skill-name/SKILL.md</code></li>
+<li>全局用户级：<code>~/.claude/skills/skill-name/SKILL.md</code><br>一个简单的 skill 示例如下：<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">name:</span> <span class="string">test-skill</span></span><br><span class="line"><span class="attr">description:</span> <span class="string">一个简单的技能测试。当用户想测试一下技能的时候触发。</span></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="comment"># 测试技能</span></span><br><span class="line"><span class="string">当被调用时，精确输出：</span></span><br><span class="line"><span class="string">“✅</span> <span class="string">技能运行成功！现在你可以构建自己的技能了。”</span></span><br></pre></td></tr></table></figure>
+这里将 <code>SKILL.md</code> 保存到 <code>~/.claude/skills/test-skill/SKILL.md</code></li>
+</ul>
+<h3 id="测试-skill-的效果"><a href="#测试-skill-的效果" class="headerlink" title="测试 skill 的效果"></a>测试 skill 的效果</h3><p>打开一个 git 项目，对任何文件进行小的编辑，并通过运行 <code>claude</code> 启动 Claude Code。你可以通过两种方式测试该 skill：</p>
+<ul>
+<li>通过键入<code>/skill-name</code>手动触发，这里是键入<code>/test-skill</code></li>
+<li>通过询问与 description 匹配的内容自动触发，这里要询问“<code>测试一下技能</code>”：</li>
+</ul>
+<h2 id="skills-的位置"><a href="#skills-的位置" class="headerlink" title="skills 的位置"></a>skills 的位置</h2><table>
+<thead>
+<tr>
+<th>位置</th>
+<th>路径</th>
+<th>适用于</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>个人</td>
+<td><code>~/.claude/skills/&lt;skill-name&gt;/SKILL.md</code></td>
+<td>你的所有项目</td>
+</tr>
+<tr>
+<td>项目</td>
+<td><code>.claude/skills/&lt;skill-name&gt;/SKILL.md</code></td>
+<td>仅此项目</td>
+</tr>
+<tr>
+<td>插件</td>
+<td><code>&lt;plugin&gt;/skills/&lt;skill-name&gt;/SKILL.md</code></td>
+<td>启用插件的位置</td>
+</tr>
+</tbody></table>
+<h2 id="skills-更新后如何生效"><a href="#skills-更新后如何生效" class="headerlink" title="skills 更新后如何生效"></a>skills 更新后如何生效</h2><ul>
+<li>Claude Code 监视 skill 目录的文件变更。</li>
+<li>在 <code>~/.claude/skills/</code>、项目 <code>.claude/skills/</code> 或 <code>--add-dir</code> 目录内的 <code>.claude/skills/</code> 中添加、编辑或删除 skill 会在当前会话中生效，无需重新启动。</li>
+<li>创建在会话启动时不存在的顶级 skills 目录需要重新启动 Claude Code，以便可以监视新目录。<blockquote>
+<p>对于[插件]中的 skill 文件夹，对 <code>hooks/</code>、<code>.mcp.json</code>、<code>agents/</code> 和 <code>output-styles/</code> 的更改需要 <code>/reload-plugins</code> 才能生效。</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="skills-的大致类别"><a href="#skills-的大致类别" class="headerlink" title="skills 的大致类别"></a>skills 的大致类别</h2><p>对 Anthropic 内部的所有技能做了归类，发现它们可以清晰地划分为 9 个类别。<br>优秀的 skills 往往精准对应其中一类；而试图覆盖太多场景的技能会横跨多个类别，反而让智能体产生混淆。<br>这并非绝对标准的分类，但可以作为你搭建 skills 时查漏补缺的实用框架。</p>
+<table>
+<thead>
+<tr>
+<th>类别</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>库与 API 参考</td>
+<td>内部库、CLI、SDK 的使用说明与避坑指南</td>
+<td>billing-lib、platform-cli、events</td>
+</tr>
+<tr>
+<td>产品验证</td>
+<td>驱动运行中的产品完成功能验证</td>
+<td>signup-driver、checkout、admin</td>
+</tr>
+<tr>
+<td>数据与分析</td>
+<td>封装 ID、字段名、常用查询模式</td>
+<td>funnel-query、grafana、datadog</td>
+</tr>
+<tr>
+<td>业务自动化</td>
+<td>多工具工作流整合为单条命令</td>
+<td>standup、tickets、weekly-recap</td>
+</tr>
+<tr>
+<td>代码质量与评审</td>
+<td>保障代码交付质量的方法论</td>
+<td>adversarial、hypothesis、bughunt</td>
+</tr>
+<tr>
+<td>CI&#x2F;CD 与部署</td>
+<td>安全可控的提交、推送与发布流程</td>
+<td>babysit-pr、deploy、cherry-pick</td>
+</tr>
+<tr>
+<td>基础设施运维</td>
+<td>带安全门禁的清理与维护操作</td>
+<td>orphans、deps、cost-investigation</td>
+</tr>
+<tr>
+<td>脚手架与模板</td>
+<td>符合框架规范的样板代码生成</td>
+<td>new-app、migration、workflow</td>
+</tr>
+<tr>
+<td>故障排查手册</td>
+<td>从症状定位到调查再到报告输出的完整流程</td>
+<td>oncall、correlator、queue-debug</td>
+</tr>
+</tbody></table>
+<h3 id="库与-API-参考"><a href="#库与-API-参考" class="headerlink" title="库与 API 参考"></a>库与 API 参考</h3><p>这类技能用于说明如何正确使用某个库、CLI 工具或 SDK，既可以是内部私有库，也可以是 Claude Code 容易用错的通用库。这类技能通常会包含一个参考代码片段文件夹，以及一份 Claude 编写脚本时需要规避的坑点清单。<br>典型示例：</p>
+<ul>
+<li><code>billing-lib</code> —— 内部计费库：边界场景、常见陷阱等</li>
+<li><code>internal-platform-cli</code> —— 内部 CLI 封装的全部子命令，附带适用场景示例</li>
+<li><code>sandbox-proxy</code> —— 开发环境出口网关配置：可访问的主机列表、“连接被拒绝”报错排查方法、白名单新增流程</li>
+</ul>
+<h3 id="产品验证"><a href="#产品验证" class="headerlink" title="产品验证"></a>产品验证</h3><p>这类技能定义了测试与验证代码功能的方法，通常会结合 Playwright、tmux 或其他外部工具完成验证。<br>在内部实践中，验证类技能对 Claude 输出质量的提升效果最可量化。投入一名工程师一周的时间打磨验证技能，通常是非常值得的。<br>可以采用的技巧包括：让 Claude 录下执行过程的视频，让你直观看到它测试了哪些内容；或者在每一步对系统状态做程序化断言。这些能力通常通过技能中内置的各类脚本实现。<br>典型示例：</p>
+<ul>
+<li><code>signup-flow-driver</code> —— 在无头浏览器中跑完「注册 → 邮箱验证 → 新手引导」全流程，每一步都内置状态断言钩子</li>
+<li><code>checkout-verifier</code> —— 使用 Stripe 测试卡驱动结账界面，验证发票最终进入正确状态</li>
+<li><code>tmux-cli-driver</code> —— 用于需要 TTY 终端的交互式 CLI 测试场景</li>
+</ul>
+<h3 id="数据获取与分析"><a href="#数据获取与分析" class="headerlink" title="数据获取与分析"></a>数据获取与分析</h3><p>这类技能对接你的数据与监控体系，可能包含带鉴权的数据获取库、特定仪表盘 ID，以及常用工作流说明或数据获取方式。<br>典型示例：</p>
+<ul>
+<li><code>funnel-query</code> —— 解答“需要关联哪些事件才能看到注册 → 激活 → 付费的转化漏斗”，并给出包含标准 user_id 的对应数据表</li>
+<li><code>cohort-compare</code> —— 对比两个用户群的留存或转化率，标记统计显著的差异，给出分群定义的跳转链接</li>
+<li><code>grafana</code> —— 数据源 UID、集群名称、问题 → 仪表盘对照表</li>
+<li><code>datadog</code> —— 字段参考（@request_id 与 trace_id 的区别）、服务列表、指标前缀命名规范</li>
+</ul>
+<h3 id="业务流程与团队自动化"><a href="#业务流程与团队自动化" class="headerlink" title="业务流程与团队自动化"></a>业务流程与团队自动化</h3><p>这类技能把重复性工作流封装成单条命令。它们的指令逻辑通常很简单，但可能依赖其他技能或 MCP 工具。对于这类技能，把历史执行结果存入日志文件，有助于模型保持输出一致性，也能对历史执行结果做复盘。<br>典型示例：</p>
+<ul>
+<li><code>standup-post</code> —— 聚合工单系统、GitHub 活动记录与历史 Slack 消息 → 生成仅含增量内容的格式化站会日报</li>
+<li><code>create-&lt;ticket-system&gt;-ticket</code> —— 强制字段规范（合法枚举值、必填字段），并执行创建后流程（@审核人、Slack 中同步链接）</li>
+<li><code>weekly-recap</code> —— 合并的 PR + 关闭的工单 + 发布记录 → 格式化周报</li>
+</ul>
+<h3 id="代码脚手架与模板"><a href="#代码脚手架与模板" class="headerlink" title="代码脚手架与模板"></a>代码脚手架与模板</h3><p>这类技能为代码库中的特定功能生成框架样板代码。你可以把技能与可组合的脚本结合使用。当你的脚手架需求包含自然语言描述、无法纯代码覆盖时，这类技能尤其有用。<br>典型示例：</p>
+<ul>
+<li><code>new-&lt;framework&gt;-workflow</code> —— 生成带有自定义注解的新服务&#x2F;工作流&#x2F;处理器脚手架</li>
+<li><code>new-migration</code> —— 你的数据库迁移文件模板 + 常见坑点</li>
+<li><code>create-app</code> —— 预置好鉴权、日志、部署配置的内部新应用模板</li>
+</ul>
+<h3 id="代码质量与评审"><a href="#代码质量与评审" class="headerlink" title="代码质量与评审"></a>代码质量与评审</h3><p>这类技能在团队内强制执行代码质量标准，辅助代码评审。可以内置确定性脚本或工具来最大化可靠性。你可以将这类技能设为钩子自动执行，也可以集成到 GitHub Action 中。<br>典型示例：</p>
+<ul>
+<li><code>adversarial-review</code> —— 启动一个全新视角的子智能体做代码批判，落地修复方案，迭代直到剩余问题都属于细枝末节</li>
+<li><code>code-style</code> —— 强制执行代码风格，尤其是 Claude 默认容易出错的风格规范</li>
+<li><code>testing-practices</code> —— 关于如何写测试、测试哪些内容的指导说明</li>
+</ul>
+<h3 id="CI-CD-与部署"><a href="#CI-CD-与部署" class="headerlink" title="CI&#x2F;CD 与部署"></a>CI&#x2F;CD 与部署</h3><p>这类技能辅助你在代码库中拉取、提交和部署代码，可能会引用其他技能来收集数据。<br>典型示例：</p>
+<ul>
+<li><code>babysit-pr</code> —— 监控 PR 状态 → 重试不稳定的 CI → 解决合并冲突 → 开启自动合并</li>
+<li><code>deploy-&lt;service&gt;</code> —— 构建 → 冒烟测试 → 灰度放量并对比错误率 → 出现回归自动回滚</li>
+<li><code>cherry-pick-prod</code> —— 隔离工作区 → 遴选提交 → 冲突解决 → 带模板的 PR</li>
+</ul>
+<h3 id="故障排查手册"><a href="#故障排查手册" class="headerlink" title="故障排查手册"></a>故障排查手册</h3><p>这类技能接收一个症状（比如 Slack 讨论串、告警、错误特征），引导跨工具排查，最终输出结构化报告。<br>典型示例：</p>
+<ul>
+<li><code>&lt;service&gt;-debugging</code> —— 为高流量服务整理「症状 → 工具 → 查询模式」的映射关系</li>
+<li><code>oncall-runner</code> —— 获取告警信息 → 排查常见诱因 → 格式化输出排查结论</li>
+<li><code>log-correlator</code> —— 输入一个请求 ID，拉取所有经手系统中匹配的日志</li>
+</ul>
+<h3 id="基础设施运维"><a href="#基础设施运维" class="headerlink" title="基础设施运维"></a>基础设施运维</h3><p>这类技能执行日常维护与运维操作，其中部分是破坏性操作，适合加上安全护栏。它们能让工程师在关键操作中更容易遵循最佳实践。<br>典型示例：</p>
+<ul>
+<li><code>&lt;resource&gt;-orphans</code> —— 发现孤儿 Pod&#x2F;卷 → 同步到 Slack → 缓冲观察期 → 用户确认 → 级联清理</li>
+<li><code>dependency-management</code> —— 团队的依赖审批工作流</li>
+<li><code>cost-investigation</code> —— 解答“为什么存储&#x2F;出口费用暴涨”，附带具体的费用分类与查询模式</li>
+</ul>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://code.claude.com/docs/zh-CN/skills">使用 skills 扩展 Claude</a></li>
+<li><a target="_blank" rel="noopener" href="https://claude.com/blog/lessons-from-building-claude-code-how-we-use-skills">构建 Claude Code 课程：如何使用 skills</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/anthropics/skills">GitHub - anthropics&#x2F;skills: Public repository for Agent Skills</a></li>
+<li><a target="_blank" rel="noopener" href="https://code.claude.com/docs/zh-CN/debug-your-config">调试你的配置：诊断为什么 skill 没有出现或触发</a></li>
+<li><a target="_blank" rel="noopener" href="https://code.claude.com/docs/zh-CN/commands">Commands：内置命令和捆绑 skills 的参考</a></li>
+<li><a target="_blank" rel="noopener" href="https://code.claude.com/docs/zh-CN/permissions">Permissions：控制工具和 skill 访问</a></li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a target="_blank" rel="noopener" href="https://github.com/AillianYue">AillianYue</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a target="_blank" rel="noopener" href="https://www.yuque.com/aillian-yue/blog">https://www.yuque.com/aillian-yue/blog</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">此文章版归AillianYue所有，如需转载，请注明来自原作者</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/ClaudeCode/">ClaudeCode</a></div><div class="post-share"><div class="social-share" data-image="/img/Claude.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/06/13/ClaudeCode%E5%9F%BA%E7%A1%80%EF%BC%9Askills%E6%B7%B1%E5%85%A5/" title="ClaudeCode基础：skills深入"><img class="cover" src="/img/Claude.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">ClaudeCode基础：skills深入</div></div><div class="info-2"><div class="info-item-1">ClaudeCode Skills高级用法与实战详解，涵盖YAML frontmatter配置、多步骤任务编排、条件触发及复杂自动化流程</div></div></div></a><a class="pagination-related" href="/2026/06/12/ClaudeCode%E5%9F%BA%E7%A1%80%EF%BC%9ACLAUDE/" title="ClaudeCode基础：CLAUDE.md"><img class="cover" src="/img/Claude.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">ClaudeCode基础：CLAUDE.md</div></div><div class="info-2"><div class="info-item-1">ClaudeCode CLAUDE.md项目配置文件详解，涵盖文件作用与配置方法、项目上下文注入、规则设定及团队协作技巧</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/06/11/ClaudeCode%E5%9F%BA%E7%A1%80%EF%BC%9A%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7/" title="ClaudeCode基础：使用技巧"><img class="cover" src="/img/Claude.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-11</div><div class="info-item-2">ClaudeCode基础：使用技巧</div></div><div class="info-2"><div class="info-item-1">ClaudeCode高效使用技巧与经验总结，涵盖上下文管理优化、命令调优、工作流效率提升及常见问题解决方案</div></div></div></a><a class="pagination-related" href="/2026/06/12/ClaudeCode%E5%9F%BA%E7%A1%80%EF%BC%9ACLAUDE/" title="ClaudeCode基础：CLAUDE.md"><img class="cover" src="/img/Claude.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-12</div><div class="info-item-2">ClaudeCode基础：CLAUDE.md</div></div><div class="info-2"><div class="info-item-1">ClaudeCode CLAUDE.md项目配置文件详解，涵盖文件作用与配置方法、项目上下文注入、规则设定及团队协作技巧</div></div></div></a><a class="pagination-related" href="/2026/06/13/ClaudeCode%E5%9F%BA%E7%A1%80%EF%BC%9Askills%E6%B7%B1%E5%85%A5/" title="ClaudeCode基础：skills深入"><img class="cover" src="/img/Claude.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-13</div><div class="info-item-2">ClaudeCode基础：skills深入</div></div><div class="info-2"><div class="info-item-1">ClaudeCode Skills高级用法与实战详解，涵盖YAML frontmatter配置、多步骤任务编排、条件触发及复杂自动化流程</div></div></div></a><a class="pagination-related" href="/2026/06/10/ClaudeCode%E5%9F%BA%E7%A1%80%EF%BC%9A%E5%AE%89%E8%A3%85/" title="ClaudeCode基础：安装"><img class="cover" src="/img/Claude.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-10</div><div class="info-item-2">ClaudeCode基础：安装</div></div><div class="info-2"><div class="info-item-1">ClaudeCode CLI命令行与IDE插件安装配置教程，涵盖npm全局安装方法及VS Code、JetBrains等编辑器集成</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">AillianYue</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">51</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">9</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">17</div></a></div><a id="card-info-btn" href="/about/"><i class="fas fa-user-graduate"></i><span>关于我</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/AillianYue" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="https://gitee.com/aillianyue" target="_blank" title="Gitee"><i class="fab fa-github-alt"></i></a><a class="social-icon" href="mailto:634558578@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="tencent://AddContact/?fromId=45&amp;fromSubId=1&amp;subcmd=all&amp;uin=634558578&amp;website=www.oicqzone.com" target="_blank" title="QQ"><i class="fab fa-qq"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站不定期更新，欢迎！</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%9C%80%E6%B1%82%E5%9C%BA%E6%99%AF"><span class="toc-number">1.</span> <span class="toc-text">需求场景</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%A5%E9%97%A8-skills"><span class="toc-number">2.</span> <span class="toc-text">入门 skills</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA-skill"><span class="toc-number">2.1.</span> <span class="toc-text">创建一个 skill</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%98%8E%E7%A1%AE-skill-%E7%9A%84%E5%8A%9F%E8%83%BD"><span class="toc-number">2.1.1.</span> <span class="toc-text">明确 skill 的功能</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA-skill-%E7%9A%84%E7%9B%AE%E5%BD%95"><span class="toc-number">2.1.2.</span> <span class="toc-text">创建 skill 的目录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%96%E5%86%99-SKILL-md"><span class="toc-number">2.1.3.</span> <span class="toc-text">编写 SKILL.md</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95-skill-%E7%9A%84%E6%95%88%E6%9E%9C"><span class="toc-number">2.1.4.</span> <span class="toc-text">测试 skill 的效果</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#skills-%E7%9A%84%E4%BD%8D%E7%BD%AE"><span class="toc-number">2.2.</span> <span class="toc-text">skills 的位置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#skills-%E6%9B%B4%E6%96%B0%E5%90%8E%E5%A6%82%E4%BD%95%E7%94%9F%E6%95%88"><span class="toc-number">2.3.</span> <span class="toc-text">skills 更新后如何生效</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#skills-%E7%9A%84%E5%A4%A7%E8%87%B4%E7%B1%BB%E5%88%AB"><span class="toc-number">2.4.</span> <span class="toc-text">skills 的大致类别</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%93%E4%B8%8E-API-%E5%8F%82%E8%80%83"><span class="toc-number">2.4.1.</span> <span class="toc-text">库与 API 参考</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%A7%E5%93%81%E9%AA%8C%E8%AF%81"><span class="toc-number">2.4.2.</span> <span class="toc-text">产品验证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E8%8E%B7%E5%8F%96%E4%B8%8E%E5%88%86%E6%9E%90"><span class="toc-number">2.4.3.</span> <span class="toc-text">数据获取与分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%9A%E5%8A%A1%E6%B5%81%E7%A8%8B%E4%B8%8E%E5%9B%A2%E9%98%9F%E8%87%AA%E5%8A%A8%E5%8C%96"><span class="toc-number">2.4.4.</span> <span class="toc-text">业务流程与团队自动化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E8%84%9A%E6%89%8B%E6%9E%B6%E4%B8%8E%E6%A8%A1%E6%9D%BF"><span class="toc-number">2.4.5.</span> <span class="toc-text">代码脚手架与模板</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E8%B4%A8%E9%87%8F%E4%B8%8E%E8%AF%84%E5%AE%A1"><span class="toc-number">2.4.6.</span> <span class="toc-text">代码质量与评审</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CI-CD-%E4%B8%8E%E9%83%A8%E7%BD%B2"><span class="toc-number">2.4.7.</span> <span class="toc-text">CI&#x2F;CD 与部署</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%85%E9%9A%9C%E6%8E%92%E6%9F%A5%E6%89%8B%E5%86%8C"><span class="toc-number">2.4.8.</span> <span class="toc-text">故障排查手册</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD%E8%BF%90%E7%BB%B4"><span class="toc-number">2.4.9.</span> <span class="toc-text">基础设施运维</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5"><span class="toc-number">3.</span> <span class="toc-text">参考链接</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/06/13/ClaudeCode%E5%9F%BA%E7%A1%80%EF%BC%9Askills%E5%85%A5%E9%97%A8/" title="ClaudeCode基础：skills入门"><img src="/img/Claude.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ClaudeCode基础：skills入门"/></a><div class="content"><a class="title" href="/2026/06/13/ClaudeCode%E5%9F%BA%E7%A1%80%EF%BC%9Askills%E5%85%A5%E9%97%A8/" title="ClaudeCode基础：skills入门">ClaudeCode基础：skills入门</a><time datetime="2026-06-13T06:03:00.000Z" title="更新于 2026-06-13 14:03:00">2026-06-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/06/13/ClaudeCode%E5%9F%BA%E7%A1%80%EF%BC%9Askills%E6%B7%B1%E5%85%A5/" title="ClaudeCode基础：skills深入"><img src="/img/Claude.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ClaudeCode基础：skills深入"/></a><div class="content"><a class="title" href="/2026/06/13/ClaudeCode%E5%9F%BA%E7%A1%80%EF%BC%9Askills%E6%B7%B1%E5%85%A5/" title="ClaudeCode基础：skills深入">ClaudeCode基础：skills深入</a><time datetime="2026-06-13T06:03:00.000Z" title="更新于 2026-06-13 14:03:00">2026-06-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/06/12/ClaudeCode%E5%9F%BA%E7%A1%80%EF%BC%9ACLAUDE/" title="ClaudeCode基础：CLAUDE.md"><img src="/img/Claude.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ClaudeCode基础：CLAUDE.md"/></a><div class="content"><a class="title" href="/2026/06/12/ClaudeCode%E5%9F%BA%E7%A1%80%EF%BC%9ACLAUDE/" title="ClaudeCode基础：CLAUDE.md">ClaudeCode基础：CLAUDE.md</a><time datetime="2026-06-12T06:10:00.000Z" title="更新于 2026-06-12 14:10:00">2026-06-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/06/11/ClaudeCode%E5%9F%BA%E7%A1%80%EF%BC%9A%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7/" title="ClaudeCode基础：使用技巧"><img src="/img/Claude.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ClaudeCode基础：使用技巧"/></a><div class="content"><a class="title" href="/2026/06/11/ClaudeCode%E5%9F%BA%E7%A1%80%EF%BC%9A%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7/" title="ClaudeCode基础：使用技巧">ClaudeCode基础：使用技巧</a><time datetime="2026-06-11T06:10:00.000Z" title="更新于 2026-06-11 14:10:00">2026-06-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/06/10/ClaudeCode%E5%9F%BA%E7%A1%80%EF%BC%9A%E5%AE%89%E8%A3%85/" title="ClaudeCode基础：安装"><img src="/img/Claude.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ClaudeCode基础：安装"/></a><div class="content"><a class="title" href="/2026/06/10/ClaudeCode%E5%9F%BA%E7%A1%80%EF%BC%9A%E5%AE%89%E8%A3%85/" title="ClaudeCode基础：安装">ClaudeCode基础：安装</a><time datetime="2026-06-10T04:00:00.000Z" title="更新于 2026-06-10 12:00:00">2026-06-10</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2019 - 2026 By AillianYue</span></div><div class="footer_custom_text">Hi, welcome to <a target="_blank" rel="noopener" href="https://github.com/AillianYue">my blog</a>!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
