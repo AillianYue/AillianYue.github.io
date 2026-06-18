@@ -1,0 +1,526 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>ClaudeCode基础05：skills深入 | AillianYue's Blog</title><meta name="author" content="AillianYue"><meta name="copyright" content="AillianYue"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="ClaudeCode Skills高级用法与实战详解，涵盖YAML frontmatter配置、多步骤任务编排、条件触发及复杂自动化流程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ClaudeCode基础05：skills深入">
+<meta property="og:url" content="http://example.com/2026/06/14/ClaudeCode%E5%9F%BA%E7%A1%8005%EF%BC%9Askills%E6%B7%B1%E5%85%A5/index.html">
+<meta property="og:site_name" content="AillianYue&#39;s Blog">
+<meta property="og:description" content="ClaudeCode Skills高级用法与实战详解，涵盖YAML frontmatter配置、多步骤任务编排、条件触发及复杂自动化流程">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/Claude.webp">
+<meta property="article:published_time" content="2026-06-14T06:03:00.000Z">
+<meta property="article:modified_time" content="2026-06-14T06:03:00.000Z">
+<meta property="article:author" content="AillianYue">
+<meta property="article:tag" content="ClaudeCode">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/Claude.webp"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "ClaudeCode基础05：skills深入",
+  "url": "http://example.com/2026/06/14/ClaudeCode%E5%9F%BA%E7%A1%8005%EF%BC%9Askills%E6%B7%B1%E5%85%A5/",
+  "image": "http://example.com/img/Claude.webp",
+  "datePublished": "2026-06-14T06:03:00.000Z",
+  "dateModified": "2026-06-14T06:03:00.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "AillianYue",
+      "url": "https://github.com/AillianYue"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/avatar.png"><link rel="canonical" href="http://example.com/2026/06/14/ClaudeCode%E5%9F%BA%E7%A1%8005%EF%BC%9Askills%E6%B7%B1%E5%85%A5/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'ClaudeCode基础05：skills深入',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">46</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">8</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">16</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 历程</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">AillianYue's Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">ClaudeCode基础05：skills深入</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 历程</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">ClaudeCode基础05：skills深入</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-06-14T06:03:00.000Z" title="发表于 2026-06-14 14:03:00">2026-06-14</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-06-14T06:03:00.000Z" title="更新于 2026-06-14 14:03:00">2026-06-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/ClaudeCode/">ClaudeCode</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/ClaudeCode/%E5%9F%BA%E7%A1%80/">基础</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">4.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>15分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><p>VERSION：1.0.0</p>
+<blockquote>
+<p>Skills 通过 <code>SKILL.md</code> 顶部的 YAML frontmatter 和随后的 markdown 内容进行配置。</p>
+</blockquote>
+<h2 id="skills-的-frontmatter"><a href="#skills-的-frontmatter" class="headerlink" title="skills 的 frontmatter"></a>skills 的 frontmatter</h2><p>除了 markdown 主体内容外，可以使用 <code>SKILL.md</code> 文件顶部 <code>---</code> 标记之间的 YAML frontmatter 字段来配置 skill 行为，例如：</p>
+<figure class="highlight plaintext"><figcaption><span>Text</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">name: my-skill</span><br><span class="line">description: What this skill does</span><br><span class="line">disable-model-invocation: true</span><br><span class="line">allowed-tools: Read Grep</span><br><span class="line">---</span><br><span class="line">Your skill instructions here...</span><br></pre></td></tr></table></figure>
+<p>所有字段都是可选的。</p>
+<blockquote>
+<p>建议使用 <code>description</code>，以便 Claude 知道何时使用该 skill。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>必需</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>name</code></td>
+<td>否</td>
+<td>Skill 列表中显示的显示名称。默认为目录名称。请参阅<a target="_blank" rel="noopener" href="https://code.claude.com/docs/zh-CN/skills#how-a-skill-gets-its-command-name">Skill 如何获得其命令名称</a>以了解这与你输入的名称在 <code>/</code> 后的调用方式有何不同。</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>推荐</td>
+<td>Skill 的功能以及何时使用它。Claude 使用它来决定何时应用该 skill。如果省略，使用 markdown 内容的第一段。将关键用例放在前面：组合的 <code>description</code> 和 <code>when_to_use</code> 文本在 skill 列表中被截断为 1,536 个字符以减少上下文使用。</td>
+</tr>
+<tr>
+<td><code>when_to_use</code></td>
+<td>否</td>
+<td>关于 Claude 何时应该调用该 skill 的额外上下文，例如触发短语或示例请求。附加到 skill 列表中的 <code>description</code>，并计入 1,536 个字符的上限。</td>
+</tr>
+<tr>
+<td><code>argument-hint</code></td>
+<td>否</td>
+<td>自动完成期间显示的提示，指示预期的参数。示例：<code>[issue-number]</code> 或 <code>[filename] [format]</code>。</td>
+</tr>
+<tr>
+<td><code>arguments</code></td>
+<td>否</td>
+<td>用于 skill 内容中<a target="_blank" rel="noopener" href="https://code.claude.com/docs/zh-CN/skills#available-string-substitutions"><code>$name</code></a><a target="_blank" rel="noopener" href="https://code.claude.com/docs/zh-CN/skills#available-string-substitutions"> 替换</a>的命名位置参数。接受空格分隔的字符串或 YAML 列表。名称按顺序映射到参数位置。</td>
+</tr>
+<tr>
+<td><code>disable-model-invocation</code></td>
+<td>否</td>
+<td>设置为 <code>true</code> 以防止 Claude 自动加载此 skill。用于你想使用 <code>/name</code> 手动触发的工作流。也防止该 skill 被<a target="_blank" rel="noopener" href="https://code.claude.com/docs/zh-CN/sub-agents#preload-skills-into-subagents">预加载到 subagents</a> 中。默认值：<code>false</code>。</td>
+</tr>
+<tr>
+<td><code>user-invocable</code></td>
+<td>否</td>
+<td>设置为 <code>false</code> 以从 <code>/</code> 菜单中隐藏。用于用户不应直接调用的背景知识。默认值：<code>true</code>。</td>
+</tr>
+<tr>
+<td><code>allowed-tools</code></td>
+<td>否</td>
+<td>当此 skill 处于活动状态时，Claude 可以使用而无需请求权限的工具。接受空格分隔的字符串或 YAML 列表。</td>
+</tr>
+<tr>
+<td><code>disallowed-tools</code></td>
+<td>否</td>
+<td>当此 skill 处于活动状态时从 Claude 的可用工具池中移除的工具。用于不应该调用某些工具的自主 skills，例如用于后台循环的 <code>AskUserQuestion</code>。接受空格分隔的字符串或 YAML 列表。当你发送下一条消息时，限制会清除。</td>
+</tr>
+<tr>
+<td><code>model</code></td>
+<td>否</td>
+<td>当此 skill 处于活动状态时要使用的模型。覆盖适用于当前轮的其余部分，不保存到设置；会话模型在你的下一个提示时恢复。接受与 <a target="_blank" rel="noopener" href="https://code.claude.com/docs/zh-CN/model-config"><code>/model</code></a> 相同的值，或 <code>inherit</code> 以保持活动模型。</td>
+</tr>
+<tr>
+<td><code>effort</code></td>
+<td>否</td>
+<td>当此 skill 处于活动状态时的<a target="_blank" rel="noopener" href="https://code.claude.com/docs/zh-CN/model-config#adjust-effort-level">工作量级别</a>。覆盖会话工作量级别。默认值：继承自会话。选项：<code>low</code>、<code>medium</code>、<code>high</code>、<code>xhigh</code>、<code>max</code>；可用级别取决于模型。</td>
+</tr>
+<tr>
+<td><code>context</code></td>
+<td>否</td>
+<td>设置为 <code>fork</code> 以在分叉的 subagent 上下文中运行。</td>
+</tr>
+<tr>
+<td><code>agent</code></td>
+<td>否</td>
+<td>当设置 <code>context: fork</code> 时要使用的 subagent 类型。</td>
+</tr>
+<tr>
+<td><code>hooks</code></td>
+<td>否</td>
+<td>限定于此 skill 生命周期的 hooks。有关配置格式，请参阅 <a target="_blank" rel="noopener" href="https://code.claude.com/docs/zh-CN/hooks#hooks-in-skills-and-agents">Skills 和代理中的 Hooks</a>。</td>
+</tr>
+<tr>
+<td><code>paths</code></td>
+<td>否</td>
+<td>Glob 模式，限制何时激活此 skill。接受逗号分隔的字符串或 YAML 列表。设置后，Claude 仅在处理与模式匹配的文件时自动加载该 skill。使用与<a target="_blank" rel="noopener" href="https://code.claude.com/docs/zh-CN/memory#path-specific-rules">路径特定规则</a>相同的格式。</td>
+</tr>
+<tr>
+<td><code>shell</code></td>
+<td>否</td>
+<td>用于此 skill 中 <code>!</code>command&#96;&#96; 和 &#96;&#96;&#96;&#96;!<code>块的 shell。接受</code>bash<code>（默认）或 </code>powershell<code>。设置 </code>powershell<code>在 Windows 上通过 PowerShell 运行内联 shell 命令。需要</code>CLAUDE_CODE_USE_POWERSHELL_TOOL&#x3D;1&#96;。</td>
+</tr>
+</tbody></table>
+<h2 id="skills-的命令来源"><a href="#skills-的命令来源" class="headerlink" title="skills 的命令来源"></a>skills 的命令来源</h2><p>你输入的命令来自 skill 文件所在的位置。frontmatter <code>name</code> 字段设置在 skill 列表中显示的显示标签，除了插件根 <code>SKILL.md</code> 外，不会改变你在 <code>/</code> 后输入的内容。<br>下表显示了每种布局的命令名称来自何处：</p>
+<table>
+<thead>
+<tr>
+<th>Skill 位置</th>
+<th>命令名称来源</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>~/.claude/skills/</code> 或 <code>.claude/skills/</code> 下的 Skill 目录</td>
+<td>目录名称</td>
+<td><code>.claude/skills/deploy-staging/SKILL.md</code><br>→ <code>/deploy-staging</code></td>
+</tr>
+<tr>
+<td><code>.claude/commands/</code> 下的文件</td>
+<td>文件名称（不含扩展名）</td>
+<td><code>.claude/commands/deploy.md</code><br>→ <code>/deploy</code></td>
+</tr>
+<tr>
+<td>插件 <code>skills/</code> 子目录</td>
+<td>目录名称，由插件命名空间</td>
+<td><code>my-plugin/skills/review/SKILL.md</code><br>→ <code>/my-plugin:review</code></td>
+</tr>
+<tr>
+<td>插件根 <code>SKILL.md</code></td>
+<td>Frontmatter <code>name</code>，以插件目录名称作为后备</td>
+<td><code>my-plugin/SKILL.md</code> 带有 <code>name: review</code><br>→ <code>/my-plugin:review</code></td>
+</tr>
+<tr>
+<td>对于插件， <code>name</code> 是 skill 设置命令名称的唯一地方，其余请参阅<a target="_blank" rel="noopener" href="https://code.claude.com/docs/zh-CN/plugins-reference#path-behavior-rules">路径行为规则</a>。</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<h2 id="skills-的内置字符串"><a href="#skills-的内置字符串" class="headerlink" title="skills 的内置字符串"></a>skills 的内置字符串</h2><p>skills 支持 skill 内容中动态值的字符串替换：</p>
+<table>
+<thead>
+<tr>
+<th>变量</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>$ARGUMENTS</code></td>
+<td>调用 skill 时传递的所有参数。如果内容中不存在 <code>$ARGUMENTS</code>，参数将作为 <code>ARGUMENTS: &lt;value&gt;</code> 追加。</td>
+</tr>
+<tr>
+<td><code>$ARGUMENTS[N]</code></td>
+<td>按 0 基索引访问特定参数，如 <code>$ARGUMENTS[0]</code> 表示第一个参数。</td>
+</tr>
+<tr>
+<td><code>$N</code></td>
+<td><code>$ARGUMENTS[N]</code> 的简写，如 <code>$0</code> 表示第一个参数或 <code>$1</code> 表示第二个参数。</td>
+</tr>
+<tr>
+<td><code>$name</code></td>
+<td>在 <a target="_blank" rel="noopener" href="https://code.claude.com/docs/zh-CN/skills#frontmatter-reference"><code>arguments</code></a> frontmatter 列表中声明的命名参数。名称按顺序映射到位置，因此使用 <code>arguments: [issue, branch]</code> 时，占位符 <code>$issue</code> 扩展为第一个参数，<code>$branch</code> 扩展为第二个参数。</td>
+</tr>
+<tr>
+<td><code>$&#123;CLAUDE_SESSION_ID&#125;</code></td>
+<td>当前会话 ID。适用于日志记录、创建会话特定文件或将 skill 输出与会话关联。</td>
+</tr>
+<tr>
+<td><code>$&#123;CLAUDE_EFFORT&#125;</code></td>
+<td>当前工作量级别：<code>low</code>、<code>medium</code>、<code>high</code>、<code>xhigh</code> 或 <code>max</code>。Ultracode 不是一个不同的级别，报告为 <code>xhigh</code>。使用此来根据活动工作量设置调整 skill 说明。</td>
+</tr>
+<tr>
+<td><code>$&#123;CLAUDE_SKILL_DIR&#125;</code></td>
+<td>包含 skill 的 <code>SKILL.md</code> 文件的目录。对于插件 skills，这是插件内 skill 的子目录，而不是插件根目录。在 bash 注入命令中使用它来引用与 skill 捆绑的脚本或文件，无论当前工作目录如何。</td>
+</tr>
+<tr>
+<td>索引参数使用 shell 风格的引用，因此用引号包装多词值以将其作为单个参数传递。例如，<code>/my-skill &quot;hello world&quot; second</code> 使 <code>$0</code> 扩展为 <code>hello world</code>，<code>$1</code> 扩展为 <code>second</code>。<code>$ARGUMENTS</code> 占位符始终扩展为完整的参数字符串，如输入的那样。</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>使用替换的示例：</strong></td>
+<td></td>
+</tr>
+</tbody></table>
+<figure class="highlight plaintext"><figcaption><span>Text</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">name: session-logger</span><br><span class="line">description: Log activity for this session</span><br><span class="line">---</span><br><span class="line">Log the following to logs/$&#123;CLAUDE_SESSION_ID&#125;.log:</span><br><span class="line">$ARGUMENTS</span><br></pre></td></tr></table></figure>
+
+<h2 id="skills-的参数传递"><a href="#skills-的参数传递" class="headerlink" title="skills 的参数传递"></a>skills 的参数传递</h2><p>你和 Claude 都可以在调用 skill 时传递参数。参数可通过 <code>$ARGUMENTS</code> 占位符获得。<br>此 skill 按编号修复 GitHub 问题。<code>$ARGUMENTS</code> 占位符被替换为 skill 名称后面的任何内容：</p>
+<figure class="highlight plaintext"><figcaption><span>Text</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">name: fix-issue</span><br><span class="line">description: 修复一个 GitHub issue</span><br><span class="line">disable-model-invocation: true</span><br><span class="line">---</span><br><span class="line">按照编码规范 $ARGUMENTS 修复 GitHub issue。</span><br><span class="line">1. 阅读 issue 描述</span><br><span class="line">2. 理解需求</span><br><span class="line">3. 实现修复</span><br><span class="line">4. 编写测试</span><br><span class="line">5. 创建提交</span><br></pre></td></tr></table></figure>
+<p>当你运行 <code>/fix-issue 123</code> 时，Claude 收到”Fix GitHub issue 123 following our coding standards…”<br>如果你使用参数调用 skill 但 skill 不包含 <code>$ARGUMENTS</code>，Claude Code 会将 <code>ARGUMENTS: &lt;your input&gt;</code> 追加到 skill 内容的末尾，以便 Claude 仍然看到你输入的内容。<br>要按位置访问单个参数，使用 <code>$ARGUMENTS[N]</code> 或较短的 <code>$N</code>：</p>
+<figure class="highlight plaintext"><figcaption><span>Text</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">name: migrate-component</span><br><span class="line">description: 将一个组件从一个框架迁移到另一个框架</span><br><span class="line">---</span><br><span class="line">将 $ARGUMENTS[0] 组件从 $ARGUMENTS[1] 迁移到 $ARGUMENTS[2]。</span><br><span class="line">保留所有现有行为和测试。</span><br></pre></td></tr></table></figure>
+<p>运行 <code>/migrate-component SearchBar React Vue</code> 会将 <code>$ARGUMENTS[0]</code> 替换为 <code>SearchBar</code>，<code>$ARGUMENTS[1]</code> 替换为 <code>React</code>，<code>$ARGUMENTS[2]</code> 替换为 <code>Vue</code>。使用 <code>$N</code> 简写的相同 skill：</p>
+<figure class="highlight plaintext"><figcaption><span>Text</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">name: migrate-component</span><br><span class="line">description: 将一个组件从一个框架迁移到另一个框架</span><br><span class="line">---</span><br><span class="line">将 $0 组件从 $1 迁移到 $2。</span><br><span class="line">保留所有现有行为和测试。</span><br></pre></td></tr></table></figure>
+
+<h2 id="为-skills-注入动态上下文"><a href="#为-skills-注入动态上下文" class="headerlink" title="为 skills 注入动态上下文"></a>为 skills 注入动态上下文</h2><p><code>!</code><command><code> 语法在将 skill 内容发送给 Claude 之前运行 shell 命令。命令输出替换占位符，因此 Claude 接收实际数据，而不是命令本身。 示例：通过使用 GitHub CLI 获取实时 PR 数据来总结拉取请求。`!`gh pr diff</code> 和其他命令首先运行，其输出被插入到提示中：</p>
+<figure class="highlight plaintext"><figcaption><span>Text</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">name: pr-summary</span><br><span class="line">description: 总结拉取请求中的变更</span><br><span class="line">context: fork</span><br><span class="line">agent: Explore</span><br><span class="line">allowed-tools: Bash(gh *)</span><br><span class="line">---</span><br><span class="line">## 拉取请求上下文</span><br><span class="line">- PR diff：!`gh pr diff`</span><br><span class="line">- PR 评论：!`gh pr view --comments`</span><br><span class="line">- 变更的文件：!`gh pr diff --name-only`</span><br><span class="line">## 你的任务</span><br><span class="line">总结此拉取请求...</span><br></pre></td></tr></table></figure>
+<p>当此 skill 运行时：</p>
+<ol>
+<li>每个 <code>!</code><command>&#96;&#96; 立即执行（在 Claude 看到任何内容之前）</li>
+<li>输出替换 skill 内容中的占位符</li>
+<li>Claude 接收带有实际 PR 数据的完全呈现的提示<br>替换对原始文件只会运行一次。命令输出作为纯文本插入，不会递归进行替换查找和展开。<br>内联形式仅在 <code>!</code> 出现在以下情况时被识别：</li>
+<li>行首</li>
+<li>紧跟在空格之后。<br>如果 <code>!</code> 跟在另一个字符之后，如 <code>KEY=!</code>cmd&#96;&#96;，占位符将保留为字面文本，命令不会运行。<br>对于多行命令，使用以 &#96;&#96;&#96;&#96;!&#96; 开头的围栏代码块而不是内联形式：<figure class="highlight plaintext"><figcaption><span>Text</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">## 查看环境</span><br><span class="line">```!</span><br><span class="line">node --version</span><br><span class="line">npm --version</span><br><span class="line">git status --short</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">要禁用来自用户、项目、插件或[其他目录](https://code.claude.com/docs/zh-CN/skills#skills-from-additional-directories)源的 skills 和自定义命令的此行为，请在[设置](https://code.claude.com/docs/zh-CN/settings)中设置 `&quot;disableSkillShellExecution&quot;: true`。每个命令都被替换为 `[shell command execution disabled by policy]` 而不是被运行。捆绑和托管 skills 不受影响。此设置在[托管设置](https://code.claude.com/docs/zh-CN/permissions#managed-settings)中最有用，用户无法覆盖它。</span><br><span class="line">&gt; 要在 skill 运行时请求更深入的推理，在 skill 内容中的任何地方包含 `ultrathink`。请参阅[使用 ultrathink 进行一次性深度推理](https://code.claude.com/docs/zh-CN/model-config#use-ultrathink-for-one-off-deep-reasoning)。</span><br><span class="line"></span><br><span class="line">## skills 的多文件配置</span><br><span class="line">skills 可以在其目录中包含多个文件。这使 `SKILL.md` 专注于要点，同时让 Claude 仅在需要时访问详细的参考资料。大型参考文档、API 规范或示例集合不需要在每次 skill 运行时加载到上下文中。</span><br><span class="line">```Plain Text</span><br><span class="line">my-skill/</span><br><span class="line">├── SKILL.md           # 主要说明（必需）</span><br><span class="line">├── reference.md       # 详细的 API 文档（需要时加载）</span><br><span class="line">├── template.md        # Claude 要填写的模板</span><br><span class="line">├── examples/</span><br><span class="line">│   └── sample.md      # 显示预期格式的示例输出</span><br><span class="line">└── scripts/</span><br><span class="line">    ├── validate.sh    # Claude 可以执行的脚本</span><br><span class="line">    └── helper.py      # 实用脚本（用于执行，不加载）</span><br></pre></td></tr></table></figure>
+<code>SKILL.md</code> 是必需的，包含主要说明。<br>以下文件是可选的，让你构建更强大的 skills：</li>
+</ol>
+<ul>
+<li>Claude 要填写的模板</li>
+<li>显示预期格式的示例输出</li>
+<li>Claude 可以执行的脚本或详细的参考文档。<br>从你的 <code>SKILL.md</code> 中引用这些文件，以便 Claude 知道它们包含什么以及何时加载它们。有关更多详细信息，请参阅<a target="_blank" rel="noopener" href="https://code.claude.com/docs/zh-CN/skills#add-supporting-files">添加支持文件</a>。<blockquote>
+<p>将 <code>SKILL.md</code> 保持在 500 行以下。将详细的参考资料移到单独的文件中。</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="skills-的调用时机"><a href="#skills-的调用时机" class="headerlink" title="skills 的调用时机"></a>skills 的调用时机</h2><p>默认情况下，你和 Claude 都可以调用任何 skill。你可以输入 <code>/skill-name</code> 直接调用它，Claude 可以在与你的对话相关时自动加载它。<br>两个 frontmatter 字段让你限制这一点：</p>
+<ol>
+<li>**<code>disable-model-invocation: true</code>**：只有你可以调用该 skill。</li>
+<li>**<code>user-invocable: false</code>**：只有 Claude 可以调用该 skill。<br>示例：<figure class="highlight plaintext"><figcaption><span>Text</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">name: deploy</span><br><span class="line">description: 将应用程序部署到生产环境</span><br><span class="line">disable-model-invocation: true</span><br><span class="line">---</span><br><span class="line">将 $ARGUMENTS 部署到生产环境：</span><br><span class="line">1. 运行测试套件</span><br><span class="line">2. 构建应用程序</span><br><span class="line">3. 推送到部署目标</span><br><span class="line">4. 验证部署是否成功</span><br></pre></td></tr></table></figure>
+以下是两个字段如何影响调用和上下文加载：<table>
+<thead>
+<tr>
+<th>Frontmatter</th>
+<th>你可以调用</th>
+<th>Claude 可以调用</th>
+<th>何时加载到上下文中</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>（默认）</td>
+<td>是</td>
+<td>是</td>
+<td>描述始终在上下文中，调用时加载完整 skill</td>
+</tr>
+<tr>
+<td><code>disable-model-invocation: true</code></td>
+<td>是</td>
+<td>否</td>
+<td>描述不在上下文中，你调用时加载完整 skill</td>
+</tr>
+<tr>
+<td><code>user-invocable: false</code></td>
+<td>否</td>
+<td>是</td>
+<td>描述始终在上下文中，调用时加载完整 skill</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>在常规会话中，skill 描述被加载到上下文中，以便 Claude 知道什么可用，但完整 skill 内容仅在调用时加载。<a target="_blank" rel="noopener" href="https://code.claude.com/docs/zh-CN/sub-agents#preload-skills-into-subagents">预加载 skills 的 Subagents</a> 的工作方式不同：完整 skill 内容在启动时注入。</p>
+</blockquote>
+</li>
+</ol>
+<h2 id="skills-内容的生命周期"><a href="#skills-内容的生命周期" class="headerlink" title="skills 内容的生命周期"></a>skills 内容的生命周期</h2><ol>
+<li>当手动或 Claude 自动调用一个 skill 时， <code>SKILL.md</code> 内容作为单个消息进入对话，并在会话的其余部分保持在那里。Claude Code 不会在后续轮次重新读取 skill 文件</li>
+<li>当对话被压缩时，Claude Code 在总结后重新附加每个 skill 的最新调用，保留前 5,000 个 token 预算。重新附加的 skills 共享 25,000 个 token 预算。Claude Code 从最近调用的 skill 开始填充此预算，因此如果你在一个会话中调用了许多 skills，较旧的 skills 可能会在压缩后完全删除。</li>
+<li>如果一个 skill 似乎在第一次响应后就没什么效果了，一般情况下 该 skill 仍然存在，只是模型正在选择其他工具或方法。加强 skill 的 <code>description</code>，以便模型继续偏好它，或使用 <a target="_blank" rel="noopener" href="https://code.claude.com/docs/zh-CN/hooks">hooks</a> 来确定性地强制行为。如果 skill 很大或你在它之后调用了其他几个，在压缩后重新调用它以恢复完整内容。</li>
+</ol>
+<h2 id="为-skill-提前批准工具"><a href="#为-skill-提前批准工具" class="headerlink" title="为 skill 提前批准工具"></a>为 skill 提前批准工具</h2><p>frontmatter 中的 <code>allowed-tools</code> 字段在 skill 处于活动状态时授予对列出的工具的权限，因此 Claude 可以使用它们而无需请求权限。它不限制哪些工具可用：每个工具仍然可调用，你的<a target="_blank" rel="noopener" href="https://code.claude.com/docs/zh-CN/permissions">权限设置</a>仍然管理不在列表中的工具。<br>对于项目级的 <code>.claude/skills/</code> skills，<code>allowed-tools</code> 在你接受该文件夹的工作区信任对话后生效，与 <code>.claude/settings.json</code> 中的权限规则相同。<br>示例：此 skill 让 Claude 在你调用它时运行 git 命令而无需每次使用批准：</p>
+<figure class="highlight plaintext"><figcaption><span>Text</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">name: commit</span><br><span class="line">description: 暂存并提交当前的变更</span><br><span class="line">disable-model-invocation: true</span><br><span class="line">allowed-tools: Bash(git add *) Bash(git commit *) Bash(git status *)</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+<p>要阻止 skill 使用某些工具，请在你的<a target="_blank" rel="noopener" href="https://code.claude.com/docs/zh-CN/permissions">权限设置</a>中添加拒绝规则。</p>
+<h2 id="在-subagent-中运行-skills"><a href="#在-subagent-中运行-skills" class="headerlink" title="在 subagent 中运行 skills"></a>在 subagent 中运行 skills</h2><p>当你想让 skill 在隔离中运行时，在你的 frontmatter 中添加 <code>context: fork</code>。skill 内容变成驱动 subagent 的提示。它将无法访问你的对话历史。</p>
+<blockquote>
+<p><code>context: fork</code> 仅对具有明确动作的 skills 有意义。如果是指南类的 skill 比如”使用这些 API 约定”，subagent 会收到指南，并返回而无意义的输出。</p>
+</blockquote>
+<p>skills 和 <a target="_blank" rel="noopener" href="https://code.claude.com/docs/zh-CN/sub-agents">subagents</a> 以两个方向协同工作：</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>系统提示</th>
+<th>任务</th>
+<th>也加载</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>带有 <code>context: fork</code> 的 Skill</td>
+<td>来自代理类型</td>
+<td>SKILL.md 内容</td>
+<td>CLAUDE.md，除非代理是 Explore 或 Plan</td>
+</tr>
+<tr>
+<td>带有 <code>skills</code> 字段的 Subagent</td>
+<td>Subagent 的 markdown 正文</td>
+<td>Claude 的委派消息</td>
+<td>预加载的 skills + CLAUDE.md</td>
+</tr>
+<tr>
+<td>使用 <code>context: fork</code>，你在你的 skill 中编写任务并选择一个代理类型来执行它。内置的 Explore 和 Plan 代理<a target="_blank" rel="noopener" href="https://code.claude.com/docs/zh-CN/sub-agents#what-loads-at-startup">跳过 CLAUDE.md 和 git 状态</a>以保持其上下文较小，因此使用 <code>agent: Explore</code> 的分叉 skill 仅看到 SKILL.md 内容和代理自己的系统提示。对于反向情况，其中你定义使用 skills 作为参考资料的自定义 subagent，请参阅 <a target="_blank" rel="noopener" href="https://code.claude.com/docs/zh-CN/sub-agents#preload-skills-into-subagents">Subagents</a>。</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>示例：使用 Explore 代理的研究 skill</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>此 skill 在分叉的 Explore 代理中运行研究。skill 内容变成任务，代理提供针对代码库探索优化的只读工具：</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<figure class="highlight plaintext"><figcaption><span>Text</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">name: deep-research</span><br><span class="line">description: 深入研究一个主题</span><br><span class="line">context: fork</span><br><span class="line">agent: Explore</span><br><span class="line">---</span><br><span class="line">深入研究 $ARGUMENTS：</span><br><span class="line">1. 使用 Glob 和 Grep 查找相关文件</span><br><span class="line">2. 阅读并分析代码</span><br><span class="line">3. 总结发现结果，并附上具体的文件引用</span><br></pre></td></tr></table></figure>
+<p>当此 skill 运行时：</p>
+<ol>
+<li>创建一个新的隔离上下文</li>
+<li>Subagent 接收 skill 内容作为其提示（”Research \$ARGUMENTS thoroughly…”）</li>
+<li><code>agent</code> 字段确定执行环境（模型、工具和权限）</li>
+<li>结果被总结并返回到你的主对话<br><code>agent</code> 字段指定要使用的 subagent 配置。选项包括内置代理（<code>Explore</code>、<code>Plan</code>、<code>general-purpose</code>）或来自 <code>.claude/agents/</code> 的任何自定义 subagent。如果省略，使用 <code>general-purpose</code>。</li>
+</ol>
+<h2 id="限制-Claude-的-skill-命令"><a href="#限制-Claude-的-skill-命令" class="headerlink" title="限制 Claude 的 skill 命令"></a>限制 Claude 的 skill 命令</h2><p>控制 Claude 可以调用哪些 skills 的三种方式：</p>
+<ol>
+<li><strong>通过在 <code>/permissions</code> 中拒绝 Skill 工具来禁用所有 skills</strong>：<figure class="highlight plaintext"><figcaption><span>Text</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># Add to deny rules:</span><br><span class="line">Skill</span><br></pre></td></tr></table></figure></li>
+<li><strong>使用</strong><a target="_blank" rel="noopener" href="https://code.claude.com/docs/zh-CN/permissions"><strong>权限规则</strong></a><strong>允许或拒绝特定 skills：</strong><figure class="highlight plaintext"><figcaption><span>Text</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># Allow only specific skills</span><br><span class="line">Skill(commit)</span><br><span class="line">Skill(review-pr *)</span><br><span class="line"># Deny specific skills</span><br><span class="line">Skill(deploy *)</span><br></pre></td></tr></table></figure>
+权限语法：<code>Skill(name)</code> 用于精确匹配，<code>Skill(name *)</code> 用于带有任何参数的前缀匹配。</li>
+<li><strong>通过在其 frontmatter 中添加 <code>disable-model-invocation: true</code> 来隐藏单个 skills</strong>。这会从 Claude 的上下文中完全删除该 skill。<blockquote>
+<p><code>user-invocable</code> 字段仅控制菜单可见性，不控制 Skill 工具访问。使用 <code>disable-model-invocation: true</code> 来阻止程序调用。</p>
+</blockquote>
+</li>
+</ol>
+<h2 id="设置-skills-的可见性"><a href="#设置-skills-的可见性" class="headerlink" title="设置 skills 的可见性"></a>设置 skills 的可见性</h2><p><code>skillOverrides</code> 从你的<a target="_blank" rel="noopener" href="https://code.claude.com/docs/zh-CN/settings">设置</a>控制 skill 可见性，而不是从 skill 自己的 frontmatter。<br>每个 <code>key</code> 是一个 skill 名称，每个 <code>value</code> 是以下四种状态之一：</p>
+<table>
+<thead>
+<tr>
+<th>value</th>
+<th>列出给 Claude</th>
+<th>在 <code>/</code> 菜单中</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>&quot;on&quot;</code></td>
+<td>名称和描述</td>
+<td>是</td>
+</tr>
+<tr>
+<td><code>&quot;name-only&quot;</code></td>
+<td>仅名称</td>
+<td>是</td>
+</tr>
+<tr>
+<td><code>&quot;user-invocable-only&quot;</code></td>
+<td>隐藏</td>
+<td>是</td>
+</tr>
+<tr>
+<td><code>&quot;off&quot;</code></td>
+<td>隐藏</td>
+<td>隐藏</td>
+</tr>
+<tr>
+<td>示例将一个 skill 折叠为其名称，并完全关闭另一个：</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<figure class="highlight plaintext"><figcaption><span>Text</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;skillOverrides&quot;: &#123;</span><br><span class="line">    &quot;skill-name1&quot;: &quot;name-only&quot;,</span><br><span class="line">    &quot;skill-name2&quot;: &quot;off&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>插件 skills 不受 <code>skillOverrides</code> 影响。通过 <code>/plugin</code> 管理这些。</p>
+</blockquote>
+<h2 id="生成视觉输出"><a href="#生成视觉输出" class="headerlink" title="生成视觉输出"></a>生成视觉输出</h2><p>Skills 可以捆绑并运行任何语言的脚本，为 Claude 提供单个提示中不可能的功能。一个强大的模式是生成视觉输出：在浏览器中打开的交互式 HTML 文件，用于探索数据、调试或创建报告。</p>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://code.claude.com/docs/zh-CN/skills">使用 skills 扩展 Claude</a></li>
+<li><a target="_blank" rel="noopener" href="https://claude.com/blog/lessons-from-building-claude-code-how-we-use-skills">构建 Claude Code 课程：如何使用 skills</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/anthropics/skills">GitHub - anthropics&#x2F;skills: Public repository for Agent Skills</a></li>
+<li><a target="_blank" rel="noopener" href="https://code.claude.com/docs/zh-CN/debug-your-config">调试你的配置：诊断为什么 skill 没有出现或触发</a></li>
+<li><a target="_blank" rel="noopener" href="https://code.claude.com/docs/zh-CN/commands">Commands：内置命令和捆绑 skills 的参考</a></li>
+<li><a target="_blank" rel="noopener" href="https://code.claude.com/docs/zh-CN/permissions">Permissions：控制工具和 skill 访问</a></li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a target="_blank" rel="noopener" href="https://github.com/AillianYue">AillianYue</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a target="_blank" rel="noopener" href="https://www.yuque.com/aillian-yue/blog">https://www.yuque.com/aillian-yue/blog</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">此文章版归AillianYue所有，如需转载，请注明来自原作者</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/ClaudeCode/">ClaudeCode</a></div><div class="post-share"><div class="social-share" data-image="/img/Claude.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/06/15/ClaudeCode%E5%9F%BA%E7%A1%8006%EF%BC%9Askills%E6%8E%A8%E8%8D%90/" title="ClaudeCode基础06：skills推荐"><img class="cover" src="/img/Claude.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">ClaudeCode基础06：skills推荐</div></div><div class="info-2"><div class="info-item-1">社区热门 Claude Code skills 推荐，按安装场景分类介绍，涵盖 SuperPowers、Semble、Grill-Me、Handoff 等 11 个 skills 的安装方式与使用方法</div></div></div></a><a class="pagination-related" href="/2026/06/13/ClaudeCode%E5%9F%BA%E7%A1%8004%EF%BC%9Askills%E5%85%A5%E9%97%A8/" title="ClaudeCode基础04：skills入门"><img class="cover" src="/img/Claude.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">ClaudeCode基础04：skills入门</div></div><div class="info-2"><div class="info-item-1">ClaudeCode Skills入门教程与完整实例，涵盖自定义斜杠命令的创建方法、SKILL.md配置及自动化工作流编写</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/06/10/ClaudeCode%E5%9F%BA%E7%A1%8001%EF%BC%9A%E5%AE%89%E8%A3%85/" title="ClaudeCode基础01：安装"><img class="cover" src="/img/Claude.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-10</div><div class="info-item-2">ClaudeCode基础01：安装</div></div><div class="info-2"><div class="info-item-1">ClaudeCode CLI命令行与IDE插件安装配置教程，涵盖npm全局安装方法及VS Code、JetBrains等编辑器集成</div></div></div></a><a class="pagination-related" href="/2026/06/17/ClaudeCode%E5%9F%BA%E7%A1%8008%EF%BC%9Ahooks/" title="ClaudeCode基础08：hooks"><img class="cover" src="/img/Claude.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-17</div><div class="info-item-2">ClaudeCode基础08：hooks</div></div><div class="info-2"><div class="info-item-1">TODO（大约50到100字）</div></div></div></a><a class="pagination-related" href="/2026/06/12/ClaudeCode%E5%9F%BA%E7%A1%8003%EF%BC%9ACLAUDE/" title="ClaudeCode基础03：CLAUDE.md"><img class="cover" src="/img/Claude.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-12</div><div class="info-item-2">ClaudeCode基础03：CLAUDE.md</div></div><div class="info-2"><div class="info-item-1">ClaudeCode CLAUDE.md项目配置文件详解，涵盖文件作用与配置方法、项目上下文注入、规则设定及团队协作技巧</div></div></div></a><a class="pagination-related" href="/2026/06/13/ClaudeCode%E5%9F%BA%E7%A1%8004%EF%BC%9Askills%E5%85%A5%E9%97%A8/" title="ClaudeCode基础04：skills入门"><img class="cover" src="/img/Claude.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-13</div><div class="info-item-2">ClaudeCode基础04：skills入门</div></div><div class="info-2"><div class="info-item-1">ClaudeCode Skills入门教程与完整实例，涵盖自定义斜杠命令的创建方法、SKILL.md配置及自动化工作流编写</div></div></div></a><a class="pagination-related" href="/2026/06/15/ClaudeCode%E5%9F%BA%E7%A1%8006%EF%BC%9Askills%E6%8E%A8%E8%8D%90/" title="ClaudeCode基础06：skills推荐"><img class="cover" src="/img/Claude.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-15</div><div class="info-item-2">ClaudeCode基础06：skills推荐</div></div><div class="info-2"><div class="info-item-1">社区热门 Claude Code skills 推荐，按安装场景分类介绍，涵盖 SuperPowers、Semble、Grill-Me、Handoff 等 11 个 skills 的安装方式与使用方法</div></div></div></a><a class="pagination-related" href="/2026/06/11/ClaudeCode%E5%9F%BA%E7%A1%8002%EF%BC%9A%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7/" title="ClaudeCode基础02：使用技巧"><img class="cover" src="/img/Claude.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-11</div><div class="info-item-2">ClaudeCode基础02：使用技巧</div></div><div class="info-2"><div class="info-item-1">ClaudeCode高效使用技巧与经验总结，涵盖上下文管理优化、命令调优、工作流效率提升及常见问题解决方案</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">AillianYue</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">46</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">8</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">16</div></a></div><a id="card-info-btn" href="/about/"><i class="fas fa-user-graduate"></i><span>关于我</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/AillianYue" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="https://gitee.com/aillianyue" target="_blank" title="Gitee"><i class="fab fa-github-alt"></i></a><a class="social-icon" href="mailto:634558578@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="tencent://AddContact/?fromId=45&amp;fromSubId=1&amp;subcmd=all&amp;uin=634558578&amp;website=www.oicqzone.com" target="_blank" title="QQ"><i class="fab fa-qq"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站不定期更新，欢迎！</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#skills-%E7%9A%84-frontmatter"><span class="toc-number">1.</span> <span class="toc-text">skills 的 frontmatter</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#skills-%E7%9A%84%E5%91%BD%E4%BB%A4%E6%9D%A5%E6%BA%90"><span class="toc-number">2.</span> <span class="toc-text">skills 的命令来源</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#skills-%E7%9A%84%E5%86%85%E7%BD%AE%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-number">3.</span> <span class="toc-text">skills 的内置字符串</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#skills-%E7%9A%84%E5%8F%82%E6%95%B0%E4%BC%A0%E9%80%92"><span class="toc-number">4.</span> <span class="toc-text">skills 的参数传递</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA-skills-%E6%B3%A8%E5%85%A5%E5%8A%A8%E6%80%81%E4%B8%8A%E4%B8%8B%E6%96%87"><span class="toc-number">5.</span> <span class="toc-text">为 skills 注入动态上下文</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#skills-%E7%9A%84%E8%B0%83%E7%94%A8%E6%97%B6%E6%9C%BA"><span class="toc-number">6.</span> <span class="toc-text">skills 的调用时机</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#skills-%E5%86%85%E5%AE%B9%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="toc-number">7.</span> <span class="toc-text">skills 内容的生命周期</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA-skill-%E6%8F%90%E5%89%8D%E6%89%B9%E5%87%86%E5%B7%A5%E5%85%B7"><span class="toc-number">8.</span> <span class="toc-text">为 skill 提前批准工具</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A8-subagent-%E4%B8%AD%E8%BF%90%E8%A1%8C-skills"><span class="toc-number">9.</span> <span class="toc-text">在 subagent 中运行 skills</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%99%90%E5%88%B6-Claude-%E7%9A%84-skill-%E5%91%BD%E4%BB%A4"><span class="toc-number">10.</span> <span class="toc-text">限制 Claude 的 skill 命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE-skills-%E7%9A%84%E5%8F%AF%E8%A7%81%E6%80%A7"><span class="toc-number">11.</span> <span class="toc-text">设置 skills 的可见性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%9F%E6%88%90%E8%A7%86%E8%A7%89%E8%BE%93%E5%87%BA"><span class="toc-number">12.</span> <span class="toc-text">生成视觉输出</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5"><span class="toc-number"></span> <span class="toc-text">参考链接</span></a></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/06/17/ClaudeCode%E5%9F%BA%E7%A1%8008%EF%BC%9Ahooks/" title="ClaudeCode基础08：hooks"><img src="/img/Claude.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ClaudeCode基础08：hooks"/></a><div class="content"><a class="title" href="/2026/06/17/ClaudeCode%E5%9F%BA%E7%A1%8008%EF%BC%9Ahooks/" title="ClaudeCode基础08：hooks">ClaudeCode基础08：hooks</a><time datetime="2026-06-17T04:00:00.000Z" title="更新于 2026-06-17 12:00:00">2026-06-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/06/16/ClaudeCode%E5%9F%BA%E7%A1%8007%EF%BC%9A.claude%E7%9B%AE%E5%BD%95/" title="ClaudeCode基础07：.claude目录"><img src="/img/Claude.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ClaudeCode基础07：.claude目录"/></a><div class="content"><a class="title" href="/2026/06/16/ClaudeCode%E5%9F%BA%E7%A1%8007%EF%BC%9A.claude%E7%9B%AE%E5%BD%95/" title="ClaudeCode基础07：.claude目录">ClaudeCode基础07：.claude目录</a><time datetime="2026-06-16T04:00:00.000Z" title="更新于 2026-06-16 12:00:00">2026-06-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/06/15/ClaudeCode%E5%9F%BA%E7%A1%8006%EF%BC%9Askills%E6%8E%A8%E8%8D%90/" title="ClaudeCode基础06：skills推荐"><img src="/img/Claude.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ClaudeCode基础06：skills推荐"/></a><div class="content"><a class="title" href="/2026/06/15/ClaudeCode%E5%9F%BA%E7%A1%8006%EF%BC%9Askills%E6%8E%A8%E8%8D%90/" title="ClaudeCode基础06：skills推荐">ClaudeCode基础06：skills推荐</a><time datetime="2026-06-15T06:03:00.000Z" title="更新于 2026-06-15 14:03:00">2026-06-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/06/14/ClaudeCode%E5%9F%BA%E7%A1%8005%EF%BC%9Askills%E6%B7%B1%E5%85%A5/" title="ClaudeCode基础05：skills深入"><img src="/img/Claude.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ClaudeCode基础05：skills深入"/></a><div class="content"><a class="title" href="/2026/06/14/ClaudeCode%E5%9F%BA%E7%A1%8005%EF%BC%9Askills%E6%B7%B1%E5%85%A5/" title="ClaudeCode基础05：skills深入">ClaudeCode基础05：skills深入</a><time datetime="2026-06-14T06:03:00.000Z" title="更新于 2026-06-14 14:03:00">2026-06-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/06/13/ClaudeCode%E5%9F%BA%E7%A1%8004%EF%BC%9Askills%E5%85%A5%E9%97%A8/" title="ClaudeCode基础04：skills入门"><img src="/img/Claude.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ClaudeCode基础04：skills入门"/></a><div class="content"><a class="title" href="/2026/06/13/ClaudeCode%E5%9F%BA%E7%A1%8004%EF%BC%9Askills%E5%85%A5%E9%97%A8/" title="ClaudeCode基础04：skills入门">ClaudeCode基础04：skills入门</a><time datetime="2026-06-13T06:03:00.000Z" title="更新于 2026-06-13 14:03:00">2026-06-13</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2019 - 2026 By AillianYue</span></div><div class="footer_custom_text">Hi, welcome to <a target="_blank" rel="noopener" href="https://github.com/AillianYue">my blog</a>!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
