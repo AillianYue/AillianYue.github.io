@@ -2418,7 +2418,7 @@ figure.highlight pre .javascript .function {
   flex: 1 auto;
   margin: 0 auto;
   padding: 40px 15px;
-  max-width: 1200px;
+  max-width: 1800px;
   width: 100%;
 }
 @media screen and (max-width: 900px) {
@@ -2430,15 +2430,27 @@ figure.highlight pre .javascript .function {
     -ms-flex-direction: column;
     flex-direction: column;
   }
+  .layout > #aside-content {
+    -webkit-box-ordinal-group: 1;
+    -moz-box-ordinal-group: 1;
+    -o-box-ordinal-group: 1;
+    -ms-flex-order: 1;
+    -webkit-order: 1;
+    order: 1;
+  }
+  .layout > div:first-child {
+    -webkit-box-ordinal-group: 2;
+    -moz-box-ordinal-group: 2;
+    -o-box-ordinal-group: 2;
+    -ms-flex-order: 2;
+    -webkit-order: 2;
+    order: 2;
+    width: 100% !important;
+  }
 }
 @media screen and (max-width: 768px) {
   .layout {
     padding: 20px 5px;
-  }
-}
-@media screen and (min-width: 2000px) {
-  .layout {
-    max-width: 60%;
   }
 }
 .layout > div:first-child:not(.nc) {
@@ -2460,11 +2472,6 @@ figure.highlight pre .javascript .function {
   -ms-transition: all 0.3s;
   transition: all 0.3s;
 }
-@media screen and (max-width: 900px) {
-  .layout > div:first-child {
-    width: 100% !important;
-  }
-}
 @media screen and (min-width: 900px) {
   .layout > div:first-child {
     -webkit-box-ordinal-group: 2;
@@ -2476,11 +2483,11 @@ figure.highlight pre .javascript .function {
   }
 }
 .layout.hide-aside {
-  max-width: 1000px;
+  max-width: 1510px;
 }
 @media screen and (min-width: 2000px) {
   .layout.hide-aside {
-    max-width: 1300px;
+    max-width: 2000px;
   }
 }
 .layout.hide-aside > div {
@@ -4225,7 +4232,7 @@ figure.highlight pre .javascript .function {
   justify-content: space-between;
   margin: 0 auto;
   padding: 40px 60px;
-  max-width: 1200px;
+  max-width: 1800px;
   width: 100%;
   text-align: left;
   gap: 13px;
@@ -4384,16 +4391,11 @@ figure.highlight pre .javascript .function {
 #page-header #post-info > * {
   margin: 0 auto;
   padding: 0 15px;
-  max-width: 1200px;
+  max-width: 1800px;
 }
 @media screen and (min-width: 768px) and (max-width: 1300px) {
   #page-header #post-info > * {
     padding: 0 30px;
-  }
-}
-@media screen and (min-width: 2000px) {
-  #page-header #post-info > * {
-    max-width: 70%;
   }
 }
 #page-header.not-top-img {
