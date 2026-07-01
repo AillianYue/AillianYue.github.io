@@ -1,0 +1,544 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>ROS1基础01：开始 | AillianYue's Blog</title><meta name="author" content="AillianYue"><meta name="copyright" content="AillianYue"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="如果你已有一定的 Linux &#x2F; C++ 基础，想快速上手 ROS1 并用起来，而不是从零系统学完官方教程，那这篇就是为你准备的。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ROS1基础01：开始">
+<meta property="og:url" content="http://example.com/2021/07/11/ROS1%E5%9F%BA%E7%A1%8001%EF%BC%9A%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/index.html">
+<meta property="og:site_name" content="AillianYue&#39;s Blog">
+<meta property="og:description" content="如果你已有一定的 Linux &#x2F; C++ 基础，想快速上手 ROS1 并用起来，而不是从零系统学完官方教程，那这篇就是为你准备的。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/ROS.webp">
+<meta property="article:published_time" content="2021-07-11T13:19:00.000Z">
+<meta property="article:modified_time" content="2026-07-01T13:19:00.000Z">
+<meta property="article:author" content="AillianYue">
+<meta property="article:tag" content="ROS">
+<meta property="article:tag" content="ROS基础">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/ROS.webp"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "ROS1基础01：开始",
+  "url": "http://example.com/2021/07/11/ROS1%E5%9F%BA%E7%A1%8001%EF%BC%9A%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/",
+  "image": "http://example.com/img/ROS.webp",
+  "datePublished": "2021-07-11T13:19:00.000Z",
+  "dateModified": "2026-07-01T13:19:00.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Yilin.Yue",
+      "url": "https://github.com/AillianYue"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/avatar.png"><link rel="canonical" href="http://example.com/2021/07/11/ROS1%E5%9F%BA%E7%A1%8001%EF%BC%9A%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'ROS1基础01：开始',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">51</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">10</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">17</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 所有文章</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">AillianYue's Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">ROS1基础01：开始</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 所有文章</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">ROS1基础01：开始</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-07-11T13:19:00.000Z" title="发表于 2021-07-11 21:19:00">2021-07-11</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-07-01T13:19:00.000Z" title="更新于 2026-07-01 21:19:00">2026-07-01</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/ROS/">ROS</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/ROS/ROS%E5%9F%BA%E7%A1%80/">ROS基础</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">4.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>15分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><p>VERSION：1.0.0</p>
+<blockquote>
+<p><strong>本篇定位</strong>：如果你已有一定的 Linux / C++ 基础，想快速上手 ROS1 并用起来，而不是从零系统学完官方教程，那这篇就是为你准备的。</p>
+</blockquote>
+<hr>
+<h1>学前须知</h1>
+<h2 id="请不要系统学习-ROS">请不要系统学习 ROS</h2>
+<p>ROS 本质上是一个<strong>工具集</strong>：它帮你解决进程间通信、数据记录、可视化等工程问题。就像你不会先通读《电动螺丝刀从入门到精通》再拧螺丝一样，学习 ROS 最有效的方式也是<strong>带着问题去实践</strong>：</p>
+<ul>
+<li>我想让两个程序互相发数据？→ 学 <strong>Topic + Publisher / Subscriber</strong></li>
+<li>我想看看谁在发什么数据？→ 学 <strong>rostopic list / echo</strong></li>
+<li>我想把传感器数据存下来回放？→ 学 <strong>rosbag</strong></li>
+</ul>
+<p>如果反过来，先从头到尾啃完官方 Wiki 再动手，反而容易迷失在庞杂的概念里，学完就忘。</p>
+<p><strong>所以本节的策略是</strong>：先花最少的时间，掌握 ROS 中最基础、最常用的一小部分知识（节点、话题、消息、常用命令行），然后就直接去项目里&quot;用起来&quot;。遇到不会的，查文档、查这篇、搜一下，都比一次学完所有内容更高效。</p>
+<blockquote>
+<p>当然，如果你已经在实践中遇到瓶颈，回头系统学习也是必要的，但那是后话，不是第一步。</p>
+</blockquote>
+<h2 id="ROS-架构简介">ROS 架构简介</h2>
+<p>ROS1（Robot Operating System 1）采用一种<strong>去中心化的点对点通信架构</strong>，核心组件包括：</p>
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>roscore</strong></td>
+<td>ROS 的&quot;管家&quot;：启动 Master（名称服务）、Parameter Server、日志节点。<strong>任何 ROS 程序运行前必须先启动 roscore</strong></td>
+</tr>
+<tr>
+<td><strong>Master</strong></td>
+<td>名称服务器：让节点之间互相发现。节点启动时向 Master 注册自己的名字和话题信息</td>
+</tr>
+<tr>
+<td><strong>Node（节点）</strong></td>
+<td>一个可执行程序，是 ROS 中的最小计算单元。一个机器人系统通常由几十上百个节点组成</td>
+</tr>
+<tr>
+<td><strong>Topic（话题）</strong></td>
+<td>节点间通信的<strong>异步总线</strong>。发布者往话题上发消息，订阅者从话题上收消息，双方互不了解对方的存在</td>
+</tr>
+<tr>
+<td><strong>Message（消息）</strong></td>
+<td>通信的数据结构。可以是 int、float、string 等基本类型，也可以是嵌套的自定义类型</td>
+</tr>
+<tr>
+<td><strong>Service（服务）</strong></td>
+<td><strong>同步</strong>的请求-响应通信（本篇暂不展开，后续进阶）</td>
+</tr>
+</tbody>
+</table>
+<p>通信模型示意：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Publisher( /talker ) ──publish──→ [/chatter Topic] ──subscribe──→ Subscriber( /listener )</span><br></pre></td></tr></table></figure>
+<h2 id="为什么要用-ROS">为什么要用 ROS</h2>
+<p>这里只列三个最直接的理由：</p>
+<ol>
+<li><strong>模块化</strong>：你不必把感知、规划、控制写在一个巨型 main() 里。拆成多个节点，各管各的，出问题也好定位。</li>
+<li><strong>复用生态</strong>：ROS 社区有大量现成的包，驱动（摄像头、激光雷达）、导航栈（move_base）、SLAM（gmapping、cartographer）、规划（OMPL）。站在巨人肩膀上。</li>
+<li><strong>工具链</strong>：rosbag 录数据 → rviz 可视化 → rqt 调试 → rosnode/rostopic 命令行诊断。一套工具覆盖从开发到 Debug 的完整链路。</li>
+</ol>
+<hr>
+<h1>核心概念</h1>
+<h2 id="节点-Node">节点 (Node)</h2>
+<p><strong>节点</strong>是 ROS 中的可执行进程。每个节点有一个唯一的名称（如 <code>/talker</code>、<code>/listener</code>），通过名称在 Master 上注册。</p>
+<p><strong>关键特征</strong>：</p>
+<ul>
+<li>一个节点就是一个进程（可执行文件），通常对应一个类或一组功能</li>
+<li>节点之间<strong>彼此独立</strong>：一个节点崩溃不会影响其他节点</li>
+<li>节点通过 Topic、Service、Action 等方式通信</li>
+</ul>
+<p><strong>C++ 中创建节点的方式</strong>（目前实际工程中主流是 <code>ros::NodeHandle</code> + <code>ros::init</code>）：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;ros/ros.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> **argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 1. 初始化 ROS 节点（节点名称为 &quot;my_node&quot;）</span></span><br><span class="line">    ros::<span class="built_in">init</span>(argc, argv, <span class="string">&quot;my_node&quot;</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 2. 创建 NodeHandle：它是节点和 ROS 系统交互的&quot;门把手&quot;</span></span><br><span class="line">    ros::NodeHandle nh;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// ... 创建 Publisher / Subscriber 等 ...</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 3. 进入事件循环（阻塞，处理回调）</span></span><br><span class="line">    ros::<span class="built_in">spin</span>();</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>💡 <code>ros::init()</code> 的第三个参数就是节点名称，必须唯一。重名时后启动的节点会覆盖前者（默认行为，可通过 <code>ROS_NODE_NAME</code> 环境变量或 remap 改变）。</p>
+</blockquote>
+<h2 id="话题-Topic">话题 (Topic)</h2>
+<p><strong>话题</strong>是 ROS 中最重要的通信机制：<strong>异步、多对多</strong>的发布-订阅模型。</p>
+<ul>
+<li>发布者把消息&quot;扔&quot;到话题上</li>
+<li>订阅者从话题上&quot;收&quot;消息</li>
+<li>双方<strong>解耦</strong>：不知道对方的存在</li>
+<li>话题名称是一个全局字符串，如 <code>/odom</code>、<code>/camera/image_raw</code></li>
+</ul>
+<p><strong>命名规则</strong>：</p>
+<ul>
+<li>以 <code>/</code> 开头表示<strong>全局名称</strong>，如 <code>/camera/rgb/image_raw</code></li>
+<li>不以 <code>/</code> 开头表示<strong>相对名称</strong>，相对于节点的命名空间</li>
+<li>私有名称以 <code>~</code> 开头，如 <code>~param_name</code></li>
+</ul>
+<p>一个话题可以有<strong>多个发布者</strong>和<strong>多个订阅者</strong>。</p>
+<h2 id="消息-Message">消息 (Message)</h2>
+<p><strong>消息</strong>是 ROS 节点间通信的数据结构。类似 C 语言中的 <code>struct</code>，由一组类型化的字段组成。</p>
+<p><strong>标准消息类型</strong>（在 <code>std_msgs</code> 包中）：</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>C++ 对应</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>std_msgs::Int32</code></td>
+<td><code>int32_t</code></td>
+</tr>
+<tr>
+<td><code>std_msgs::Float64</code></td>
+<td><code>double</code></td>
+</tr>
+<tr>
+<td><code>std_msgs::String</code></td>
+<td><code>std::string</code></td>
+</tr>
+<tr>
+<td><code>std_msgs::Header</code></td>
+<td>包含 timestamp 和 frame_id 的公共头部</td>
+</tr>
+</tbody>
+</table>
+<p><strong>常用复合消息</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>包名</th>
+<th>消息类型</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>geometry_msgs</code></td>
+<td><code>Twist</code></td>
+<td>速度指令（线速度 + 角速度）</td>
+</tr>
+<tr>
+<td><code>geometry_msgs</code></td>
+<td><code>Pose</code> / <code>PoseStamped</code></td>
+<td>位置 + 朝向</td>
+</tr>
+<tr>
+<td><code>sensor_msgs</code></td>
+<td><code>Image</code></td>
+<td>图像数据</td>
+</tr>
+<tr>
+<td><code>sensor_msgs</code></td>
+<td><code>LaserScan</code></td>
+<td>激光雷达扫描数据</td>
+</tr>
+<tr>
+<td><code>nav_msgs</code></td>
+<td><code>Odometry</code></td>
+<td>里程计数据</td>
+</tr>
+<tr>
+<td><code>tf2_msgs</code></td>
+<td><code>TFMessage</code></td>
+<td>坐标变换</td>
+</tr>
+</tbody>
+</table>
+<h2 id="发布者-Publisher">发布者 (Publisher)</h2>
+<p><strong>发布者</strong>节点负责向话题发送消息。创建流程：</p>
+<ol>
+<li>通过 <code>NodeHandle::advertise&lt;T&gt;()</code> 告诉 Master&quot;我要发某种消息了&quot;</li>
+<li>用 <code>publish(msg)</code> 发送消息</li>
+<li>通常配合定时器或传感器回调循环发送</li>
+</ol>
+<p><strong>一个最基本的生产者（Publiser）节点代码段</strong>：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// talker.cpp</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;ros/ros.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;std_msgs/String.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> **argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    ros::<span class="built_in">init</span>(argc, argv, <span class="string">&quot;talker&quot;</span>);</span><br><span class="line">    ros::NodeHandle nh;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// advertise：告诉 ROS 我要在 /chatter 话题上发 std_msgs::String 消息</span></span><br><span class="line">    <span class="comment">// 第二个参数是队列大小，最多缓存 1000 条，满了就丢最旧的</span></span><br><span class="line">    ros::Publisher pub = nh.<span class="built_in">advertise</span>&lt;std_msgs::String&gt;(<span class="string">&quot;/chatter&quot;</span>, <span class="number">1000</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 设置循环频率 10Hz</span></span><br><span class="line">    <span class="function">ros::Rate <span class="title">loop_rate</span><span class="params">(<span class="number">10</span>)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> count = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (ros::<span class="built_in">ok</span>())</span><br><span class="line">    &#123;</span><br><span class="line">        std_msgs::String msg;</span><br><span class="line">        msg.data = <span class="string">&quot;Hello ROS! count = &quot;</span> + std::<span class="built_in">to_string</span>(count++);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 真正发送消息到话题上</span></span><br><span class="line">        pub.<span class="built_in">publish</span>(msg);</span><br><span class="line"></span><br><span class="line">        ros::<span class="built_in">spinOnce</span>();   <span class="comment">// 如果有回调（此处没有），处理一下</span></span><br><span class="line">        loop_rate.<span class="built_in">sleep</span>(); <span class="comment">// 休眠到下一帧</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>⚠️ <code>advertise</code> 的第二个参数是<strong>队列深度</strong>。发布频率高而订阅者处理慢时，超过队列长度的旧消息会被丢弃。这个值视场景而定：高频传感器（Camera、LaserScan）通常设 1~10；低频指令通常设 10~1000。</p>
+</blockquote>
+<h2 id="订阅者-Subscriber">订阅者 (Subscriber)</h2>
+<p><strong>订阅者</strong>节点接收话题上的消息。核心机制是<strong>回调函数</strong>，消息到达时，ROS 自动调用你注册的回调。</p>
+<p>创建流程：</p>
+<ol>
+<li>通过 <code>NodeHandle::subscribe&lt;T&gt;()</code> 告诉 Master&quot;我要订阅某种消息&quot;</li>
+<li>注册一个<strong>回调函数</strong>，每次消息到达时自动调用</li>
+<li>调用 <code>ros::spin()</code> 或 <code>ros::spinOnce()</code> 让回调被触发</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// listener.cpp</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;ros/ros.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;std_msgs/String.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 回调函数，每当有消息到达 /chatter，就打印它</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">chatterCallback</span><span class="params">(<span class="type">const</span> std_msgs::String::ConstPtr &amp;msg)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">ROS_INFO</span>(<span class="string">&quot;I heard: [%s]&quot;</span>, msg-&gt;data.<span class="built_in">c_str</span>());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> **argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    ros::<span class="built_in">init</span>(argc, argv, <span class="string">&quot;listener&quot;</span>);</span><br><span class="line">    ros::NodeHandle nh;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// subscribe：订阅 /chatter 话题，队列深度 1000</span></span><br><span class="line">    ros::Subscriber sub = nh.<span class="built_in">subscribe</span>(<span class="string">&quot;/chatter&quot;</span>, <span class="number">1000</span>, chatterCallback);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// spin() 进入循环，等待回调触发</span></span><br><span class="line">    ros::<span class="built_in">spin</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>重要区分</strong>：</p>
+<ul>
+<li><code>ros::spin()</code> — 阻塞，直到节点关闭。适合纯订阅者。</li>
+<li><code>ros::spinOnce()</code> — 非阻塞，处理一次待处理回调后立即返回。适合在 <code>while</code> 循环中既要<strong>发布</strong>又要<strong>接收</strong>的场景（见上面 talker 的写法）。</li>
+<li>如果一个节点既发布又订阅，通常在 while 循环中调 <code>spinOnce()</code>。</li>
+</ul>
+</blockquote>
+<hr>
+<h1>常见的代码段</h1>
+<blockquote>
+<p>以下代码针对 ROS1 Noetic，C++11 及以上标准。</p>
+</blockquote>
+<h2 id="自定义消息">自定义消息</h2>
+<p>ROS 内置消息不够用时，你需要定义自己的 <code>.msg</code> 文件。</p>
+<p><strong>步骤</strong>：</p>
+<h3 id="1-在包中创建-msg-目录，新建-msg-文件">1. 在包中创建 <code>msg/</code> 目录，新建 <code>.msg</code> 文件</h3>
+<p><strong>InputDemo.msg</strong>（定义输入数据，比如传感器的原始值）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># InputDemo.msg</span><br><span class="line"># 原始传感器数据输入</span><br><span class="line">int32 raw_value</span><br><span class="line">float32 filter_coefficient</span><br><span class="line">string sensor_name</span><br></pre></td></tr></table></figure>
+<p><strong>OutputDemo.msg</strong>（定义输出数据，比如经算法处理后的结果）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># OutputDemo.msg</span><br><span class="line"># 算法处理后的输出</span><br><span class="line">float32 result</span><br><span class="line">bool is_valid</span><br><span class="line">string description</span><br></pre></td></tr></table></figure>
+<h3 id="2-修改-CMakeLists-txt">2. 修改 <code>CMakeLists.txt</code></h3>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 添加消息构建依赖</span></span><br><span class="line"><span class="keyword">find_package</span>(catkin REQUIRED COMPONENTS</span><br><span class="line">  roscpp</span><br><span class="line">  std_msgs</span><br><span class="line">  message_generation</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 声明要编译的消息文件</span></span><br><span class="line">add_message_files(</span><br><span class="line">  FILES</span><br><span class="line">  InputDemo.msg</span><br><span class="line">  OutputDemo.msg</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成消息</span></span><br><span class="line">generate_messages(</span><br><span class="line">  DEPENDENCIES</span><br><span class="line">  std_msgs</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置编译（供依赖本包的其他包使用）</span></span><br><span class="line">catkin_package(</span><br><span class="line">  CATKIN_DEPENDS message_runtime</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h3 id="3-修改-package-xml">3. 修改 <code>package.xml</code></h3>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">build_depend</span>&gt;</span>message_generation<span class="tag">&lt;/<span class="name">build_depend</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">exec_depend</span>&gt;</span>message_runtime<span class="tag">&lt;/<span class="name">exec_depend</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="4-编译">4. 编译</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">catkin_make</span><br><span class="line"><span class="comment"># 或者 catkin build</span></span><br></pre></td></tr></table></figure>
+<p>生成后你就可以在 C++ 代码中像普通类型一样使用：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;your_package/InputDemo.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;your_package/OutputDemo.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用自定义消息</span></span><br><span class="line">your_package::InputDemo in;</span><br><span class="line">in.raw_value = <span class="number">42</span>;</span><br><span class="line">in.filter_coefficient = <span class="number">0.8f</span>;</span><br><span class="line">in.sensor_name = <span class="string">&quot;ultrasonic_1&quot;</span>;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>💡 <code>catkin build</code> 会自动生成头文件（<code>&lt;包名&gt;/&lt;消息名&gt;.h</code>），包含完整的数据结构、序列化方法、以及 <code>ConstPtr</code> 等 typedef。</p>
+</blockquote>
+<h2 id="创建节点-创建或订阅话题">创建节点 / 创建或订阅话题</h2>
+<p>在 ROS 中，一个包（package）通常包含多个节点。下面是一个完整的包结构示例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">my_robot_pkg/</span><br><span class="line">├── CMakeLists.txt</span><br><span class="line">├── package.xml</span><br><span class="line">├── msg/                  # 自定义消息</span><br><span class="line">│   ├── InputDemo.msg</span><br><span class="line">│   └── OutputDemo.msg</span><br><span class="line">└── src/                  # C++ 源文件</span><br><span class="line">    ├── talker.cpp</span><br><span class="line">    └── listener.cpp</span><br></pre></td></tr></table></figure>
+<h2 id="发布者节点">发布者节点</h2>
+<h3 id="初始化-→-创建发布者-→-填充消息-→-发布">初始化 → 创建发布者 → 填充消息 → 发布</h3>
+<p>这是一个完整的发布者节点，使用自定义消息 <code>OutputDemo</code>：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// src/output_publisher.cpp</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;ros/ros.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;my_robot_pkg/OutputDemo.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> **argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 1. 初始化节点</span></span><br><span class="line">    ros::<span class="built_in">init</span>(argc, argv, <span class="string">&quot;output_publisher&quot;</span>);</span><br><span class="line">    ros::NodeHandle nh;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 创建发布者</span></span><br><span class="line">    ros::Publisher pub = nh.<span class="built_in">advertise</span>&lt;my_robot_pkg::OutputDemo&gt;(<span class="string">&quot;/sensor/output&quot;</span>, <span class="number">10</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 3. 设置发布频率</span></span><br><span class="line">    <span class="function">ros::Rate <span class="title">loop_rate</span><span class="params">(<span class="number">5</span>)</span></span>;  <span class="comment">// 5 Hz</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (ros::<span class="built_in">ok</span>())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// 4. 填充消息</span></span><br><span class="line">        my_robot_pkg::OutputDemo msg;</span><br><span class="line">        msg.result      = <span class="number">3.14159f</span>;</span><br><span class="line">        msg.is_valid    = <span class="literal">true</span>;</span><br><span class="line">        msg.description = <span class="string">&quot;processed sensor data&quot;</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 5. 发布</span></span><br><span class="line">        pub.<span class="built_in">publish</span>(msg);</span><br><span class="line">        <span class="built_in">ROS_INFO</span>(<span class="string">&quot;Published: result=%.3f, valid=%d&quot;</span>, msg.result, msg.is_valid);</span><br><span class="line"></span><br><span class="line">        ros::<span class="built_in">spinOnce</span>();</span><br><span class="line">        loop_rate.<span class="built_in">sleep</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="订阅者节点">订阅者节点</h2>
+<h3 id="回调函数机制">回调函数机制</h3>
+<p>订阅者通常基于回调函数，这是一种<strong>异步</strong>模式：你注册好回调，ROS 内部线程在消息到达时自动调用它，主线程继续做其他事情或者 <code>spin()</code> 等待。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// src/input_subscriber.cpp</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;ros/ros.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;my_robot_pkg/InputDemo.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 回调函数，ConstPtr 是消息的 const 智能指针</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">inputCallback</span><span class="params">(<span class="type">const</span> my_robot_pkg::InputDemo::ConstPtr &amp;msg)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">ROS_INFO</span>(<span class="string">&quot;Received from [%s]: value=%d, coeff=%.2f&quot;</span>,</span><br><span class="line">             msg-&gt;sensor_name.<span class="built_in">c_str</span>(),</span><br><span class="line">             msg-&gt;raw_value,</span><br><span class="line">             msg-&gt;filter_coefficient);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 在这里做你的业务逻辑，比如将接收到的数据传给算法模块</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> **argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    ros::<span class="built_in">init</span>(argc, argv, <span class="string">&quot;input_subscriber&quot;</span>);</span><br><span class="line">    ros::NodeHandle nh;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 订阅 /sensor/input 话题，队列深度 100</span></span><br><span class="line">    ros::Subscriber sub = nh.<span class="built_in">subscribe</span>(<span class="string">&quot;/sensor/input&quot;</span>, <span class="number">100</span>, inputCallback);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 进入回调等待循环：阻塞在此，消息到了自动调 inputCallback</span></span><br><span class="line">    ros::<span class="built_in">spin</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>🔑 <strong>回调陷阱提醒</strong>：</p>
+<ul>
+<li>回调函数中<strong>不要做阻塞操作</strong>（如 <code>sleep</code>、长耗时计算），它会阻塞整个节点处理其他回调。</li>
+<li>如果需要在回调里做耗时操作，把数据<strong>拷贝出来</strong>放到一个队列/缓冲区，在主循环中处理。</li>
+<li>消息指针是 <code>ConstPtr</code>，你<strong>不能修改</strong>它。要改就拷贝再改。</li>
+</ul>
+</blockquote>
+<hr>
+<h1>其他的常见场合</h1>
+<h2 id="CMake-编译">CMake 编译</h2>
+<p>在实际项目中，你可能会混用 ROS1 和非 ROS 代码。用一个编译宏来开关 ROS1 相关功能是常见做法：</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cmake_minimum_required</span>(VERSION <span class="number">3.0</span>)</span><br><span class="line"><span class="keyword">project</span>(my_hybrid_project)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 可选：通过命令行传入 -DUSE_ROS1=ON 来开启</span></span><br><span class="line"><span class="keyword">option</span>(USE_ROS1 <span class="string">&quot;Build with ROS1 support&quot;</span> <span class="keyword">OFF</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(USE_ROS1)</span><br><span class="line">    <span class="comment"># 在编译定义中加入宏，这样 C++ 代码中可以用 #ifdef USE_ROS1 做条件编译</span></span><br><span class="line">    <span class="keyword">add_definitions</span>(-DUSE_ROS1)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 查找 ROS1 依赖</span></span><br><span class="line">    <span class="keyword">find_package</span>(catkin REQUIRED COMPONENTS</span><br><span class="line">        roscpp</span><br><span class="line">        std_msgs</span><br><span class="line">        geometry_msgs</span><br><span class="line">        sensor_msgs</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    <span class="keyword">include_directories</span>(</span><br><span class="line">        <span class="variable">$&#123;catkin_INCLUDE_DIRS&#125;</span></span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 这个目标链接 ROS 库</span></span><br><span class="line">    <span class="keyword">add_executable</span>(my_ros_node src/my_ros_node.cpp)</span><br><span class="line">    <span class="keyword">target_link_libraries</span>(my_ros_node <span class="variable">$&#123;catkin_LIBRARIES&#125;</span>)</span><br><span class="line"><span class="keyword">endif</span>()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">NOT</span> USE_ROS1)</span><br><span class="line">    <span class="comment"># 纯 C++ 版本编译，无需 ROS</span></span><br><span class="line">    <span class="keyword">add_executable</span>(my_standalone_node src/my_standalone_node.cpp)</span><br><span class="line"><span class="keyword">endif</span>()</span><br></pre></td></tr></table></figure>
+<p>然后在 C++ 代码中使用条件编译：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// my_node.cpp</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> USE_ROS1</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;ros/ros.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;std_msgs/String.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> **argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> USE_ROS1</span></span><br><span class="line">    ros::<span class="built_in">init</span>(argc, argv, <span class="string">&quot;hybrid_node&quot;</span>);</span><br><span class="line">    ros::NodeHandle nh;</span><br><span class="line">    ros::Publisher pub = nh.<span class="built_in">advertise</span>&lt;std_msgs::String&gt;(<span class="string">&quot;/chatter&quot;</span>, <span class="number">10</span>);</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 公共逻辑</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Node started&quot;</span> &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> USE_ROS1</span></span><br><span class="line">    ros::<span class="built_in">spin</span>();</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>编译方式：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 带 ROS1</span></span><br><span class="line">catkin_make -DUSE_ROS1=ON</span><br><span class="line"></span><br><span class="line"><span class="comment"># 不带 ROS1（纯 C++ 模式，可用于单元测试或裸机环境）</span></span><br><span class="line">catkin_make -DUSE_ROS1=OFF</span><br></pre></td></tr></table></figure>
+<h2 id="常见命令">常见命令</h2>
+<p>ROS 提供了一系列命令行工具来诊断运行时状态。以下是<strong>最常用</strong>的几个：</p>
+<h3 id="rosnode-—-节点诊断">rosnode — 节点诊断</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 列出所有活跃节点</span></span><br><span class="line">rosnode list</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看某个节点的详细信息（发布的话题、订阅的话题、服务等）</span></span><br><span class="line">rosnode info /talker</span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试节点是否可达</span></span><br><span class="line">rosnode ping /talker</span><br><span class="line"></span><br><span class="line"><span class="comment"># 杀掉某个节点</span></span><br><span class="line">rosnode <span class="built_in">kill</span> /talker</span><br></pre></td></tr></table></figure>
+<h3 id="rostopic-—-话题诊断">rostopic — 话题诊断</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 列出所有活跃话题</span></span><br><span class="line">rostopic list</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看话题的消息类型、发布者/订阅者信息</span></span><br><span class="line">rostopic info /chatter</span><br><span class="line"></span><br><span class="line"><span class="comment"># 实时打印话题上的消息内容（最常用的调试命令！）</span></span><br><span class="line">rostopic <span class="built_in">echo</span> /chatter</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看话题的消息发布频率</span></span><br><span class="line">rostopic hz /chatter</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看话题的消息带宽</span></span><br><span class="line">rostopic bw /chatter</span><br><span class="line"></span><br><span class="line"><span class="comment"># 手动发布一条消息到话题上（用于测试订阅者）</span></span><br><span class="line">rostopic pub /chatter std_msgs/String <span class="string">&quot;data: &#x27;hello manually&#x27;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 以 10Hz 持续发布消息（-r 指定频率）</span></span><br><span class="line">rostopic pub -r 10 /cmd_vel geometry_msgs/Twist \</span><br><span class="line">    <span class="string">&#x27;&#123;linear: &#123;x: 0.5, y: 0.0, z: 0.0&#125;, angular: &#123;z: 0.2&#125;&#125;&#x27;</span></span><br></pre></td></tr></table></figure>
+<h3 id="rosmsg-—-消息诊断">rosmsg — 消息诊断</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看消息定义</span></span><br><span class="line">rosmsg show std_msgs/String</span><br><span class="line">rosmsg show geometry_msgs/Twist</span><br><span class="line"></span><br><span class="line"><span class="comment"># 列出某个包的所有消息类型</span></span><br><span class="line">rosmsg list | grep geometry_msgs</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示消息的 MD5 校验和（用于调试通信不匹配问题）</span></span><br><span class="line">rosmsg md5 std_msgs/String</span><br></pre></td></tr></table></figure>
+<h2 id="Rosbag-录制与回放">Rosbag 录制与回放</h2>
+<p><strong>rosbag</strong> 是 ROS 中<strong>最强大的工具之一</strong>，它可以把当前运行的话题数据录制到磁盘，然后离线回放。这在<strong>算法调试</strong>、<strong>复现 bug</strong>、<strong>数据集采集</strong>中极为常用。</p>
+<h3 id="录制">录制</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 录制所有话题（会产生很大的 .bag 文件）</span></span><br><span class="line">rosbag record -a</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 录制指定话题（更常见，避免录制无用数据）</span></span><br><span class="line">rosbag record /chatter /odom /scan /camera/image_raw</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 指定 bag 文件名</span></span><br><span class="line">rosbag record -O my_session.bag /chatter /odom</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 按大小分割录制（每 100MB 自动分文件）</span></span><br><span class="line">rosbag record -a --<span class="built_in">split</span> --size=100</span><br></pre></td></tr></table></figure>
+<h3 id="回放">回放</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 回放 bag（默认以录制时的速度发布）</span></span><br><span class="line">rosbag play my_session.bag</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 以 0.5 倍速回放</span></span><br><span class="line">rosbag play -r 0.5 my_session.bag</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 只回放特定话题（--topics 参数）</span></span><br><span class="line">rosbag play my_session.bag --topics /chatter /odom</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 循环回放（用于持续测试）</span></span><br><span class="line">rosbag play -l my_session.bag</span><br><span class="line"></span><br><span class="line"><span class="comment"># 5. 回放到以 / 开头的全局名称时，加上 --clock 可以发布 /clock 话题</span></span><br><span class="line"><span class="comment">#    （对需要模拟时间的节点有用）</span></span><br><span class="line">rosbag play --clock my_session.bag</span><br></pre></td></tr></table></figure>
+<h3 id="查看-bag-信息">查看 bag 信息</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看 bag 的详细信息（话题列表、消息数量、时长、大小等）</span></span><br><span class="line">rosbag info my_session.bag</span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出更紧凑的信息</span></span><br><span class="line">rosbag info -y my_session.bag</span><br></pre></td></tr></table></figure>
+<h2 id="Rqt-可视化工具">Rqt 可视化工具</h2>
+<p><strong>rqt</strong> 是 ROS 的 Qt 图形化工具套件。它以一个插件式界面替代了早期零散的单用途 GUI 工具。</p>
+<h3 id="启动">启动</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 启动 rqt 主界面（推荐方式）</span></span><br><span class="line">rqt</span><br></pre></td></tr></table></figure>
+<p>启动后，通过顶部菜单栏 <strong>Plugins</strong> → 展开对应分类 → 点击需要的插件，即可在界面中手动添加各种面板。所有插件都在一个窗口里，可以自由拖拽排列。</p>
+<blockquote>
+<p>当然，如果你已经知道要开哪个插件，也可以直接用命令行一步到位：<code>rqt_publisher</code>（手动发消息）、<code>rqt_topic</code>（话题监控）、<code>rqt_graph</code>（节点关系图）、<code>rqt_plot</code>（实时曲线）、<code>rqt_console</code>（日志）、<code>rqt_image_view</code>（图像）、<code>rqt_reconfigure</code>（动态参数）等。</p>
+</blockquote>
+<h3 id="最常用场景">最常用场景</h3>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>操作方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>我想手动往话题上发一条消息</td>
+<td>Plugins → Topics → <strong>Message Publisher</strong> → 选话题 → 填字段值 → <strong>Publish</strong></td>
+</tr>
+<tr>
+<td>我想查看话题的消息内容和频率</td>
+<td>Plugins → Topics → <strong>Topic Monitor</strong> → 选话题即可实时查看</td>
+</tr>
+<tr>
+<td>我想看节点谁连接谁</td>
+<td>Plugins → Introspection → <strong>Node Graph</strong></td>
+</tr>
+<tr>
+<td>我想看某个值的实时变化趋势</td>
+<td>Plugins → Visualization → <strong>Plot</strong> → 选择话题字段</td>
+</tr>
+<tr>
+<td>我想看摄像头画面</td>
+<td>Plugins → Visualization → <strong>Image View</strong> → 选 <code>/camera/image_raw</code></td>
+</tr>
+<tr>
+<td>ROS_INFO 太多刷屏了</td>
+<td>Plugins → Logging → <strong>Console</strong> → 按级别过滤</td>
+</tr>
+<tr>
+<td>我想在运行时调参数</td>
+<td>Plugins → Configuration → <strong>Dynamic Reconfigure</strong></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h1>总结</h1>
+<p>在 ROS1 中<strong>最核心、最高频</strong>的知识点：</p>
+<table>
+<thead>
+<tr>
+<th>概念</th>
+<th>一句话</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>roscore</code></td>
+<td>ROS 的管家，跑任何东西前必须先启动它</td>
+</tr>
+<tr>
+<td><code>ros::init</code></td>
+<td>初始化一个节点</td>
+</tr>
+<tr>
+<td><code>NodeHandle</code></td>
+<td>节点和 ROS 的&quot;门把手&quot;，用它创建发布者/订阅者</td>
+</tr>
+<tr>
+<td><code>Publisher</code></td>
+<td>往话题上发消息</td>
+</tr>
+<tr>
+<td><code>Subscriber</code></td>
+<td>从话题上收消息（通过回调函数）</td>
+</tr>
+<tr>
+<td><code>ros::spin()</code></td>
+<td>阻塞等待回调</td>
+</tr>
+<tr>
+<td><code>ros::spinOnce()</code></td>
+<td>非阻塞，处理一次回调</td>
+</tr>
+<tr>
+<td><code>rostopic echo</code></td>
+<td>查看话题数据（最常用的调试命令）</td>
+</tr>
+<tr>
+<td><code>rosbag</code></td>
+<td>录数据 &amp; 回放数据</td>
+</tr>
+</tbody>
+</table>
+<p><strong>学习建议</strong>：</p>
+<ol>
+<li>搭建一个 ROS1 工作环境（Ubuntu 20.04 + ROS Noetic，或 Docker）</li>
+<li>照着本文的代码段写一个 talker + listener，跑通</li>
+<li>在实际项目中遇到需求时，带着问题去：需要坐标变换学 tf2，需要动作控制学 Action，需要参数服务器学 Parameter Server</li>
+<li>从 ROS1 过渡到 ROS2 时，概念相通，API 类似，迁移成本不高</li>
+</ol>
+<blockquote>
+<p><strong>ROS 只是一个工具，能帮你解决问题的工具才是好工具。不用成为 ROS 专家，够用就行。</strong></p>
+</blockquote>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a target="_blank" rel="noopener" href="https://github.com/AillianYue">Yilin.Yue</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">此文章版权归<a target="_blank" rel="noopener" href="https://github.com/AillianYue">Yilin.Yue</a>所有，如需转载，请引用本文链接</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/ROS/">ROS</a><a class="post-meta__tags" href="/tags/ROS%E5%9F%BA%E7%A1%80/">ROS基础</a></div><div class="post-share"><div class="social-share" data-image="/img/ROS.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2021/07/12/ROS%E5%85%A5%E9%97%A802%EF%BC%9A%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5/" title="ROS入门02：基础概念"><img class="cover" src="/img/ROS.webp" onerror="onerror=null;src='/img/404.webp'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">ROS入门02：基础概念</div></div><div class="info-2"><div class="info-item-1">ROS机器人操作系统基础知识详解，涵盖通信机制计算图架构、开发工具集、应用功能库及生态系统全面介绍与总结</div></div></div></a><a class="pagination-related" href="/2021/07/11/ROS%E5%85%A5%E9%97%A801%EF%BC%9A%E5%AE%89%E8%A3%85/" title="ROS入门01：安装"><img class="cover" src="/img/ROS.webp" onerror="onerror=null;src='/img/404.webp'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">ROS入门01：安装</div></div><div class="info-2"><div class="info-item-1">ROS机器人操作系统安装配置完整教程，涵盖Ubuntu 16.04至20.04各版本ROS安装步骤、软件源配置及环境验证</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2021/07/16/ROS%E5%85%A5%E9%97%A808%EF%BC%9AParameter/" title="ROS入门08：Parameter"><img class="cover" src="/img/ROS.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-07-16</div><div class="info-item-2">ROS入门08：Parameter</div></div><div class="info-2"><div class="info-item-1">ROS参数服务器Parameter的使用与配置详解，涵盖命令行工具操作参数及编程方式读写参数的完整方法</div></div></div></a><a class="pagination-related" href="/2021/07/18/ROS%E5%85%A5%E9%97%A810%EF%BC%9Alaunch/" title="ROS入门10：launch"><img class="cover" src="/img/ROS.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-07-18</div><div class="info-item-2">ROS入门10：launch</div></div><div class="info-2"><div class="info-item-1">ROS Launch启动文件配置与使用方法详解，涵盖XML标签语法、多节点同时启动、参数设置及命名空间管理</div></div></div></a><a class="pagination-related" href="/2021/07/20/ROS%E5%85%A5%E9%97%A812%EF%BC%9A%E6%80%BB%E7%BB%93/" title="ROS入门12：总结"><img class="cover" src="/img/ROS.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-07-20</div><div class="info-item-2">ROS入门12：总结</div></div><div class="info-2"><div class="info-item-1">ROS入门学习知识点全面回顾与总结，涵盖各模块核心概念梳理、机器人控制仿真资源及进阶学习路线推荐指南</div></div></div></a><a class="pagination-related" href="/2021/07/17/ROS%E5%85%A5%E9%97%A809%EF%BC%9ATF%E5%9D%90%E6%A0%87%E7%B3%BB%E5%B9%BF%E6%92%AD%E4%B8%8E%E7%9B%91%E5%90%AC/" title="ROS入门09：TF坐标系广播与监听"><img class="cover" src="/img/ROS.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-07-17</div><div class="info-item-2">ROS入门09：TF坐标系广播与监听</div></div><div class="info-2"><div class="info-item-1">ROS TF坐标变换系统广播与监听实现详解，涵盖坐标系管理原理、TF变换编程接口及实际调试方法与应用</div></div></div></a><a class="pagination-related" href="/2021/07/13/ROS%E5%85%A5%E9%97%A804%EF%BC%9APublisher%E5%92%8CSubscriber/" title="ROS入门04：Publisher 和 Subscriber"><img class="cover" src="/img/ROS.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-07-13</div><div class="info-item-2">ROS入门04：Publisher 和 Subscriber</div></div><div class="info-2"><div class="info-item-1">ROS发布者Publisher与订阅者Subscriber编程实现详解，涵盖话题通信模型及节点创建与消息发布订阅流程</div></div></div></a><a class="pagination-related" href="/2021/07/14/ROS%E5%85%A5%E9%97%A805%EF%BC%9ATopic/" title="ROS入门05：Topic"><img class="cover" src="/img/ROS.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-07-14</div><div class="info-item-2">ROS入门05：Topic</div></div><div class="info-2"><div class="info-item-1">ROS Topic消息定义与通信实现详解，涵盖msg文件定义格式、话题发布订阅模式及自定义消息类型的使用方法</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">AillianYue</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">51</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">10</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">17</div></a></div><a id="card-info-btn" href="/about/"><i class="fas fa-user-graduate"></i><span>关于我</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/AillianYue" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="https://gitee.com/aillianyue" target="_blank" title="Gitee"><i class="fab fa-github-alt"></i></a><a class="social-icon" href="mailto:634558578@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="tencent://AddContact/?fromId=45&amp;fromSubId=1&amp;subcmd=all&amp;uin=634558578&amp;website=www.oicqzone.com" target="_blank" title="QQ"><i class="fab fa-qq"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站不定期更新，欢迎！</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">学前须知</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%B7%E4%B8%8D%E8%A6%81%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0-ROS"><span class="toc-number">1.1.</span> <span class="toc-text">请不要系统学习 ROS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ROS-%E6%9E%B6%E6%9E%84%E7%AE%80%E4%BB%8B"><span class="toc-number">1.2.</span> <span class="toc-text">ROS 架构简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%94%A8-ROS"><span class="toc-number">1.3.</span> <span class="toc-text">为什么要用 ROS</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">核心概念</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%8A%82%E7%82%B9-Node"><span class="toc-number">2.1.</span> <span class="toc-text">节点 (Node)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%9D%E9%A2%98-Topic"><span class="toc-number">2.2.</span> <span class="toc-text">话题 (Topic)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B6%88%E6%81%AF-Message"><span class="toc-number">2.3.</span> <span class="toc-text">消息 (Message)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%91%E5%B8%83%E8%80%85-Publisher"><span class="toc-number">2.4.</span> <span class="toc-text">发布者 (Publisher)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%A2%E9%98%85%E8%80%85-Subscriber"><span class="toc-number">2.5.</span> <span class="toc-text">订阅者 (Subscriber)</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">常见的代码段</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E6%B6%88%E6%81%AF"><span class="toc-number">3.1.</span> <span class="toc-text">自定义消息</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%9C%A8%E5%8C%85%E4%B8%AD%E5%88%9B%E5%BB%BA-msg-%E7%9B%AE%E5%BD%95%EF%BC%8C%E6%96%B0%E5%BB%BA-msg-%E6%96%87%E4%BB%B6"><span class="toc-number">3.1.1.</span> <span class="toc-text">1. 在包中创建 msg&#x2F; 目录，新建 .msg 文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E4%BF%AE%E6%94%B9-CMakeLists-txt"><span class="toc-number">3.1.2.</span> <span class="toc-text">2. 修改 CMakeLists.txt</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E4%BF%AE%E6%94%B9-package-xml"><span class="toc-number">3.1.3.</span> <span class="toc-text">3. 修改 package.xml</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E7%BC%96%E8%AF%91"><span class="toc-number">3.1.4.</span> <span class="toc-text">4. 编译</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E8%8A%82%E7%82%B9-%E5%88%9B%E5%BB%BA%E6%88%96%E8%AE%A2%E9%98%85%E8%AF%9D%E9%A2%98"><span class="toc-number">3.2.</span> <span class="toc-text">创建节点 &#x2F; 创建或订阅话题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%91%E5%B8%83%E8%80%85%E8%8A%82%E7%82%B9"><span class="toc-number">3.3.</span> <span class="toc-text">发布者节点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96-%E2%86%92-%E5%88%9B%E5%BB%BA%E5%8F%91%E5%B8%83%E8%80%85-%E2%86%92-%E5%A1%AB%E5%85%85%E6%B6%88%E6%81%AF-%E2%86%92-%E5%8F%91%E5%B8%83"><span class="toc-number">3.3.1.</span> <span class="toc-text">初始化 → 创建发布者 → 填充消息 → 发布</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%A2%E9%98%85%E8%80%85%E8%8A%82%E7%82%B9"><span class="toc-number">3.4.</span> <span class="toc-text">订阅者节点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0%E6%9C%BA%E5%88%B6"><span class="toc-number">3.4.1.</span> <span class="toc-text">回调函数机制</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">其他的常见场合</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#CMake-%E7%BC%96%E8%AF%91"><span class="toc-number">4.1.</span> <span class="toc-text">CMake 编译</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E5%91%BD%E4%BB%A4"><span class="toc-number">4.2.</span> <span class="toc-text">常见命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#rosnode-%E2%80%94-%E8%8A%82%E7%82%B9%E8%AF%8A%E6%96%AD"><span class="toc-number">4.2.1.</span> <span class="toc-text">rosnode — 节点诊断</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#rostopic-%E2%80%94-%E8%AF%9D%E9%A2%98%E8%AF%8A%E6%96%AD"><span class="toc-number">4.2.2.</span> <span class="toc-text">rostopic — 话题诊断</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#rosmsg-%E2%80%94-%E6%B6%88%E6%81%AF%E8%AF%8A%E6%96%AD"><span class="toc-number">4.2.3.</span> <span class="toc-text">rosmsg — 消息诊断</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Rosbag-%E5%BD%95%E5%88%B6%E4%B8%8E%E5%9B%9E%E6%94%BE"><span class="toc-number">4.3.</span> <span class="toc-text">Rosbag 录制与回放</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BD%95%E5%88%B6"><span class="toc-number">4.3.1.</span> <span class="toc-text">录制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9E%E6%94%BE"><span class="toc-number">4.3.2.</span> <span class="toc-text">回放</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B-bag-%E4%BF%A1%E6%81%AF"><span class="toc-number">4.3.3.</span> <span class="toc-text">查看 bag 信息</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Rqt-%E5%8F%AF%E8%A7%86%E5%8C%96%E5%B7%A5%E5%85%B7"><span class="toc-number">4.4.</span> <span class="toc-text">Rqt 可视化工具</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8"><span class="toc-number">4.4.1.</span> <span class="toc-text">启动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%80%E5%B8%B8%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">4.4.2.</span> <span class="toc-text">最常用场景</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2021/07/11/ROS1%E5%9F%BA%E7%A1%8001%EF%BC%9A%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/" title="ROS1基础01：开始"><img src="/img/ROS.webp" onerror="this.onerror=null;this.src='/img/404.webp'" alt="ROS1基础01：开始"/></a><div class="content"><a class="title" href="/2021/07/11/ROS1%E5%9F%BA%E7%A1%8001%EF%BC%9A%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/" title="ROS1基础01：开始">ROS1基础01：开始</a><time datetime="2026-07-01T13:19:00.000Z" title="更新于 2026-07-01 21:19:00">2026-07-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/06/28/%E9%9B%B6%E6%95%A3%E6%96%87%E6%A1%A3%EF%BC%9Amd%E8%BD%ACppt%E5%B7%A5%E5%85%B7/" title="零散文档：md转ppt工具"><img src="/img/Notion.webp" onerror="this.onerror=null;this.src='/img/404.webp'" alt="零散文档：md转ppt工具"/></a><div class="content"><a class="title" href="/2026/06/28/%E9%9B%B6%E6%95%A3%E6%96%87%E6%A1%A3%EF%BC%9Amd%E8%BD%ACppt%E5%B7%A5%E5%85%B7/" title="零散文档：md转ppt工具">零散文档：md转ppt工具</a><time datetime="2026-06-28T06:12:00.000Z" title="更新于 2026-06-28 14:12:00">2026-06-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/06/19/ClaudeCode%E5%9F%BA%E7%A1%8010%EF%BC%9AMCP/" title="ClaudeCode基础10：MCP"><img src="/img/Claude.webp" onerror="this.onerror=null;this.src='/img/404.webp'" alt="ClaudeCode基础10：MCP"/></a><div class="content"><a class="title" href="/2026/06/19/ClaudeCode%E5%9F%BA%E7%A1%8010%EF%BC%9AMCP/" title="ClaudeCode基础10：MCP">ClaudeCode基础10：MCP</a><time datetime="2026-06-26T13:00:00.000Z" title="更新于 2026-06-26 21:00:00">2026-06-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/06/18/ClaudeCode%E5%9F%BA%E7%A1%8009%EF%BC%9Ahooks/" title="ClaudeCode基础09：hooks"><img src="/img/Claude.webp" onerror="this.onerror=null;this.src='/img/404.webp'" alt="ClaudeCode基础09：hooks"/></a><div class="content"><a class="title" href="/2026/06/18/ClaudeCode%E5%9F%BA%E7%A1%8009%EF%BC%9Ahooks/" title="ClaudeCode基础09：hooks">ClaudeCode基础09：hooks</a><time datetime="2026-06-26T12:00:00.000Z" title="更新于 2026-06-26 20:00:00">2026-06-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/06/17/ClaudeCode%E5%9F%BA%E7%A1%8008%EF%BC%9A.claude%E7%9B%AE%E5%BD%95/" title="ClaudeCode基础08：.claude目录"><img src="/img/Claude.webp" onerror="this.onerror=null;this.src='/img/404.webp'" alt="ClaudeCode基础08：.claude目录"/></a><div class="content"><a class="title" href="/2026/06/17/ClaudeCode%E5%9F%BA%E7%A1%8008%EF%BC%9A.claude%E7%9B%AE%E5%BD%95/" title="ClaudeCode基础08：.claude目录">ClaudeCode基础08：.claude目录</a><time datetime="2026-06-26T11:00:00.000Z" title="更新于 2026-06-26 19:00:00">2026-06-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/06/16/ClaudeCode%E5%9F%BA%E7%A1%8007%EF%BC%9A%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" title="ClaudeCode基础07：常用命令"><img src="/img/Claude.webp" onerror="this.onerror=null;this.src='/img/404.webp'" alt="ClaudeCode基础07：常用命令"/></a><div class="content"><a class="title" href="/2026/06/16/ClaudeCode%E5%9F%BA%E7%A1%8007%EF%BC%9A%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" title="ClaudeCode基础07：常用命令">ClaudeCode基础07：常用命令</a><time datetime="2026-06-26T10:03:00.000Z" title="更新于 2026-06-26 18:03:00">2026-06-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/06/15/ClaudeCode%E5%9F%BA%E7%A1%8006%EF%BC%9Askills%E6%8E%A8%E8%8D%90/" title="ClaudeCode基础06：skills推荐"><img src="/img/Claude.webp" onerror="this.onerror=null;this.src='/img/404.webp'" alt="ClaudeCode基础06：skills推荐"/></a><div class="content"><a class="title" href="/2026/06/15/ClaudeCode%E5%9F%BA%E7%A1%8006%EF%BC%9Askills%E6%8E%A8%E8%8D%90/" title="ClaudeCode基础06：skills推荐">ClaudeCode基础06：skills推荐</a><time datetime="2026-06-26T09:03:00.000Z" title="更新于 2026-06-26 17:03:00">2026-06-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/06/14/ClaudeCode%E5%9F%BA%E7%A1%8005%EF%BC%9Askills%E6%B7%B1%E5%85%A5/" title="ClaudeCode基础05：skills深入"><img src="/img/Claude.webp" onerror="this.onerror=null;this.src='/img/404.webp'" alt="ClaudeCode基础05：skills深入"/></a><div class="content"><a class="title" href="/2026/06/14/ClaudeCode%E5%9F%BA%E7%A1%8005%EF%BC%9Askills%E6%B7%B1%E5%85%A5/" title="ClaudeCode基础05：skills深入">ClaudeCode基础05：skills深入</a><time datetime="2026-06-26T08:03:00.000Z" title="更新于 2026-06-26 16:03:00">2026-06-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/06/13/ClaudeCode%E5%9F%BA%E7%A1%8004%EF%BC%9Askills%E5%85%A5%E9%97%A8/" title="ClaudeCode基础04：skills入门"><img src="/img/Claude.webp" onerror="this.onerror=null;this.src='/img/404.webp'" alt="ClaudeCode基础04：skills入门"/></a><div class="content"><a class="title" href="/2026/06/13/ClaudeCode%E5%9F%BA%E7%A1%8004%EF%BC%9Askills%E5%85%A5%E9%97%A8/" title="ClaudeCode基础04：skills入门">ClaudeCode基础04：skills入门</a><time datetime="2026-06-26T07:03:00.000Z" title="更新于 2026-06-26 15:03:00">2026-06-26</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2019 - 2026 By AillianYue</span></div><div class="footer_custom_text">Hi, welcome to <a target="_blank" rel="noopener" href="https://github.com/AillianYue">my blog</a>!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(async () => {
+  const showKatex = () => {
+    document.querySelectorAll('#article-container .katex').forEach(el => el.classList.add('katex-show'))
+  }
+
+  if (!window.katex_js_css) {
+    window.katex_js_css = true
+    await btf.getCSS('https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css')
+    if (false) {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js')
+    }
+  }
+
+  showKatex()
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
